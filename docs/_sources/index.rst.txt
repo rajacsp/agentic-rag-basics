@@ -11,6 +11,7 @@ Contents
 
    preface
    ch01_initial_setup_configuration
+   ch02_configure_vector_database
 
 Quick Facts
 -----------

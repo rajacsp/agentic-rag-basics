@@ -1,0 +1,533 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 2: Configure Vector Database &mdash; GitHub Book Template 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Topic 1: Initial Setup and Configuration" href="ch01_initial_setup_configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GitHub Book Template
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 2: Configure Vector Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-modules">Step 1: Import Required Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-determine-embedding-dimension">Step 2: Determine Embedding Dimension</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-create-collection-initialization-function">Step 3: Create Collection Initialization Function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-3a-dense-vector-configuration">Step 3a: Dense Vector Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3b-sparse-vector-configuration">Step 3b: Sparse Vector Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-collection-setup">Complete Collection Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hybrid-search-capabilities">Hybrid Search Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrievalmode-options">RetrievalMode Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#collection-metadata-and-properties">Collection Metadata and Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GitHub Book Template</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 2: Configure Vector Database</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch02_configure_vector_database.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-2-configure-vector-database">
+<h1>Topic 2: Configure Vector Database<a class="headerlink" href="#topic-2-configure-vector-database" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the configuration of Qdrant vector database to support hybrid search capabilities. We’ll set up collections with both dense and sparse vector configurations, enabling efficient storage and retrieval of document chunks using multiple embedding strategies simultaneously.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>The vector database serves as the central repository for all embeddings and document chunks. By configuring it with hybrid search capabilities, we enable:</p>
+<ul class="simple">
+<li><p><strong>Dense Vector Search</strong>: Semantic similarity matching using transformer embeddings</p></li>
+<li><p><strong>Sparse Vector Search</strong>: Keyword-based matching using BM25 embeddings</p></li>
+<li><p><strong>Hybrid Retrieval</strong>: Combining both search methods for optimal results</p></li>
+<li><p><strong>Scalability</strong>: Efficient storage and retrieval of millions of vectors</p></li>
+</ul>
+</section>
+<section id="step-1-import-required-modules">
+<h2>Step 1: Import Required Modules<a class="headerlink" href="#step-1-import-required-modules" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary Qdrant and LangChain components:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qdrant_client.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">qmodels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_qdrant</span><span class="w"> </span><span class="kn">import</span> <span class="n">QdrantVectorStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_qdrant.qdrant</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetrievalMode</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">qdrant_client.http.models</span></code>: Provides data models for Qdrant configuration (vectors, collections, distances)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QdrantVectorStore</span></code>: LangChain wrapper for Qdrant integration</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RetrievalMode</span></code>: Enum specifying retrieval strategies (dense, sparse, or hybrid)</p></li>
+</ul>
+</section>
+<section id="step-2-determine-embedding-dimension">
+<h2>Step 2: Determine Embedding Dimension<a class="headerlink" href="#step-2-determine-embedding-dimension" title="Link to this heading">¶</a></h2>
+<p>Calculate the dimensionality of your dense embeddings:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">embedding_dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dense_embeddings</span><span class="o">.</span><span class="n">embed_query</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Why This Matters:</strong></p>
+<ul class="simple">
+<li><p>The embedding dimension must match the vector size configured in Qdrant</p></li>
+<li><p>Different embedding models produce different dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sentence-transformers/all-mpnet-base-v2</span></code> produces 768-dimensional vectors</p></li>
+<li><p>This dynamic approach ensures compatibility if you change embedding models</p></li>
+</ul>
+<p><strong>Example Output:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For all-mpnet-base-v2 model</span>
+<span class="n">embedding_dimension</span> <span class="o">=</span> <span class="mi">768</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-create-collection-initialization-function">
+<h2>Step 3: Create Collection Initialization Function<a class="headerlink" href="#step-3-create-collection-initialization-function" title="Link to this heading">¶</a></h2>
+<p>Define a function to safely create Qdrant collections:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ensure_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">collection_exists</span><span class="p">(</span><span class="n">collection_name</span><span class="p">):</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">create_collection</span><span class="p">(</span>
+            <span class="n">collection_name</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span>
+            <span class="n">vectors_config</span><span class="o">=</span><span class="n">qmodels</span><span class="o">.</span><span class="n">VectorParams</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="n">embedding_dimension</span><span class="p">,</span>
+                <span class="n">distance</span><span class="o">=</span><span class="n">qmodels</span><span class="o">.</span><span class="n">Distance</span><span class="o">.</span><span class="n">COSINE</span>
+            <span class="p">),</span>
+            <span class="n">sparse_vectors_config</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;sparse&quot;</span><span class="p">:</span> <span class="n">qmodels</span><span class="o">.</span><span class="n">SparseVectorParams</span><span class="p">()</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Function Purpose:</strong></p>
+<p>This function provides idempotent collection creation, preventing errors if the collection already exists.</p>
+<section id="step-3a-dense-vector-configuration">
+<h3>Step 3a: Dense Vector Configuration<a class="headerlink" href="#step-3a-dense-vector-configuration" title="Link to this heading">¶</a></h3>
+<p>The dense vector configuration defines how semantic embeddings are stored:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vectors_config</span><span class="o">=</span><span class="n">qmodels</span><span class="o">.</span><span class="n">VectorParams</span><span class="p">(</span>
+    <span class="n">size</span><span class="o">=</span><span class="n">embedding_dimension</span><span class="p">,</span>      <span class="c1"># 768 for all-mpnet-base-v2</span>
+    <span class="n">distance</span><span class="o">=</span><span class="n">qmodels</span><span class="o">.</span><span class="n">Distance</span><span class="o">.</span><span class="n">COSINE</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>size</strong>: Number of dimensions in the embedding vector (768 for our model)</p></li>
+<li><p><strong>distance</strong>: Similarity metric used for comparison</p></li>
+</ul>
+<p><strong>Distance Metrics Explained:</strong></p>
+<ul class="simple">
+<li><p><strong>COSINE</strong>: Measures angle between vectors (0 to 2, where 0 = identical)</p>
+<ul>
+<li><p>Best for: Normalized embeddings, semantic similarity</p></li>
+<li><p>Range: 0 (identical) to 2 (opposite)</p></li>
+<li><p>Recommended for transformer embeddings</p></li>
+</ul>
+</li>
+<li><p><strong>EUCLIDEAN</strong>: Measures straight-line distance between points</p>
+<ul>
+<li><p>Best for: Geometric similarity</p></li>
+<li><p>Computationally more expensive</p></li>
+<li><p>Suitable for non-normalized embeddings</p></li>
+</ul>
+</li>
+<li><p><strong>DOT_PRODUCT</strong>: Inner product of vectors</p>
+<ul>
+<li><p>Best for: Normalized vectors with magnitude information</p></li>
+<li><p>Fastest computation</p></li>
+<li><p>Requires normalized embeddings</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Why COSINE for This Use Case:</strong></p>
+<p>Transformer embeddings like <code class="docutils literal notranslate"><span class="pre">all-mpnet-base-v2</span></code> are normalized, making cosine distance ideal. It’s also the most intuitive for semantic similarity (0 = identical meaning, 2 = opposite meaning).</p>
+</section>
+<section id="step-3b-sparse-vector-configuration">
+<h3>Step 3b: Sparse Vector Configuration<a class="headerlink" href="#step-3b-sparse-vector-configuration" title="Link to this heading">¶</a></h3>
+<p>The sparse vector configuration enables keyword-based retrieval:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sparse_vectors_config</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;sparse&quot;</span><span class="p">:</span> <span class="n">qmodels</span><span class="o">.</span><span class="n">SparseVectorParams</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Named Configuration</strong>: The “sparse” key identifies this sparse vector type</p></li>
+<li><p><strong>SparseVectorParams()</strong>: Uses default BM25 parameters</p></li>
+<li><p><strong>Purpose</strong>: Stores sparse embeddings for keyword matching</p></li>
+</ul>
+<p><strong>Sparse vs Dense Vectors:</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspect</p></th>
+<th class="head"><p>Dense Vectors</p></th>
+<th class="head"><p>Sparse Vectors</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Dimensions</p></td>
+<td><p>768 (fixed)</p></td>
+<td><p>Variable (thousands)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Storage</p></td>
+<td><p>Compact</p></td>
+<td><p>Larger</p></td>
+</tr>
+<tr class="row-even"><td><p>Search Type</p></td>
+<td><p>Semantic</p></td>
+<td><p>Keyword</p></td>
+</tr>
+<tr class="row-odd"><td><p>Speed</p></td>
+<td><p>Fast</p></td>
+<td><p>Very Fast</p></td>
+</tr>
+<tr class="row-even"><td><p>Use Case</p></td>
+<td><p>Meaning matching</p></td>
+<td><p>Exact term matching</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="complete-collection-setup">
+<h2>Complete Collection Setup<a class="headerlink" href="#complete-collection-setup" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete collection configuration code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qdrant_client.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">qmodels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_qdrant</span><span class="w"> </span><span class="kn">import</span> <span class="n">QdrantVectorStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_qdrant.qdrant</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetrievalMode</span>
+
+<span class="c1"># Calculate embedding dimension</span>
+<span class="n">embedding_dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dense_embeddings</span><span class="o">.</span><span class="n">embed_query</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Embedding dimension: </span><span class="si">{</span><span class="n">embedding_dimension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Define collection creation function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ensure_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a Qdrant collection with hybrid search capabilities.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        collection_name (str): Name of the collection to create</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">collection_exists</span><span class="p">(</span><span class="n">collection_name</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating collection: </span><span class="si">{</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">create_collection</span><span class="p">(</span>
+            <span class="n">collection_name</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span>
+            <span class="n">vectors_config</span><span class="o">=</span><span class="n">qmodels</span><span class="o">.</span><span class="n">VectorParams</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="n">embedding_dimension</span><span class="p">,</span>
+                <span class="n">distance</span><span class="o">=</span><span class="n">qmodels</span><span class="o">.</span><span class="n">Distance</span><span class="o">.</span><span class="n">COSINE</span>
+            <span class="p">),</span>
+            <span class="n">sparse_vectors_config</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;sparse&quot;</span><span class="p">:</span> <span class="n">qmodels</span><span class="o">.</span><span class="n">SparseVectorParams</span><span class="p">()</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Collection </span><span class="si">{</span><span class="n">collection_name</span><span class="si">}</span><span class="s2"> created successfully&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Collection </span><span class="si">{</span><span class="n">collection_name</span><span class="si">}</span><span class="s2"> already exists&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create the child chunks collection</span>
+<span class="n">ensure_collection</span><span class="p">(</span><span class="n">CHILD_COLLECTION</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="hybrid-search-capabilities">
+<h2>Hybrid Search Capabilities<a class="headerlink" href="#hybrid-search-capabilities" title="Link to this heading">¶</a></h2>
+<p><strong>What is Hybrid Search?</strong></p>
+<p>Hybrid search combines dense and sparse embeddings to leverage the strengths of both:</p>
+<ol class="arabic simple">
+<li><p><strong>Dense Search Phase</strong>: Finds semantically similar documents</p></li>
+<li><p><strong>Sparse Search Phase</strong>: Finds keyword-matching documents</p></li>
+<li><p><strong>Fusion</strong>: Combines results using ranking algorithms</p></li>
+</ol>
+<p><strong>Example Scenario:</strong></p>
+<p>Query: “How do neural networks process information?”</p>
+<ul class="simple">
+<li><p><strong>Dense Search</strong>: Finds documents about “machine learning” and “deep learning”</p></li>
+<li><p><strong>Sparse Search</strong>: Finds documents containing exact terms “neural networks”</p></li>
+<li><p><strong>Hybrid Result</strong>: Returns documents that are both semantically relevant AND contain key terms</p></li>
+</ul>
+<p><strong>Advantages:</strong></p>
+<ul class="simple">
+<li><p>Captures both semantic meaning and keyword relevance</p></li>
+<li><p>Reduces false positives from pure semantic search</p></li>
+<li><p>Improves recall for technical documents</p></li>
+<li><p>Balances precision and comprehensiveness</p></li>
+</ul>
+</section>
+<section id="retrievalmode-options">
+<h2>RetrievalMode Options<a class="headerlink" href="#retrievalmode-options" title="Link to this heading">¶</a></h2>
+<p>When using QdrantVectorStore, you can specify different retrieval modes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dense-only retrieval (semantic search)</span>
+<span class="n">vector_store</span> <span class="o">=</span> <span class="n">QdrantVectorStore</span><span class="p">(</span>
+    <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+    <span class="n">collection_name</span><span class="o">=</span><span class="n">CHILD_COLLECTION</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="o">=</span><span class="n">dense_embeddings</span><span class="p">,</span>
+    <span class="n">retrieval_mode</span><span class="o">=</span><span class="n">RetrievalMode</span><span class="o">.</span><span class="n">DENSE</span>
+<span class="p">)</span>
+
+<span class="c1"># Sparse-only retrieval (keyword search)</span>
+<span class="n">vector_store</span> <span class="o">=</span> <span class="n">QdrantVectorStore</span><span class="p">(</span>
+    <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+    <span class="n">collection_name</span><span class="o">=</span><span class="n">CHILD_COLLECTION</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="o">=</span><span class="n">dense_embeddings</span><span class="p">,</span>
+    <span class="n">retrieval_mode</span><span class="o">=</span><span class="n">RetrievalMode</span><span class="o">.</span><span class="n">SPARSE</span>
+<span class="p">)</span>
+
+<span class="c1"># Hybrid retrieval (recommended)</span>
+<span class="n">vector_store</span> <span class="o">=</span> <span class="n">QdrantVectorStore</span><span class="p">(</span>
+    <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+    <span class="n">collection_name</span><span class="o">=</span><span class="n">CHILD_COLLECTION</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="o">=</span><span class="n">dense_embeddings</span><span class="p">,</span>
+    <span class="n">retrieval_mode</span><span class="o">=</span><span class="n">RetrievalMode</span><span class="o">.</span><span class="n">HYBRID</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Retrieval Mode Comparison:</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Use Case</p></th>
+<th class="head"><p>Pros</p></th>
+<th class="head"><p>Cons</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DENSE</p></td>
+<td><p>Semantic understanding</p></td>
+<td><p>Fast, intuitive</p></td>
+<td><p>May miss keywords</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPARSE</p></td>
+<td><p>Exact matching</p></td>
+<td><p>Precise keywords</p></td>
+<td><p>Misses semantic meaning</p></td>
+</tr>
+<tr class="row-even"><td><p>HYBRID</p></td>
+<td><p>General purpose</p></td>
+<td><p>Best of both worlds</p></td>
+<td><p>Slightly slower</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="collection-metadata-and-properties">
+<h2>Collection Metadata and Properties<a class="headerlink" href="#collection-metadata-and-properties" title="Link to this heading">¶</a></h2>
+<p>After creating a collection, you can inspect its properties:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get collection information</span>
+<span class="n">collection_info</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_collection</span><span class="p">(</span><span class="n">CHILD_COLLECTION</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Collection name: </span><span class="si">{</span><span class="n">collection_info</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vector size: </span><span class="si">{</span><span class="n">collection_info</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">vectors</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distance metric: </span><span class="si">{</span><span class="n">collection_info</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">vectors</span><span class="o">.</span><span class="n">distance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Points count: </span><span class="si">{</span><span class="n">collection_info</span><span class="o">.</span><span class="n">points_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Available Information:</strong></p>
+<ul class="simple">
+<li><p>Collection configuration and parameters</p></li>
+<li><p>Vector dimensions and distance metrics</p></li>
+<li><p>Number of stored points (vectors)</p></li>
+<li><p>Sparse vector configuration</p></li>
+<li><p>Indexing status</p></li>
+</ul>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Collection Naming</strong></p>
+<p>Use descriptive, hierarchical names:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good</span>
+<span class="n">CHILD_COLLECTION</span> <span class="o">=</span> <span class="s2">&quot;document_child_chunks&quot;</span>
+<span class="n">PARENT_COLLECTION</span> <span class="o">=</span> <span class="s2">&quot;document_parent_chunks&quot;</span>
+
+<span class="c1"># Avoid</span>
+<span class="n">COLLECTION</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span>
+<span class="n">CHUNKS</span> <span class="o">=</span> <span class="s2">&quot;c1&quot;</span>
+</pre></div>
+</div>
+<p><strong>2. Idempotent Operations</strong></p>
+<p>Always check if collection exists before creating:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">collection_exists</span><span class="p">(</span><span class="n">collection_name</span><span class="p">):</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">create_collection</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>3. Dimension Consistency</strong></p>
+<p>Ensure embedding dimension matches configuration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate dynamically</span>
+<span class="n">embedding_dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dense_embeddings</span><span class="o">.</span><span class="n">embed_query</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">))</span>
+
+<span class="c1"># Verify before creating collection</span>
+<span class="k">assert</span> <span class="n">embedding_dimension</span> <span class="o">==</span> <span class="mi">768</span><span class="p">,</span> <span class="s2">&quot;Unexpected embedding dimension&quot;</span>
+</pre></div>
+</div>
+<p><strong>4. Distance Metric Selection</strong></p>
+<p>Choose appropriate distance metric for your embeddings:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For normalized embeddings (transformer models)</span>
+<span class="n">distance</span><span class="o">=</span><span class="n">qmodels</span><span class="o">.</span><span class="n">Distance</span><span class="o">.</span><span class="n">COSINE</span>
+
+<span class="c1"># For non-normalized embeddings</span>
+<span class="n">distance</span><span class="o">=</span><span class="n">qmodels</span><span class="o">.</span><span class="n">Distance</span><span class="o">.</span><span class="n">EUCLIDEAN</span>
+</pre></div>
+</div>
+<p><strong>5. Sparse Vector Configuration</strong></p>
+<p>Always include sparse vectors for hybrid search:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sparse_vectors_config</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;sparse&quot;</span><span class="p">:</span> <span class="n">qmodels</span><span class="o">.</span><span class="n">SparseVectorParams</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Memory Usage:</strong></p>
+<ul class="simple">
+<li><p>Dense vectors: ~3KB per vector (768 dimensions × 4 bytes)</p></li>
+<li><p>Sparse vectors: Variable, typically 1-10KB per vector</p></li>
+<li><p>Metadata: Additional storage for payloads</p></li>
+</ul>
+<p><strong>Indexing:</strong></p>
+<ul class="simple">
+<li><p>Qdrant automatically creates indexes for efficient search</p></li>
+<li><p>Initial indexing may take time for large collections</p></li>
+<li><p>Indexes are updated incrementally as new vectors are added</p></li>
+</ul>
+<p><strong>Scaling:</strong></p>
+<ul class="simple">
+<li><p>Single Qdrant instance: Millions of vectors</p></li>
+<li><p>Distributed Qdrant: Billions of vectors</p></li>
+<li><p>Partitioning: Split collections by document type or domain</p></li>
+</ul>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>Collection Already Exists Error</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Check before creating</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">collection_exists</span><span class="p">(</span><span class="n">collection_name</span><span class="p">):</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">create_collection</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Dimension Mismatch Error</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Embedding dimension doesn&#39;t match collection config</span>
+<span class="c1"># Solution: Verify dimension before creating collection</span>
+<span class="n">embedding_dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dense_embeddings</span><span class="o">.</span><span class="n">embed_query</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dimension: </span><span class="si">{</span><span class="n">embedding_dimension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Should be 768</span>
+</pre></div>
+</div>
+<p><strong>Connection Error</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Cannot connect to Qdrant</span>
+<span class="c1"># Solution: Ensure Qdrant is running</span>
+<span class="c1"># Check: client.get_collections() should return collections</span>
+</pre></div>
+</div>
+<p><strong>Sparse Vector Not Working</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Sparse vectors not being used</span>
+<span class="c1"># Solution: Ensure sparse_vectors_config is included</span>
+<span class="c1"># Verify: Use RetrievalMode.HYBRID or RetrievalMode.SPARSE</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With the vector database configured, you can proceed to:</p>
+<ul class="simple">
+<li><p>Ingesting documents and creating chunks</p></li>
+<li><p>Generating embeddings for chunks</p></li>
+<li><p>Storing vectors in the configured collections</p></li>
+<li><p>Implementing retrieval and search functionality</p></li>
+<li><p>Building the complete RAG pipeline</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch01_initial_setup_configuration.html" class="btn btn-neutral float-left" title="Topic 1: Initial Setup and Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
