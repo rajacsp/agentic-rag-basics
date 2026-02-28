@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 3: PDFs to Markdown &mdash; GitHub Book Template 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Topic 4: Hierarchical Document Indexing" href="ch04_hierarchical_document_indexing.html" />
+    <link rel="prev" title="Topic 2: Configure Vector Database" href="ch02_configure_vector_database.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GitHub Book Template
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 3: PDFs to Markdown</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-workflow">Purpose and Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-configure-environment-variables">Step 2: Configure Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-single-pdf-conversion-function">Step 3: Single PDF Conversion Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-batch-pdf-conversion-function">Step 4: Batch PDF Conversion Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-conversion-pipeline">Complete Conversion Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-examples">Usage Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-structure">Output Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GitHub Book Template</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 3: PDFs to Markdown</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch03_pdfs_to_markdown.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-3-pdfs-to-markdown">
+<h1>Topic 3: PDFs to Markdown<a class="headerlink" href="#topic-3-pdfs-to-markdown" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the conversion of PDF documents to Markdown format, a crucial preprocessing step in the RAG pipeline. Converting PDFs to Markdown enables easier text extraction, better preservation of document structure, and improved compatibility with downstream processing tasks.</p>
+</section>
+<section id="purpose-and-workflow">
+<h2>Purpose and Workflow<a class="headerlink" href="#purpose-and-workflow" title="Link to this heading">¶</a></h2>
+<p>PDF documents are binary files with complex formatting and layout information. Converting them to Markdown provides:</p>
+<ul class="simple">
+<li><p><strong>Structured Text</strong>: Preserves document hierarchy and formatting</p></li>
+<li><p><strong>Machine Readability</strong>: Easier for text processing and chunking</p></li>
+<li><p><strong>Format Compatibility</strong>: Works seamlessly with LangChain and other text processing tools</p></li>
+<li><p><strong>Preservation of Content</strong>: Maintains important structural information while removing formatting noise</p></li>
+<li><p><strong>Scalability</strong>: Batch processing of multiple PDFs</p></li>
+</ul>
+<p>The conversion workflow:</p>
+<ol class="arabic simple">
+<li><p>Load PDF document using PyMuPDF</p></li>
+<li><p>Extract text and structure using pymupdf4llm</p></li>
+<li><p>Clean and normalize the extracted Markdown</p></li>
+<li><p>Save to output directory with proper naming</p></li>
+</ol>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf4llm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: Operating system interface for environment variables</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pymupdf</span></code>: PyMuPDF library for PDF manipulation (also known as fitz)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pymupdf4llm</span></code>: Extension for converting PDFs to Markdown optimized for LLMs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code>: Object-oriented path handling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">glob</span></code>: Pattern-based file discovery</p></li>
+</ul>
+<p><strong>Why These Libraries:</strong></p>
+<ul class="simple">
+<li><p><strong>PyMuPDF</strong>: Fast, efficient PDF processing with layout awareness</p></li>
+<li><p><strong>pymupdf4llm</strong>: Specifically designed for LLM-friendly Markdown conversion</p></li>
+<li><p><strong>pathlib</strong>: Modern, cross-platform path operations</p></li>
+<li><p><strong>glob</strong>: Flexible file pattern matching</p></li>
+</ul>
+</section>
+<section id="step-2-configure-environment-variables">
+<h2>Step 2: Configure Environment Variables<a class="headerlink" href="#step-2-configure-environment-variables" title="Link to this heading">¶</a></h2>
+<p>Set up environment variables for optimal processing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TOKENIZERS_PARALLELISM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;false&quot;</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>TOKENIZERS_PARALLELISM</strong>: Controls parallel tokenization</p></li>
+<li><p><strong>Value “false”</strong>: Disables parallelism to avoid warnings and potential conflicts</p></li>
+<li><p><strong>Why</strong>: Prevents race conditions when processing multiple PDFs sequentially</p></li>
+</ul>
+<p><strong>Other Useful Environment Variables:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Suppress warnings</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TOKENIZERS_PARALLELISM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;false&quot;</span>
+
+<span class="c1"># Control logging verbosity</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TRANSFORMERS_VERBOSITY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span>
+
+<span class="c1"># Set number of threads</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OMP_NUM_THREADS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;4&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-single-pdf-conversion-function">
+<h2>Step 3: Single PDF Conversion Function<a class="headerlink" href="#step-3-single-pdf-conversion-function" title="Link to this heading">¶</a></h2>
+<p>Define a function to convert a single PDF to Markdown:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pdf_to_markdown</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a single PDF file to Markdown format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf_path (str): Path to the PDF file</span>
+<span class="sd">        output_dir (str): Directory to save the Markdown file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">pymupdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
+    <span class="n">md</span> <span class="o">=</span> <span class="n">pymupdf4llm</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span>
+        <span class="n">doc</span><span class="p">,</span>
+        <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">footer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">page_separators</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">ignore_images</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">write_images</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">image_path</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="n">md_cleaned</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;surrogatepass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+    <span class="n">Path</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">md_cleaned</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Function Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pdf_path</span></code>: Full path to the PDF file to convert</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_dir</span></code>: Directory where Markdown file will be saved</p></li>
+</ul>
+<p><strong>Step 3a: Open PDF Document</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">doc</span> <span class="o">=</span> <span class="n">pymupdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Opens the PDF file and creates a document object for processing.</p>
+<p><strong>Step 3b: Convert to Markdown</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">md</span> <span class="o">=</span> <span class="n">pymupdf4llm</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span>
+    <span class="n">doc</span><span class="p">,</span>
+    <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>           <span class="c1"># Exclude page headers</span>
+    <span class="n">footer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>           <span class="c1"># Exclude page footers</span>
+    <span class="n">page_separators</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>   <span class="c1"># Add separators between pages</span>
+    <span class="n">ignore_images</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>     <span class="c1"># Skip image processing</span>
+    <span class="n">write_images</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>     <span class="c1"># Don&#39;t save images to disk</span>
+    <span class="n">image_path</span><span class="o">=</span><span class="kc">None</span>         <span class="c1"># No image output directory</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Parameter Explanations:</strong></p>
+<ul class="simple">
+<li><p><strong>header=False</strong>: Removes header content (page numbers, titles)</p></li>
+<li><p><strong>footer=False</strong>: Removes footer content (page numbers, dates)</p></li>
+<li><p><strong>page_separators=True</strong>: Adds <code class="docutils literal notranslate"><span class="pre">---</span></code> between pages for structure</p></li>
+<li><p><strong>ignore_images=True</strong>: Skips image extraction (faster processing)</p></li>
+<li><p><strong>write_images=False</strong>: Doesn’t save images separately</p></li>
+<li><p><strong>image_path=None</strong>: No directory for image output</p></li>
+</ul>
+<p><strong>Why These Settings:</strong></p>
+<ul class="simple">
+<li><p>Removing headers/footers reduces noise in the text</p></li>
+<li><p>Page separators help identify page boundaries</p></li>
+<li><p>Ignoring images speeds up conversion and reduces storage</p></li>
+<li><p>Optimized for text-based RAG systems</p></li>
+</ul>
+<p><strong>Alternative Configurations:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For documents with important images</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">pymupdf4llm</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span>
+    <span class="n">doc</span><span class="p">,</span>
+    <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">footer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">page_separators</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">ignore_images</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>        <span class="c1"># Include images</span>
+    <span class="n">write_images</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>          <span class="c1"># Save images</span>
+    <span class="n">image_path</span><span class="o">=</span><span class="s2">&quot;./extracted_images&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># For documents with important headers/footers</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">pymupdf4llm</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span>
+    <span class="n">doc</span><span class="p">,</span>
+    <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>                <span class="c1"># Include headers</span>
+    <span class="n">footer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>                <span class="c1"># Include footers</span>
+    <span class="n">page_separators</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">ignore_images</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">write_images</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">image_path</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Step 3c: Clean Markdown Content</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">md_cleaned</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;surrogatepass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This two-step encoding/decoding process handles problematic characters:</p>
+<ol class="arabic simple">
+<li><p><strong>encode(‘utf-8’, errors=’surrogatepass’)</strong>: Converts string to bytes, preserving invalid UTF-8 sequences</p></li>
+<li><p><strong>decode(‘utf-8’, errors=’ignore’)</strong>: Converts back to string, removing invalid sequences</p></li>
+</ol>
+<p><strong>Why This Matters:</strong></p>
+<ul class="simple">
+<li><p>PDFs may contain corrupted or invalid UTF-8 characters</p></li>
+<li><p>This approach gracefully handles encoding errors</p></li>
+<li><p>Prevents crashes during processing</p></li>
+<li><p>Ensures clean, valid Markdown output</p></li>
+</ul>
+<p><strong>Step 3d: Save Markdown File</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+<span class="n">Path</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">md_cleaned</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Saves the cleaned Markdown to disk:</p>
+<ol class="arabic simple">
+<li><p><strong>Path(output_dir) / Path(doc.name).stem</strong>: Creates output path with original filename</p></li>
+<li><p><strong>.with_suffix(“.md”)</strong>: Ensures .md extension</p></li>
+<li><p><strong>.write_bytes()</strong>: Writes UTF-8 encoded content to file</p></li>
+</ol>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input: docs/research_paper.pdf</span>
+<span class="c1"># Output: markdown/research_paper.md</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-batch-pdf-conversion-function">
+<h2>Step 4: Batch PDF Conversion Function<a class="headerlink" href="#step-4-batch-pdf-conversion-function" title="Link to this heading">¶</a></h2>
+<p>Define a function to convert multiple PDFs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pdfs_to_markdowns</span><span class="p">(</span><span class="n">path_pattern</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert multiple PDF files to Markdown format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path_pattern (str): Glob pattern for PDF files (e.g., &quot;docs/*.pdf&quot;)</span>
+<span class="sd">        overwrite (bool): Whether to overwrite existing Markdown files</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">)</span>
+    <span class="n">output_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">pdf_path</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path_pattern</span><span class="p">)):</span>
+        <span class="n">md_path</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">md_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">pdf_to_markdown</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Function Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">path_pattern</span></code>: Glob pattern to match PDF files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">overwrite</span></code>: Whether to re-convert existing Markdown files</p></li>
+</ul>
+<p><strong>Step 4a: Create Output Directory</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">)</span>
+<span class="n">output_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Creates the output directory if it doesn’t exist:</p>
+<ul class="simple">
+<li><p><strong>parents=True</strong>: Creates parent directories as needed</p></li>
+<li><p><strong>exist_ok=True</strong>: Doesn’t error if directory already exists</p></li>
+</ul>
+<p><strong>Step 4b: Iterate Over PDF Files</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pdf_path</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path_pattern</span><span class="p">)):</span>
+</pre></div>
+</div>
+<p>Finds all PDFs matching the pattern and converts each one:</p>
+<ul class="simple">
+<li><p><strong>glob.glob(path_pattern)</strong>: Finds files matching pattern</p></li>
+<li><p><strong>map(Path, …)</strong>: Converts strings to Path objects</p></li>
+<li><p><a href="#id1"><span class="problematic" id="id2">**</span></a>for pdf_path in …: <a href="#id3"><span class="problematic" id="id4">**</span></a>: Iterates over each PDF</p></li>
+</ul>
+<p><strong>Step 4c: Check for Existing Files</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">md_path</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">overwrite</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">md_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="n">pdf_to_markdown</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Implements smart conversion logic:</p>
+<ul class="simple">
+<li><p><strong>overwrite=True</strong>: Always re-convert</p></li>
+<li><p><strong>overwrite=False</strong>: Skip if Markdown already exists</p></li>
+<li><p>Saves time on repeated runs</p></li>
+</ul>
+</section>
+<section id="complete-conversion-pipeline">
+<h2>Complete Conversion Pipeline<a class="headerlink" href="#complete-conversion-pipeline" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete PDF to Markdown conversion code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf4llm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+
+<span class="c1"># Configure environment</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TOKENIZERS_PARALLELISM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;false&quot;</span>
+
+<span class="c1"># Define paths (from previous setup)</span>
+<span class="n">DOCS_DIR</span> <span class="o">=</span> <span class="s2">&quot;docs&quot;</span>
+<span class="n">MARKDOWN_DIR</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pdf_to_markdown</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a single PDF to Markdown.&quot;&quot;&quot;</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">pymupdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
+    <span class="n">md</span> <span class="o">=</span> <span class="n">pymupdf4llm</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span>
+        <span class="n">doc</span><span class="p">,</span>
+        <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">footer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">page_separators</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">ignore_images</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">write_images</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">image_path</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="n">md_cleaned</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;surrogatepass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+    <span class="n">Path</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">md_cleaned</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converted: </span><span class="si">{</span><span class="n">pdf_path</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">.md&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pdfs_to_markdowns</span><span class="p">(</span><span class="n">path_pattern</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert multiple PDFs to Markdown.&quot;&quot;&quot;</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">)</span>
+    <span class="n">output_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">pdf_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path_pattern</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> PDF files to process&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">pdf_path</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">pdf_files</span><span class="p">):</span>
+        <span class="n">md_path</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">md_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">pdf_to_markdown</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping (already exists): </span><span class="si">{</span><span class="n">md_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Execute conversion</span>
+<span class="n">pdfs_to_markdowns</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">DOCS_DIR</span><span class="si">}</span><span class="s2">/*.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading">¶</a></h2>
+<p><strong>Convert All PDFs in Directory</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert all PDFs in docs/ directory</span>
+<span class="n">pdfs_to_markdowns</span><span class="p">(</span><span class="s2">&quot;docs/*.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Convert Specific PDF Pattern</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert only research papers</span>
+<span class="n">pdfs_to_markdowns</span><span class="p">(</span><span class="s2">&quot;docs/research_*.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Force Re-conversion</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Re-convert all PDFs, overwriting existing Markdown</span>
+<span class="n">pdfs_to_markdowns</span><span class="p">(</span><span class="s2">&quot;docs/*.pdf&quot;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Convert Single PDF</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert one PDF</span>
+<span class="n">pdf_to_markdown</span><span class="p">(</span><span class="s2">&quot;docs/document.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;markdown&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="output-structure">
+<h2>Output Structure<a class="headerlink" href="#output-structure" title="Link to this heading">¶</a></h2>
+<p>After conversion, your directory structure looks like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>project/
+├── docs/
+│   ├── research_paper.pdf
+│   ├── technical_guide.pdf
+│   └── manual.pdf
+└── markdown/
+    ├── research_paper.md
+    ├── technical_guide.md
+    └── manual.md
+</pre></div>
+</div>
+<p><strong>Markdown File Contents:</strong></p>
+<p>Each Markdown file contains:</p>
+<ul class="simple">
+<li><p>Extracted text from the PDF</p></li>
+<li><p>Preserved heading hierarchy</p></li>
+<li><p>Page separators (<code class="docutils literal notranslate"><span class="pre">---</span></code>)</p></li>
+<li><p>Lists and formatting</p></li>
+<li><p>Code blocks (if present)</p></li>
+<li><p>Tables (if present)</p></li>
+</ul>
+<p><strong>Example Markdown Output:</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># Document Title</span>
+
+<span class="gu">## Section 1</span>
+
+This is the content of section 1.
+
+---
+
+<span class="gu">## Section 2</span>
+
+Content continues on the next page.
+
+<span class="k">-</span><span class="w"> </span>Bullet point 1
+<span class="k">-</span><span class="w"> </span>Bullet point 2
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Organize PDFs by Type</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Separate different document types</span>
+<span class="n">pdfs_to_markdowns</span><span class="p">(</span><span class="s2">&quot;docs/research/*.pdf&quot;</span><span class="p">)</span>
+<span class="n">pdfs_to_markdowns</span><span class="p">(</span><span class="s2">&quot;docs/manuals/*.pdf&quot;</span><span class="p">)</span>
+<span class="n">pdfs_to_markdowns</span><span class="p">(</span><span class="s2">&quot;docs/reports/*.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>2. Handle Large Batches</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process with progress tracking</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tqdm</span>
+
+<span class="n">pdf_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;docs/*.pdf&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">pdf_path</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">):</span>
+    <span class="n">pdf_to_markdown</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">MARKDOWN_DIR</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>3. Error Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pdf_to_markdown_safe</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert PDF with error handling.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="n">pymupdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="n">pymupdf4llm</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">footer</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">md_cleaned</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;surrogatepass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">md_cleaned</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Converted: </span><span class="si">{</span><span class="n">pdf_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✗ Error converting </span><span class="si">{</span><span class="n">pdf_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>4. Verify Conversions</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check conversion results</span>
+<span class="n">markdown_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.md&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully converted </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">markdown_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> files&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">md_file</span> <span class="ow">in</span> <span class="n">markdown_files</span><span class="p">:</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">md_file</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">md_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">size</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>5. Clean Up Invalid Files</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove empty or corrupted Markdown files</span>
+<span class="k">for</span> <span class="n">md_file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.md&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">md_file</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>  <span class="c1"># Less than 100 bytes</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removing small file: </span><span class="si">{</span><span class="n">md_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">md_file</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Processing Speed:</strong></p>
+<ul class="simple">
+<li><p>Average PDF: 1-5 seconds per document</p></li>
+<li><p>Large PDFs (500+ pages): 10-30 seconds</p></li>
+<li><p>Batch processing: Linear with number of documents</p></li>
+</ul>
+<p><strong>Memory Usage:</strong></p>
+<ul class="simple">
+<li><p>Per PDF: ~50-200MB depending on size</p></li>
+<li><p>Parallel processing: Multiply by number of workers</p></li>
+<li><p>Recommendation: Process sequentially for stability</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Skip image processing for faster conversion</span>
+<span class="n">ignore_images</span><span class="o">=</span><span class="kc">True</span>
+
+<span class="c1"># Use page separators for better chunking</span>
+<span class="n">page_separators</span><span class="o">=</span><span class="kc">True</span>
+
+<span class="c1"># Skip headers/footers to reduce noise</span>
+<span class="n">header</span><span class="o">=</span><span class="kc">False</span>
+<span class="n">footer</span><span class="o">=</span><span class="kc">False</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>PDF Opening Error</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: &quot;Cannot open PDF&quot;</span>
+<span class="c1"># Solution: Verify file exists and is valid</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File exists&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File not found&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Encoding Errors</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Invalid UTF-8 characters</span>
+<span class="c1"># Solution: Already handled by cleaning function</span>
+
+<span class="n">md_cleaned</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;surrogatepass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Empty Markdown Output</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Converted file is empty</span>
+<span class="c1"># Possible causes:</span>
+<span class="c1"># - PDF is image-only (scanned document)</span>
+<span class="c1"># - PDF is corrupted</span>
+<span class="c1"># - PDF uses unsupported encoding</span>
+
+<span class="c1"># Solution: Check file size</span>
+<span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">md_path</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Empty output for </span><span class="si">{</span><span class="n">pdf_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Memory Issues with Large PDFs</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Out of memory with large PDFs</span>
+<span class="c1"># Solution: Process one at a time, not in parallel</span>
+
+<span class="k">for</span> <span class="n">pdf_path</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;docs/*.pdf&quot;</span><span class="p">):</span>
+    <span class="n">pdf_to_markdown</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">MARKDOWN_DIR</span><span class="p">)</span>
+    <span class="c1"># File is closed after each conversion</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With PDFs converted to Markdown, you can proceed to:</p>
+<ul class="simple">
+<li><p>Chunking Markdown documents into smaller pieces</p></li>
+<li><p>Generating embeddings for each chunk</p></li>
+<li><p>Storing chunks in the vector database</p></li>
+<li><p>Implementing retrieval and search functionality</p></li>
+<li><p>Building the complete RAG pipeline</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch02_configure_vector_database.html" class="btn btn-neutral float-left" title="Topic 2: Configure Vector Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch04_hierarchical_document_indexing.html" class="btn btn-neutral float-right" title="Topic 4: Hierarchical Document Indexing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

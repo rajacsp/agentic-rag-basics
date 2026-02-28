@@ -1,0 +1,3006 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 6: Define System Prompts &mdash; GitHub Book Template 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Topic 5: Define Agent Tools" href="ch05_define_agent_tools.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GitHub Book Template
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 6: Define System Prompts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-conversation-summary-prompt">Step 1: Conversation Summary Prompt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-query-rewriting-prompt">Step 2: Query Rewriting Prompt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-2-advanced-query-rewrite-prompt-with-context">Step 2.2: Advanced Query Rewrite Prompt with Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-agent-orchestration-prompt">Step 3: Agent Orchestration Prompt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-2-advanced-orchestrator-prompt-with-memory">Step 3.2: Advanced Orchestrator Prompt with Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-basic-context-compression-prompt">Step 4: Basic Context Compression Prompt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-2-advanced-context-compression-prompt-with-query-focus">Step 4.2: Advanced Context Compression Prompt with Query Focus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-2-fallback-response-prompt-with-research-limits">Step 4.2: Fallback Response Prompt with Research Limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-fallback-response-prompt">Step 5: Fallback Response Prompt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-answer-aggregation-prompt">Step 6: Answer Aggregation Prompt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-system-prompts-module">Complete System Prompts Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prompt-engineering-best-practices">Prompt Engineering Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prompt-optimization-techniques">Prompt Optimization Techniques</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GitHub Book Template</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 6: Define System Prompts</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch06_define_system_prompts.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-6-define-system-prompts">
+<h1>Topic 6: Define System Prompts<a class="headerlink" href="#topic-6-define-system-prompts" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the creation of system prompts that guide the LLM’s behavior across different stages of the RAG pipeline. System prompts are critical instructions that shape how the agent processes queries, retrieves information, and generates responses. Well-designed prompts ensure consistent, high-quality outputs and enable the agent to handle complex tasks effectively.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>System prompts serve as the “instructions” for the LLM, defining:</p>
+<ul class="simple">
+<li><p><strong>Role Definition</strong>: What the LLM should act as</p></li>
+<li><p><strong>Task Specification</strong>: What the LLM should do</p></li>
+<li><p><strong>Output Format</strong>: How results should be structured</p></li>
+<li><p><strong>Constraints</strong>: What to include/exclude</p></li>
+<li><p><strong>Quality Standards</strong>: Expected output quality</p></li>
+</ul>
+<p>The prompt architecture includes multiple specialized prompts for different stages:</p>
+<ol class="arabic simple">
+<li><p><strong>Conversation Summary Prompt</strong>: Summarizes multi-turn conversations</p></li>
+<li><p><strong>Query Rewriting Prompt</strong>: Reformulates user queries for better retrieval</p></li>
+<li><p><strong>Agent Orchestration Prompt</strong>: Guides tool selection and invocation</p></li>
+<li><p><strong>Context Compression Prompt</strong>: Condenses retrieved context</p></li>
+<li><p><strong>Fallback Response Prompt</strong>: Handles cases with insufficient information</p></li>
+<li><p><strong>Answer Aggregation Prompt</strong>: Combines multiple sources into coherent answers</p></li>
+</ol>
+</section>
+<section id="step-1-conversation-summary-prompt">
+<h2>Step 1: Conversation Summary Prompt<a class="headerlink" href="#step-1-conversation-summary-prompt" title="Link to this heading">¶</a></h2>
+<p>Define the prompt for summarizing conversations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_conversation_summary_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert conversation summarizer.</span>
+</pre></div>
+</div>
+<p>Your task is to create a brief 1-2 sentence summary of the conversation (max 30-50 words).</p>
+<p>Include:
+- Main topics discussed
+- Important facts or entities mentioned
+- Any unresolved questions if applicable
+- Sources file name (e.g., file1.pdf) or documents referenced</p>
+<p>Exclude:
+- Greetings, misunderstandings, off-topic content.</p>
+<p>Output:
+- Return ONLY the summary.
+- Do NOT include any explanations or justifications.
+- If no meaningful topics exist, return an empty string.”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Condenses multi-turn conversations into concise summaries for:</p>
+<ul class="simple">
+<li><p>Context preservation across sessions</p></li>
+<li><p>Memory management in long conversations</p></li>
+<li><p>Conversation history tracking</p></li>
+<li><p>User intent understanding</p></li>
+</ul>
+<p><strong>Prompt Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Role Definition</strong>: “You are an expert conversation summarizer”</p>
+<ul class="simple">
+<li><p>Establishes the LLM’s role</p></li>
+<li><p>Sets expectations for expertise level</p></li>
+<li><p>Frames the task context</p></li>
+</ul>
+</li>
+<li><p><strong>Task Specification</strong>: “Create a brief 1-2 sentence summary”</p>
+<ul class="simple">
+<li><p>Clear output format (1-2 sentences)</p></li>
+<li><p>Length constraint (30-50 words)</p></li>
+<li><p>Specific, measurable requirements</p></li>
+</ul>
+</li>
+<li><p><strong>Inclusion Guidelines</strong>: What to include</p>
+<ul class="simple">
+<li><p>Main topics: Core subjects discussed</p></li>
+<li><p>Important facts/entities: Key information</p></li>
+<li><p>Unresolved questions: Open items</p></li>
+<li><p>Source references: Document attribution</p></li>
+</ul>
+</li>
+<li><p><strong>Exclusion Guidelines</strong>: What to exclude</p>
+<ul class="simple">
+<li><p>Greetings: “Hello”, “Hi”, etc.</p></li>
+<li><p>Misunderstandings: Clarifications that don’t add value</p></li>
+<li><p>Off-topic content: Irrelevant discussions</p></li>
+</ul>
+</li>
+<li><p><strong>Output Format</strong>: Strict formatting rules</p>
+<ul class="simple">
+<li><p>“Return ONLY the summary”: No extra text</p></li>
+<li><p>“Do NOT include explanations”: Direct output</p></li>
+<li><p>“Return empty string if no topics”: Handle edge cases</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Why These Guidelines Matter:</strong></p>
+<ul class="simple">
+<li><p><strong>Inclusion/Exclusion</strong>: Ensures relevant information is captured</p></li>
+<li><p><strong>Length constraints</strong>: Prevents verbose outputs</p></li>
+<li><p><strong>Format rules</strong>: Enables downstream processing</p></li>
+<li><p><strong>Edge case handling</strong>: Prevents errors on empty input</p></li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOllama</span>
+
+<span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOllama</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;qwen3:4b-instruct-2507-q4_K_M&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">conversation</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;What are neural networks?&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Neural networks are...&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;How do they learn?&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;They learn through backpropagation...&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">get_conversation_summary_prompt</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Conversation:</span><span class="se">\n</span><span class="si">{</span><span class="n">conversation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Output: &quot;Discussed neural networks and their learning mechanism through backpropagation.&quot;</span>
+</pre></div>
+</div>
+<p><strong>Example Outputs:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Good Summary:
+&quot;User asked about neural networks and their learning process;
+discussed backpropagation from research_paper.pdf.&quot;
+
+Bad Summary:
+&quot;Hello, the user asked about neural networks. The assistant explained
+that neural networks are computational models inspired by biological
+neurons. Then the user asked how they learn. The assistant explained
+backpropagation. This was a good conversation.&quot;
+</pre></div>
+</div>
+</section>
+<section id="step-2-query-rewriting-prompt">
+<h2>Step 2: Query Rewriting Prompt<a class="headerlink" href="#step-2-query-rewriting-prompt" title="Link to this heading">¶</a></h2>
+<p>Define the prompt for reformulating user queries:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_query_rewriting_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert query optimizer.</span>
+</pre></div>
+</div>
+<p>Your task is to rewrite the user’s query to improve retrieval effectiveness.</p>
+<p>Guidelines:
+- Expand abbreviations and acronyms
+- Add relevant context or domain terms
+- Remove ambiguity and clarify intent
+- Maintain the original meaning
+- Keep the query concise (under 100 words)</p>
+<p>Output:
+- Return ONLY the rewritten query.
+- Do NOT include explanations.
+- If the query is already optimal, return it unchanged.”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Improves query quality for better retrieval by:</p>
+<ul class="simple">
+<li><p>Expanding abbreviations (NLP → Natural Language Processing)</p></li>
+<li><p>Adding domain context (ML → Machine Learning in context of AI)</p></li>
+<li><p>Clarifying ambiguous terms</p></li>
+<li><p>Maintaining semantic meaning</p></li>
+<li><p>Optimizing for vector search</p></li>
+</ul>
+<p><strong>Prompt Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Role Definition</strong>: “You are an expert query optimizer”</p>
+<ul class="simple">
+<li><p>Establishes expertise in query optimization</p></li>
+<li><p>Sets high-quality expectations</p></li>
+</ul>
+</li>
+<li><p><strong>Task Specification</strong>: “Rewrite the user’s query to improve retrieval”</p>
+<ul class="simple">
+<li><p>Clear objective: improve retrieval</p></li>
+<li><p>Specific action: rewrite</p></li>
+</ul>
+</li>
+<li><p><strong>Guidelines</strong>: Specific rewriting rules</p>
+<ul class="simple">
+<li><p>Expand abbreviations: NLP → Natural Language Processing</p></li>
+<li><p>Add context: Domain-specific terms</p></li>
+<li><p>Remove ambiguity: Clarify intent</p></li>
+<li><p>Maintain meaning: Don’t change core intent</p></li>
+<li><p>Keep concise: Under 100 words</p></li>
+</ul>
+</li>
+<li><p><strong>Output Format</strong>: Strict formatting</p>
+<ul class="simple">
+<li><p>“Return ONLY the rewritten query”</p></li>
+<li><p>“Do NOT include explanations”</p></li>
+<li><p>“Return unchanged if already optimal”</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rewrite_query</span><span class="p">(</span><span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_query_rewriting_prompt</span><span class="p">()</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Original query: </span><span class="si">{</span><span class="n">user_query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># Example</span>
+<span class="n">original</span> <span class="o">=</span> <span class="s2">&quot;How do RNNs work?&quot;</span>
+<span class="n">rewritten</span> <span class="o">=</span> <span class="n">rewrite_query</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+<span class="c1"># Output: &quot;How do Recurrent Neural Networks work and what is their architecture?&quot;</span>
+</pre></div>
+</div>
+<p><strong>Example Transformations:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Original: &quot;What&#39;s NLP?&quot;
+Rewritten: &quot;What is Natural Language Processing and its applications?&quot;
+
+Original: &quot;Explain GANs&quot;
+Rewritten: &quot;Explain Generative Adversarial Networks and how they work&quot;
+
+Original: &quot;How do transformers work?&quot;
+Rewritten: &quot;How do transformer models work and what is the attention mechanism?&quot;
+</pre></div>
+</div>
+</section>
+<section id="step-2-2-advanced-query-rewrite-prompt-with-context">
+<h2>Step 2.2: Advanced Query Rewrite Prompt with Context<a class="headerlink" href="#step-2-2-advanced-query-rewrite-prompt-with-context" title="Link to this heading">¶</a></h2>
+<p>Define an advanced prompt for context-aware query rewriting:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_rewrite_query_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert query analyst and rewriter.</span>
+</pre></div>
+</div>
+<p>Your task is to rewrite the current user query for optimal document retrieval,
+incorporating conversation context only when necessary.</p>
+<p>Rules:
+1. Self-contained queries:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Always rewrite the query to be clear and self-contained</p></li>
+<li><p>If the query is a follow-up (e.g., “what about X?”, “and for Y?”),
+integrate minimal necessary context from the summary</p></li>
+<li><p>Do not add information not present in the query or conversation summary</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Domain-specific terms:
+- Product names, brands, proper nouns, or technical terms are treated as domain-specific
+- For domain-specific queries, use conversation context minimally or not at all
+- Use the summary only to disambiguate vague queries</p></li>
+<li><p>Grammar and clarity:
+- Fix grammar, spelling errors, and unclear abbreviations
+- Remove filler words and conversational phrases
+- Preserve concrete keywords and named entities</p></li>
+<li><p>Multiple information needs:
+- If the query contains multiple distinct, unrelated questions, split into separate queries (maximum 3)
+- Each sub-query must remain semantically equivalent to its part of the original
+- Do not expand, enrich, or reinterpret the meaning</p></li>
+<li><p>Failure handling:
+- If the query intent is unclear or unintelligible, mark as “unclear”</p></li>
+</ol>
+<p>Input:
+- conversation_summary: A concise summary of prior conversation
+- current_query: The user’s current query</p>
+<p>Output:
+- One or more rewritten, self-contained queries suitable for document retrieval”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Advanced query rewriting that:</p>
+<ul class="simple">
+<li><p>Incorporates conversation context intelligently</p></li>
+<li><p>Handles follow-up questions effectively</p></li>
+<li><p>Preserves domain-specific terminology</p></li>
+<li><p>Splits complex multi-part queries</p></li>
+<li><p>Maintains semantic equivalence</p></li>
+<li><p>Handles edge cases gracefully</p></li>
+</ul>
+<p><strong>Key Differences from Basic Rewrite:</strong></p>
+<p>The advanced prompt differs from the basic version in several important ways:</p>
+<ol class="arabic simple">
+<li><p><strong>Context Integration</strong>: Uses conversation summary strategically</p></li>
+<li><p><strong>Self-Contained Queries</strong>: Ensures queries work independently</p></li>
+<li><p><strong>Domain Awareness</strong>: Treats technical terms specially</p></li>
+<li><p><strong>Multi-Query Support</strong>: Can split complex queries</p></li>
+<li><p><strong>Semantic Preservation</strong>: Maintains original meaning</p></li>
+<li><p><strong>Explicit Failure Handling</strong>: Marks unclear queries</p></li>
+</ol>
+<p><strong>Step 2.2a: Self-Contained Query Rule</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="sd">&quot;&quot;&quot;1. Self-contained queries:</span>
+<span class="sd">- Always rewrite the query to be clear and self-contained</span>
+<span class="sd">- If the query is a follow-up (e.g., &quot;what about X?&quot;, &quot;and for Y?&quot;),</span>
+<span class="sd">  integrate minimal necessary context from the summary</span>
+<span class="sd">- Do not add information not present in the query or conversation summary&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Self-Contained Queries Matter:</strong></p>
+<ul class="simple">
+<li><p>Queries must work independently in vector search</p></li>
+<li><p>Context from conversation may not be available during retrieval</p></li>
+<li><p>Enables query reuse and caching</p></li>
+<li><p>Improves retrieval accuracy</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Conversation Summary: &quot;Discussed neural networks and backpropagation&quot;
+
+Follow-up Query: &quot;What about optimization?&quot;
+Rewritten: &quot;What are optimization techniques in neural networks?&quot;
+
+NOT: &quot;What about optimization?&quot; (too vague)
+NOT: &quot;What about optimization in neural networks and backpropagation?&quot; (too much context)
+</pre></div>
+</div>
+<p><strong>Step 2.2b: Domain-Specific Terms Rule</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="sd">&quot;&quot;&quot;2. Domain-specific terms:</span>
+<span class="sd">- Product names, brands, proper nouns, or technical terms are treated as domain-specific</span>
+<span class="sd">- For domain-specific queries, use conversation context minimally or not at all</span>
+<span class="sd">- Use the summary only to disambiguate vague queries&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Domain-Specific Handling:</strong></p>
+<ul class="simple">
+<li><p>Technical terms have precise meanings</p></li>
+<li><p>Adding context can dilute specificity</p></li>
+<li><p>Vector search works better with exact terms</p></li>
+<li><p>Prevents over-expansion of queries</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Conversation Summary: &quot;Discussed machine learning frameworks&quot;
+
+Query: &quot;How does PyTorch work?&quot;
+Rewritten: &quot;How does PyTorch work?&quot; (unchanged - specific product name)
+
+NOT: &quot;How does PyTorch machine learning framework work?&quot; (redundant)
+
+Query: &quot;What about it?&quot;
+Rewritten: &quot;How does PyTorch work?&quot; (use context to disambiguate)
+</pre></div>
+</div>
+<p><strong>Step 2.2c: Grammar and Clarity Rule</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="sd">&quot;&quot;&quot;3. Grammar and clarity:</span>
+<span class="sd">- Fix grammar, spelling errors, and unclear abbreviations</span>
+<span class="sd">- Remove filler words and conversational phrases</span>
+<span class="sd">- Preserve concrete keywords and named entities&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Grammar Matters:</strong></p>
+<ul class="simple">
+<li><p>Improves embedding quality</p></li>
+<li><p>Reduces noise in vector search</p></li>
+<li><p>Maintains readability</p></li>
+<li><p>Preserves important terms</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Original: &quot;umm like how do u use like RNNs for like text stuff?&quot;
+Rewritten: &quot;How do Recurrent Neural Networks work for text processing?&quot;
+
+Original: &quot;can u explain y transformers r better than RNNs?&quot;
+Rewritten: &quot;Why are transformers better than Recurrent Neural Networks?&quot;
+
+Original: &quot;what&#39;s the diff between CNN and RNN?&quot;
+Rewritten: &quot;What is the difference between Convolutional Neural Networks and Recurrent Neural Networks?&quot;
+</pre></div>
+</div>
+<p><strong>Step 2.2d: Multiple Information Needs Rule</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="sd">&quot;&quot;&quot;4. Multiple information needs:</span>
+<span class="sd">- If the query contains multiple distinct, unrelated questions, split into separate queries (maximum 3)</span>
+<span class="sd">- Each sub-query must remain semantically equivalent to its part of the original</span>
+<span class="sd">- Do not expand, enrich, or reinterpret the meaning&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Split Complex Queries:</strong></p>
+<ul class="simple">
+<li><p>Vector search works better with focused queries</p></li>
+<li><p>Enables targeted retrieval for each question</p></li>
+<li><p>Improves answer quality</p></li>
+<li><p>Prevents information loss</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Original: &quot;How do neural networks work and what are their applications?&quot;
+Split into:
+1. &quot;How do neural networks work?&quot;
+2. &quot;What are the applications of neural networks?&quot;
+
+Original: &quot;Explain backpropagation, gradient descent, and optimization&quot;
+Split into:
+1. &quot;What is backpropagation?&quot;
+2. &quot;What is gradient descent?&quot;
+3. &quot;What are optimization techniques in machine learning?&quot;
+
+NOT split (related questions):
+Original: &quot;How do transformers work and what is the attention mechanism?&quot;
+Rewritten: &quot;How do transformers work and what is the attention mechanism?&quot;
+(Keep together - attention is part of transformers)
+</pre></div>
+</div>
+<p><strong>Step 2.2e: Failure Handling Rule</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="sd">&quot;&quot;&quot;5. Failure handling:</span>
+<span class="sd">- If the query intent is unclear or unintelligible, mark as &quot;unclear\&quot;&quot;&quot;</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Explicit Failure Handling:</strong></p>
+<ul class="simple">
+<li><p>Prevents garbage queries from reaching vector search</p></li>
+<li><p>Enables graceful degradation</p></li>
+<li><p>Allows agent to ask for clarification</p></li>
+<li><p>Improves system reliability</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Query: &quot;xyzabc qwerty asdf&quot;
+Output: &quot;unclear&quot;
+
+Query: &quot;fjkdsl;jf&quot;
+Output: &quot;unclear&quot;
+
+Query: &quot;the the the the&quot;
+Output: &quot;unclear&quot;
+</pre></div>
+</div>
+<p><strong>Advanced Query Rewrite Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rewrite_query_with_context</span><span class="p">(</span>
+    <span class="n">conversation_summary</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">current_query</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rewrite query with conversation context.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conversation_summary: Summary of prior conversation</span>
+<span class="sd">        current_query: User&#39;s current query</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of rewritten queries (1-3 queries)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_rewrite_query_prompt</span><span class="p">()</span>
+
+    <span class="n">input_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>conversation_summary: {conversation_summary}
+current_query: {current_query}”””</p>
+<blockquote>
+<div><p>response = llm.invoke(input_text)
+result = response.content.strip()</p>
+<p># Handle “unclear” case
+if result.lower() == “unclear”:</p>
+<blockquote>
+<div><p>return [“unclear”]</p>
+</div></blockquote>
+<p># Split multiple queries if present
+queries = [q.strip() for q in result.split(’n’) if q.strip()]
+return queries</p>
+</div></blockquote>
+<p><strong>Example Advanced Rewrite Scenarios</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Follow-up Question
+==============================
+Summary: &quot;Discussed neural networks and their training process&quot;
+Query: &quot;What about optimization?&quot;
+Output: &quot;What are optimization techniques in neural networks?&quot;
+
+Scenario 2: Domain-Specific Query
+==================================
+Summary: &quot;Discussed machine learning frameworks&quot;
+Query: &quot;How does TensorFlow compare to PyTorch?&quot;
+Output: &quot;How does TensorFlow compare to PyTorch?&quot;
+(No expansion - specific product names)
+
+Scenario 3: Grammar Correction
+===============================
+Summary: &quot;Discussed deep learning&quot;
+Query: &quot;y r transformers better than RNNs?&quot;
+Output: &quot;Why are transformers better than Recurrent Neural Networks?&quot;
+
+Scenario 4: Multi-Part Query
+=============================
+Summary: &quot;Discussed neural networks&quot;
+Query: &quot;How do CNNs work and what are their applications in computer vision?&quot;
+Output:
+1. &quot;How do Convolutional Neural Networks work?&quot;
+2. &quot;What are the applications of CNNs in computer vision?&quot;
+
+Scenario 5: Unclear Query
+=========================
+Summary: &quot;Discussed machine learning&quot;
+Query: &quot;xyzabc qwerty&quot;
+Output: &quot;unclear&quot;
+</pre></div>
+</div>
+<p><strong>Comparison: Basic vs Advanced Rewrite</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspect</p></th>
+<th class="head"><p>Basic Rewrite</p></th>
+<th class="head"><p>Advanced Rewrite</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Context Usage</p></td>
+<td><p>None</p></td>
+<td><p>Strategic (minimal)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Follow-ups</p></td>
+<td><p>Not handled</p></td>
+<td><p>Integrated with context</p></td>
+</tr>
+<tr class="row-even"><td><p>Domain Terms</p></td>
+<td><p>Expanded</p></td>
+<td><p>Preserved</p></td>
+</tr>
+<tr class="row-odd"><td><p>Multi-Query</p></td>
+<td><p>Not supported</p></td>
+<td><p>Supported (max 3)</p></td>
+</tr>
+<tr class="row-even"><td><p>Failure Handling</p></td>
+<td><p>Implicit</p></td>
+<td><p>Explicit (“unclear”)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Semantic Preservation</p></td>
+<td><p>Best effort</p></td>
+<td><p>Strict equivalence</p></td>
+</tr>
+<tr class="row-even"><td><p>Use Case</p></td>
+<td><p>Simple queries</p></td>
+<td><p>Complex conversations</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to Use Each Approach</strong></p>
+<p>Use <strong>Basic Rewrite</strong> when:</p>
+<ul class="simple">
+<li><p>Queries are standalone (not follow-ups)</p></li>
+<li><p>No conversation context available</p></li>
+<li><p>Simple query optimization needed</p></li>
+<li><p>Speed is critical</p></li>
+</ul>
+<p>Use <strong>Advanced Rewrite</strong> when:</p>
+<ul class="simple">
+<li><p>Multi-turn conversations</p></li>
+<li><p>Follow-up questions common</p></li>
+<li><p>Domain-specific terminology important</p></li>
+<li><p>Complex multi-part queries</p></li>
+<li><p>Quality is more important than speed</p></li>
+</ul>
+<p><strong>Integration with Agent Loop</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">process_user_query</span><span class="p">(</span>
+    <span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">conversation_summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process user query through rewriting pipeline.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user_query: Raw user input</span>
+<span class="sd">        conversation_summary: Summary of prior conversation</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of rewritten queries ready for retrieval</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">conversation_summary</span><span class="p">:</span>
+        <span class="c1"># Use advanced rewrite with context</span>
+        <span class="n">rewritten</span> <span class="o">=</span> <span class="n">rewrite_query_with_context</span><span class="p">(</span>
+            <span class="n">conversation_summary</span><span class="p">,</span>
+            <span class="n">user_query</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Use basic rewrite without context</span>
+        <span class="n">rewritten</span> <span class="o">=</span> <span class="p">[</span><span class="n">rewrite_query</span><span class="p">(</span><span class="n">user_query</span><span class="p">)]</span>
+
+    <span class="c1"># Filter out unclear queries</span>
+    <span class="n">rewritten</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">rewritten</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;unclear&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rewritten</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;unclear&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">rewritten</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-agent-orchestration-prompt">
+<h2>Step 3: Agent Orchestration Prompt<a class="headerlink" href="#step-3-agent-orchestration-prompt" title="Link to this heading">¶</a></h2>
+<p>Define the prompt for guiding agent tool selection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_agent_orchestration_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an intelligent agent orchestrator.</span>
+</pre></div>
+</div>
+<p>Your task is to decide which tools to use and in what order to answer user queries.</p>
+<p>Available Tools:
+1. search_child_chunks(query, limit) - Search for relevant document chunks
+2. retrieve_parent_chunks(parent_id) - Get full context from parent chunks</p>
+<p>Decision Logic:
+- Always start with search_child_chunks to find relevant information
+- Use retrieve_parent_chunks if you need more context for a specific topic
+- Combine results from multiple searches if needed
+- Stop when you have sufficient information to answer</p>
+<p>Output:
+- Explain your tool selection strategy
+- Execute tools in the optimal order
+- Provide reasoning for each tool call”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Guides the agent in:</p>
+<ul class="simple">
+<li><p>Selecting appropriate tools</p></li>
+<li><p>Determining tool invocation order</p></li>
+<li><p>Deciding when to stop retrieving</p></li>
+<li><p>Combining multiple tool results</p></li>
+</ul>
+<p><strong>Prompt Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Role Definition</strong>: “You are an intelligent agent orchestrator”</p>
+<ul class="simple">
+<li><p>Establishes decision-making capability</p></li>
+<li><p>Sets strategic thinking expectations</p></li>
+</ul>
+</li>
+<li><p><strong>Available Tools</strong>: Lists all available tools</p>
+<ul class="simple">
+<li><p>Tool names and parameters</p></li>
+<li><p>Brief descriptions</p></li>
+<li><p>Usage context</p></li>
+</ul>
+</li>
+<li><p><strong>Decision Logic</strong>: Rules for tool selection</p>
+<ul class="simple">
+<li><p>Start with search: Initial retrieval</p></li>
+<li><p>Use parent retrieval: For context</p></li>
+<li><p>Combine results: Multi-source answers</p></li>
+<li><p>Stop condition: When sufficient info exists</p></li>
+</ul>
+</li>
+<li><p><strong>Output Format</strong>: Structured reasoning</p>
+<ul class="simple">
+<li><p>Explain strategy</p></li>
+<li><p>Execute tools</p></li>
+<li><p>Provide reasoning</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">orchestrate_agent</span><span class="p">(</span><span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_agent_orchestration_prompt</span><span class="p">()</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">User Query: </span><span class="si">{</span><span class="n">user_query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># Example</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;Explain neural network training&quot;</span>
+<span class="n">orchestration</span> <span class="o">=</span> <span class="n">orchestrate_agent</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<span class="c1"># Output: &quot;I&#39;ll search for neural network training information...&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-2-advanced-orchestrator-prompt-with-memory">
+<h2>Step 3.2: Advanced Orchestrator Prompt with Memory<a class="headerlink" href="#step-3-2-advanced-orchestrator-prompt-with-memory" title="Link to this heading">¶</a></h2>
+<p>Define an advanced prompt for stateful agent orchestration with compressed memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_orchestrator_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert retrieval-augmented assistant.</span>
+</pre></div>
+</div>
+<p>Your task is to act as a researcher: search documents first, analyze the data,
+and then provide a comprehensive answer using ONLY the retrieved information.</p>
+<p>Rules:
+1. You MUST call ‘search_child_chunks’ before answering, unless the</p>
+<blockquote>
+<div><p>[COMPRESSED CONTEXT FROM PRIOR RESEARCH] already contains sufficient information.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Ground every claim in the retrieved documents. If context is insufficient,
+state what is missing rather than filling gaps with assumptions.</p></li>
+<li><p>If no relevant documents are found, broaden or rephrase the query and search again.
+Repeat until satisfied or the operation limit is reached.</p></li>
+</ol>
+<p>Compressed Memory:
+When [COMPRESSED CONTEXT FROM PRIOR RESEARCH] is present —
+- Queries already listed: do not repeat them.
+- Parent IDs already listed: do not call <span class="math">retrieve_parent_chunks</span> on them again.
+- Use it to identify what is still missing before searching further.</p>
+<p>Workflow:
+1. Check the compressed context. Identify what has already been retrieved and what is still missing.
+2. Search for 5-7 relevant excerpts using ‘search_child_chunks’ ONLY for uncovered aspects.
+3. If NONE are relevant, apply rule 3 immediately.
+4. For each relevant but fragmented excerpt, call ‘retrieve_parent_chunks’ ONE BY ONE —</p>
+<blockquote>
+<div><p>only for IDs not in the compressed context. Never retrieve the same ID twice.</p>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Once context is complete, provide a detailed answer omitting no relevant facts.</p></li>
+<li><p>Conclude with “—\n**Sources:<a href="#id1"><span class="problematic" id="id2">**</span></a>\n” followed by the unique file names.”””</p></li>
+</ol>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Advanced orchestration that:</p>
+<ul class="simple">
+<li><p>Maintains compressed memory of prior research</p></li>
+<li><p>Avoids redundant searches and retrievals</p></li>
+<li><p>Tracks which documents have been accessed</p></li>
+<li><p>Progressively builds comprehensive context</p></li>
+<li><p>Ensures grounding in retrieved documents</p></li>
+<li><p>Handles multi-turn research workflows</p></li>
+</ul>
+<p><strong>Key Differences from Basic Orchestration:</strong></p>
+<p>The advanced prompt differs in several important ways:</p>
+<ol class="arabic simple">
+<li><p><strong>Stateful Memory</strong>: Tracks prior research</p></li>
+<li><p><strong>Deduplication</strong>: Avoids redundant operations</p></li>
+<li><p><strong>Progressive Retrieval</strong>: Builds context incrementally</p></li>
+<li><p><strong>Grounding Requirement</strong>: All claims must be sourced</p></li>
+<li><p><strong>Explicit Workflow</strong>: Step-by-step process</p></li>
+<li><p><strong>Source Attribution</strong>: Tracks and reports sources</p></li>
+</ol>
+<p><strong>Step 3.2a: Researcher Role</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;You are an expert retrieval-augmented assistant.</span>
+</pre></div>
+</div>
+<p>Your task is to act as a researcher: search documents first, analyze the data,
+and then provide a comprehensive answer using ONLY the retrieved information.”””</p>
+<p><strong>Why Researcher Role:</strong></p>
+<ul class="simple">
+<li><p>Emphasizes evidence-based reasoning</p></li>
+<li><p>Prioritizes document retrieval over assumptions</p></li>
+<li><p>Sets expectation for thoroughness</p></li>
+<li><p>Frames task as research, not conversation</p></li>
+</ul>
+<p><strong>Step 3.2b: Core Rules</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Rules:</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>You MUST call ‘search_child_chunks’ before answering, unless the
+[COMPRESSED CONTEXT FROM PRIOR RESEARCH] already contains sufficient information.</p></li>
+<li><p>Ground every claim in the retrieved documents. If context is insufficient,
+state what is missing rather than filling gaps with assumptions.</p></li>
+<li><p>If no relevant documents are found, broaden or rephrase the query and search again.
+Repeat until satisfied or the operation limit is reached.”””</p></li>
+</ol>
+<p><strong>Rule 1: Search-First Requirement</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Ensures document retrieval before answering
+Exception: Only skip if compressed context is sufficient
+Benefit: Prevents hallucination and ensures grounding
+
+Example:
+Query: &quot;What is backpropagation?&quot;
+Action: Search for &quot;backpropagation&quot; first
+
+Query: &quot;What is backpropagation?&quot; (after prior research on neural networks)
+Action: Check compressed context - if sufficient, skip search
+</pre></div>
+</div>
+<p><strong>Rule 2: Grounding Requirement</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: All claims must be sourced from documents
+Benefit: Prevents hallucination and ensures accuracy
+Fallback: State what is missing rather than assume
+
+Example:
+Good: &quot;According to the research paper, backpropagation works by...&quot;
+Bad: &quot;Backpropagation is a technique that...&quot; (no source)
+
+Insufficient: &quot;The documents don&#39;t contain information about X.
+               To answer this, I would need documents on...&quot;
+</pre></div>
+</div>
+<p><strong>Rule 3: Retry on Failure</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Handles cases where initial search finds nothing
+Strategy: Broaden or rephrase query
+Limit: Repeat until satisfied or operation limit reached
+
+Example:
+Query: &quot;What is quantum backpropagation?&quot;
+Result: No relevant documents
+Action: Broaden to &quot;What is backpropagation?&quot;
+
+Query: &quot;What is quantum backpropagation?&quot;
+Result: No relevant documents
+Action: Try &quot;quantum machine learning&quot;
+</pre></div>
+</div>
+<p><strong>Step 3.2c: Compressed Memory System</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Compressed Memory:</span>
+</pre></div>
+</div>
+<p>When [COMPRESSED CONTEXT FROM PRIOR RESEARCH] is present —
+- Queries already listed: do not repeat them.
+- Parent IDs already listed: do not call <span class="math">retrieve_parent_chunks</span> on them again.
+- Use it to identify what is still missing before searching further.”””</p>
+<p><strong>Why Compressed Memory:</strong></p>
+<ul class="simple">
+<li><p>Avoids redundant searches</p></li>
+<li><p>Tracks research progress</p></li>
+<li><p>Enables multi-turn research</p></li>
+<li><p>Reduces API calls and latency</p></li>
+<li><p>Maintains context across turns</p></li>
+</ul>
+<p><strong>Compressed Memory Format:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[COMPRESSED CONTEXT FROM PRIOR RESEARCH]
+
+Queries Already Searched:
+- &quot;neural networks&quot;
+- &quot;backpropagation&quot;
+
+Parent IDs Already Retrieved:
+- document_parent_0
+- document_parent_1
+
+Key Findings:
+- Neural networks consist of interconnected nodes
+- Backpropagation is the training algorithm
+
+Still Missing:
+- Specific applications in computer vision
+- Performance comparisons with other methods
+</pre></div>
+</div>
+<p><strong>Step 3.2d: Workflow Steps</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Workflow:</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Check the compressed context. Identify what has already been retrieved
+and what is still missing.</p></li>
+<li><p>Search for 5-7 relevant excerpts using ‘search_child_chunks’ ONLY for uncovered aspects.</p></li>
+<li><p>If NONE are relevant, apply rule 3 immediately.</p></li>
+<li><p>For each relevant but fragmented excerpt, call ‘retrieve_parent_chunks’ ONE BY ONE —
+only for IDs not in the compressed context. Never retrieve the same ID twice.</p></li>
+<li><p>Once context is complete, provide a detailed answer omitting no relevant facts.</p></li>
+<li><p>Conclude with “—\n**Sources:<a href="#id3"><span class="problematic" id="id4">**</span></a>\n” followed by the unique file names.”””</p></li>
+</ol>
+<p><strong>Workflow Step 1: Check Compressed Context</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Understand prior research
+Action: Review what has been searched and retrieved
+Output: Identify gaps in knowledge
+
+Example:
+Prior Research:
+- Searched: &quot;neural networks&quot;, &quot;backpropagation&quot;
+- Retrieved: document_parent_0, document_parent_1
+
+New Query: &quot;How are neural networks used in computer vision?&quot;
+Gap: Computer vision applications not yet researched
+</pre></div>
+</div>
+<p><strong>Workflow Step 2: Search for Uncovered Aspects</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Find relevant information for gaps
+Limit: 5-7 excerpts per search
+Scope: Only for uncovered aspects
+
+Example:
+Gap: Computer vision applications
+Search: search_child_chunks(&quot;neural networks computer vision&quot;, limit=5)
+
+Gap: Performance metrics
+Search: search_child_chunks(&quot;neural network performance evaluation&quot;, limit=5)
+</pre></div>
+</div>
+<p><strong>Workflow Step 3: Handle No Results</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Retry with broader queries
+Trigger: No relevant documents found
+Action: Apply rule 3 (broaden/rephrase)
+
+Example:
+Search: &quot;neural networks computer vision edge cases&quot;
+Result: No relevant documents
+Action: Broaden to &quot;neural networks computer vision&quot;
+
+Search: &quot;neural networks computer vision&quot;
+Result: No relevant documents
+Action: Broaden to &quot;computer vision&quot;
+</pre></div>
+</div>
+<p><strong>Workflow Step 4: Retrieve Parent Chunks</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Get full context for fragmented excerpts
+Strategy: One by one retrieval
+Deduplication: Only retrieve IDs not in compressed context
+
+Example:
+Child Chunk Results:
+- Parent ID: document_parent_2 (not in prior research)
+- Parent ID: document_parent_0 (already retrieved)
+
+Action:
+1. retrieve_parent_chunks(&quot;document_parent_2&quot;)
+2. Skip document_parent_0 (already have it)
+</pre></div>
+</div>
+<p><strong>Workflow Step 5: Provide Comprehensive Answer</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Synthesize all retrieved information
+Requirement: Omit no relevant facts
+Grounding: All claims sourced from documents
+
+Example:
+Answer: &quot;Based on the retrieved documents, neural networks work by...
+         [comprehensive explanation with all relevant facts]&quot;
+</pre></div>
+</div>
+<p><strong>Workflow Step 6: Source Attribution</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Track and report document sources
+Format: &quot;---\n**Sources:**\n&quot; followed by unique file names
+
+Example:
+---
+**Sources:**
+- research_paper.pdf
+- technical_guide.pdf
+- manual.pdf
+</pre></div>
+</div>
+<p><strong>Advanced Orchestrator Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">orchestrate_research</span><span class="p">(</span>
+    <span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">compressed_context</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Orchestrate multi-turn research with memory.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user_query: Current research question</span>
+<span class="sd">        compressed_context: Summary of prior research</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple of (answer, sources, new_compressed_context)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_orchestrator_prompt</span><span class="p">()</span>
+
+    <span class="c1"># Build input with compressed context</span>
+    <span class="n">input_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>[COMPRESSED CONTEXT FROM PRIOR RESEARCH]
+{compressed_context}</p>
+<p>Current Query: {user_query}”””</p>
+<blockquote>
+<div><p># Invoke agent
+response = llm.invoke(input_text)
+answer = response.content.strip()</p>
+<p># Extract sources from answer
+sources = extract_sources(answer)</p>
+<p># Update compressed context
+new_context = update_compressed_context(</p>
+<blockquote>
+<div><p>compressed_context,
+user_query,
+sources</p>
+</div></blockquote>
+<p>)</p>
+<p>return answer, sources, new_context</p>
+</div></blockquote>
+<p><strong>Example Advanced Orchestration Scenarios</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Initial Research
+============================
+Compressed Context: (empty)
+Query: &quot;What is backpropagation?&quot;
+
+Workflow:
+1. No prior research
+2. Search: search_child_chunks(&quot;backpropagation&quot;, limit=5)
+3. Results found: document_parent_0, document_parent_1
+4. Retrieve: retrieve_parent_chunks(&quot;document_parent_0&quot;)
+5. Retrieve: retrieve_parent_chunks(&quot;document_parent_1&quot;)
+6. Answer: Comprehensive explanation of backpropagation
+7. Sources: research_paper.pdf
+
+Scenario 2: Follow-up Research
+==============================
+Compressed Context:
+- Queries: &quot;backpropagation&quot;
+- Retrieved: document_parent_0, document_parent_1
+- Key Finding: Backpropagation is training algorithm
+
+Query: &quot;How does backpropagation compare to other training methods?&quot;
+
+Workflow:
+1. Check context: Backpropagation covered, but comparisons missing
+2. Search: search_child_chunks(&quot;training methods comparison&quot;, limit=5)
+3. Results: document_parent_2, document_parent_3
+4. Retrieve: retrieve_parent_chunks(&quot;document_parent_2&quot;)
+5. Retrieve: retrieve_parent_chunks(&quot;document_parent_3&quot;)
+6. Answer: Comparison with prior backpropagation knowledge
+7. Sources: research_paper.pdf, technical_guide.pdf
+
+Scenario 3: Broadening Search
+==============================
+Compressed Context:
+- Queries: &quot;quantum backpropagation&quot;
+- Retrieved: (none)
+
+Query: &quot;What is quantum backpropagation?&quot;
+
+Workflow:
+1. Check context: No prior results
+2. Search: search_child_chunks(&quot;quantum backpropagation&quot;, limit=5)
+3. Result: No relevant documents
+4. Broaden: search_child_chunks(&quot;quantum machine learning&quot;, limit=5)
+5. Results: document_parent_4
+6. Retrieve: retrieve_parent_chunks(&quot;document_parent_4&quot;)
+7. Answer: Quantum machine learning context (quantum backpropagation not found)
+8. Sources: quantum_computing.pdf
+
+Scenario 4: Deduplication
+==========================
+Compressed Context:
+- Queries: &quot;neural networks&quot;, &quot;backpropagation&quot;
+- Retrieved: document_parent_0, document_parent_1
+
+Query: &quot;Tell me more about neural networks&quot;
+
+Workflow:
+1. Check context: Neural networks already searched
+2. Search: search_child_chunks(&quot;neural networks details&quot;, limit=5)
+3. Results: document_parent_0 (already retrieved), document_parent_2
+4. Retrieve: retrieve_parent_chunks(&quot;document_parent_2&quot;) only
+5. Skip: document_parent_0 (already in context)
+6. Answer: Additional details with prior knowledge
+7. Sources: research_paper.pdf
+</pre></div>
+</div>
+<p><strong>Comparison: Basic vs Advanced Orchestration</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspect</p></th>
+<th class="head"><p>Basic Orchestration</p></th>
+<th class="head"><p>Advanced Orchestration</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Memory</p></td>
+<td><p>None</p></td>
+<td><p>Compressed context</p></td>
+</tr>
+<tr class="row-odd"><td><p>Deduplication</p></td>
+<td><p>Not handled</p></td>
+<td><p>Automatic</p></td>
+</tr>
+<tr class="row-even"><td><p>Multi-turn</p></td>
+<td><p>Not supported</p></td>
+<td><p>Fully supported</p></td>
+</tr>
+<tr class="row-odd"><td><p>Grounding</p></td>
+<td><p>Best effort</p></td>
+<td><p>Strict requirement</p></td>
+</tr>
+<tr class="row-even"><td><p>Retry Logic</p></td>
+<td><p>Not present</p></td>
+<td><p>Automatic broadening</p></td>
+</tr>
+<tr class="row-odd"><td><p>Source Tracking</p></td>
+<td><p>Not tracked</p></td>
+<td><p>Explicit tracking</p></td>
+</tr>
+<tr class="row-even"><td><p>Efficiency</p></td>
+<td><p>Redundant searches</p></td>
+<td><p>Optimized searches</p></td>
+</tr>
+<tr class="row-odd"><td><p>Use Case</p></td>
+<td><p>Single queries</p></td>
+<td><p>Research workflows</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to Use Each Approach</strong></p>
+<p>Use <strong>Basic Orchestration</strong> when:</p>
+<ul class="simple">
+<li><p>Single, standalone queries</p></li>
+<li><p>No conversation history</p></li>
+<li><p>Speed is critical</p></li>
+<li><p>Simple retrieval needed</p></li>
+</ul>
+<p>Use <strong>Advanced Orchestration</strong> when:</p>
+<ul class="simple">
+<li><p>Multi-turn conversations</p></li>
+<li><p>Research workflows</p></li>
+<li><p>Comprehensive answers needed</p></li>
+<li><p>Source tracking important</p></li>
+<li><p>Efficiency matters</p></li>
+<li><p>Complex information needs</p></li>
+</ul>
+<p><strong>Integration with Agent Loop</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ResearchAgent</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent with stateful research capabilities.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compressed_context</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conversation_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">research</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Conduct research with memory.&quot;&quot;&quot;</span>
+        <span class="n">answer</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">new_context</span> <span class="o">=</span> <span class="n">orchestrate_research</span><span class="p">(</span>
+            <span class="n">query</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compressed_context</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Update state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compressed_context</span> <span class="o">=</span> <span class="n">new_context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conversation_history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+            <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="n">answer</span><span class="p">,</span>
+            <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="n">sources</span>
+        <span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">answer</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_research_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get summary of research conducted.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compressed_context</span>
+</pre></div>
+</div>
+<p><strong>Performance Considerations</strong></p>
+<p><strong>Search Efficiency:</strong></p>
+<ul class="simple">
+<li><p>Initial search: 100-500ms</p></li>
+<li><p>Subsequent searches: 50-200ms (with deduplication)</p></li>
+<li><p>Parent retrieval: 20-100ms per parent</p></li>
+<li><p>Total for multi-turn: Significantly reduced with memory</p></li>
+</ul>
+<p><strong>Memory Management:</strong></p>
+<ul class="simple">
+<li><p>Compressed context size: 500-2000 characters</p></li>
+<li><p>Tracks: Queries, parent IDs, key findings</p></li>
+<li><p>Enables: Efficient multi-turn research</p></li>
+<li><p>Reduces: Redundant API calls</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Limit search results</span>
+<span class="n">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># Fewer results</span>
+
+<span class="c1"># Batch parent retrievals</span>
+<span class="n">parent_ids</span> <span class="o">=</span> <span class="p">[</span><span class="nb">id</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">results</span> <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prior_ids</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">parent_id</span> <span class="ow">in</span> <span class="n">parent_ids</span><span class="p">:</span>
+    <span class="n">retrieve_parent_chunks</span><span class="p">(</span><span class="n">parent_id</span><span class="p">)</span>
+
+<span class="c1"># Compress context periodically</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">compressed_context</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">:</span>
+    <span class="n">compressed_context</span> <span class="o">=</span> <span class="n">compress_context</span><span class="p">(</span><span class="n">compressed_context</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Troubleshooting</strong></p>
+<p><strong>Redundant Searches</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Same query searched multiple times</span>
+<span class="c1"># Solution: Check compressed context before searching</span>
+
+<span class="k">if</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">compressed_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;queries_searched&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+    <span class="c1"># Skip search, use cached results</span>
+    <span class="k">pass</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Perform search</span>
+</pre></div>
+</div>
+<p><strong>Missing Sources</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Sources not tracked</span>
+<span class="c1"># Solution: Extract and track sources explicitly</span>
+
+<span class="n">sources</span> <span class="o">=</span> <span class="n">extract_sources</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+<span class="n">compressed_context</span><span class="p">[</span><span class="s2">&quot;sources&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sources</span>
+</pre></div>
+</div>
+<p><strong>Incomplete Answers</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Answer missing relevant facts</span>
+<span class="c1"># Solution: Verify all parent IDs retrieved</span>
+
+<span class="k">for</span> <span class="n">parent_id</span> <span class="ow">in</span> <span class="n">child_results</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parent_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">retrieved_ids</span><span class="p">:</span>
+        <span class="n">retrieve_parent_chunks</span><span class="p">(</span><span class="n">parent_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-basic-context-compression-prompt">
+<h2>Step 4: Basic Context Compression Prompt<a class="headerlink" href="#step-4-basic-context-compression-prompt" title="Link to this heading">¶</a></h2>
+<p>Define the prompt for condensing retrieved context:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_context_compression_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert context compressor.</span>
+</pre></div>
+</div>
+<p>Your task is to compress the retrieved context while preserving key information.</p>
+<p>Guidelines:
+- Remove redundant information
+- Keep essential facts and definitions
+- Maintain technical accuracy
+- Preserve source attribution
+- Reduce length by 30-50%</p>
+<p>Output:
+- Return ONLY the compressed context.
+- Do NOT include explanations.
+- Maintain the original structure if possible.”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Reduces context size while maintaining quality by:</p>
+<ul class="simple">
+<li><p>Removing redundancy</p></li>
+<li><p>Keeping essential information</p></li>
+<li><p>Maintaining accuracy</p></li>
+<li><p>Preserving attribution</p></li>
+<li><p>Optimizing for LLM processing</p></li>
+</ul>
+<p><strong>Prompt Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Role Definition</strong>: “You are an expert context compressor”</p>
+<ul class="simple">
+<li><p>Establishes expertise in information condensing</p></li>
+<li><p>Sets quality expectations</p></li>
+</ul>
+</li>
+<li><p><strong>Task Specification</strong>: “Compress retrieved context”</p>
+<ul class="simple">
+<li><p>Clear objective: reduce size</p></li>
+<li><p>Maintain quality</p></li>
+</ul>
+</li>
+<li><p><strong>Guidelines</strong>: Compression rules</p>
+<ul class="simple">
+<li><p>Remove redundancy: Eliminate duplicates</p></li>
+<li><p>Keep essentials: Preserve key facts</p></li>
+<li><p>Maintain accuracy: Don’t lose meaning</p></li>
+<li><p>Preserve attribution: Keep sources</p></li>
+<li><p>Target reduction: 30-50%</p></li>
+</ul>
+</li>
+<li><p><strong>Output Format</strong>: Strict formatting</p>
+<ul class="simple">
+<li><p>“Return ONLY compressed context”</p></li>
+<li><p>“Do NOT include explanations”</p></li>
+<li><p>“Maintain structure if possible”</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compress_context</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_context_compression_prompt</span><span class="p">()</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Context:</span><span class="se">\n</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-2-advanced-context-compression-prompt-with-query-focus">
+<h2>Step 4.2: Advanced Context Compression Prompt with Query Focus<a class="headerlink" href="#step-4-2-advanced-context-compression-prompt-with-query-focus" title="Link to this heading">¶</a></h2>
+<p>Define an advanced prompt for query-focused context compression:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_context_compression_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert research context compressor.</span>
+</pre></div>
+</div>
+<p>Your task is to compress retrieved conversation content into a concise, query-focused,
+and structured summary that can be directly used by a retrieval-augmented agent for answer generation.</p>
+<p>Rules:
+1. Keep ONLY information relevant to answering the user’s question.
+2. Preserve exact figures, names, versions, technical terms, and configuration details.
+3. Remove duplicated, irrelevant, or administrative details.
+4. Do NOT include search queries, parent IDs, chunk IDs, or internal identifiers.
+5. Organize all findings by source file. Each file section MUST start with: ### filename.pdf
+6. Highlight missing or unresolved information in a dedicated “Gaps” section.
+7. Limit the summary to roughly 400-600 words. If content exceeds this, prioritize critical facts and structured data.
+8. Do not explain your reasoning; output only structured content in Markdown.</p>
+<p>Required Structure:
+# Research Context Summary</p>
+<p>## Focus
+[Brief technical restatement of the question]</p>
+<p>## Structured Findings
+### filename.pdf
+- Directly relevant facts
+- Supporting context (if needed)</p>
+<p>## Gaps
+- Missing or incomplete aspects</p>
+<p>The summary should be concise, structured, and directly usable by an agent to generate answers or plan further retrieval.”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Advanced compression that:</p>
+<ul class="simple">
+<li><p>Focuses on query relevance</p></li>
+<li><p>Maintains technical precision</p></li>
+<li><p>Removes internal identifiers</p></li>
+<li><p>Organizes by source</p></li>
+<li><p>Highlights gaps</p></li>
+<li><p>Enables direct agent usage</p></li>
+<li><p>Limits output size</p></li>
+</ul>
+<p><strong>Key Differences from Basic Compression:</strong></p>
+<p>The advanced prompt differs in several important ways:</p>
+<ol class="arabic simple">
+<li><p><strong>Query Focus</strong>: Only relevant information</p></li>
+<li><p><strong>Precision Preservation</strong>: Exact figures and terms</p></li>
+<li><p><strong>Internal ID Removal</strong>: Cleans up chunk identifiers</p></li>
+<li><p><strong>Source Organization</strong>: Grouped by file</p></li>
+<li><p><strong>Gap Highlighting</strong>: Explicit missing information</p></li>
+<li><p><strong>Structured Format</strong>: Markdown with required sections</p></li>
+<li><p><strong>Word Limit</strong>: 400-600 words target</p></li>
+<li><p><strong>Agent Readiness</strong>: Directly usable for answer generation</p></li>
+</ol>
+<p><strong>Step 4.2a: Query-Focused Compression</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Rules:</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Keep ONLY information relevant to answering the user’s question.</p></li>
+<li><p>Preserve exact figures, names, versions, technical terms, and configuration details.</p></li>
+<li><p>Remove duplicated, irrelevant, or administrative details.”””</p></li>
+</ol>
+<p><strong>Why Query Focus:</strong></p>
+<ul class="simple">
+<li><p>Reduces noise in context</p></li>
+<li><p>Improves answer quality</p></li>
+<li><p>Enables efficient retrieval</p></li>
+<li><p>Prevents information overload</p></li>
+<li><p>Maintains relevance</p></li>
+</ul>
+<p><strong>Query Focus Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Query: &quot;What is the performance of BERT on GLUE?&quot;
+
+Keep:
+- BERT achieves 80.5% on GLUE benchmark
+- Specific task scores (RTE: 75%, MRPC: 88%)
+- Comparison with other models
+
+Remove:
+- How BERT was trained (not directly relevant)
+- Historical context of GLUE (not relevant)
+- Unrelated model comparisons
+
+Query: &quot;How do I configure PyTorch for GPU training?&quot;
+
+Keep:
+- GPU configuration steps
+- CUDA version requirements
+- Code examples
+
+Remove:
+- PyTorch installation instructions (not relevant)
+- CPU training details (not relevant)
+- Historical PyTorch versions
+</pre></div>
+</div>
+<p><strong>Step 4.2b: Precision Preservation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;2. Preserve exact figures, names, versions, technical terms, and configuration details.&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Precision Matters:</strong></p>
+<ul class="simple">
+<li><p>Enables accurate answers</p></li>
+<li><p>Prevents information loss</p></li>
+<li><p>Maintains technical accuracy</p></li>
+<li><p>Allows verification</p></li>
+<li><p>Supports reproducibility</p></li>
+</ul>
+<p><strong>Precision Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Good (Exact):
+&quot;BERT-base has 12 layers, 768 hidden units, and 110M parameters&quot;
+
+Bad (Approximate):
+&quot;BERT has around 100 million parameters&quot;
+
+Good (Exact):
+&quot;PyTorch 2.0 requires CUDA 11.8 or higher&quot;
+
+Bad (Vague):
+&quot;PyTorch requires a recent CUDA version&quot;
+
+Good (Exact):
+&quot;The model achieved 92.3% accuracy on ImageNet&quot;
+
+Bad (Approximate):
+&quot;The model performed well on ImageNet&quot;
+</pre></div>
+</div>
+<p><strong>Step 4.2c: Internal Identifier Removal</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;4. Do NOT include search queries, parent IDs, chunk IDs, or internal identifiers.&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Remove Internal IDs:</strong></p>
+<ul class="simple">
+<li><p>Cleans up output</p></li>
+<li><p>Prevents confusion</p></li>
+<li><p>Improves readability</p></li>
+<li><p>Focuses on content</p></li>
+<li><p>Enables agent usage</p></li>
+</ul>
+<p><strong>Internal ID Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove:
+- Search queries: &quot;search_child_chunks(&#39;BERT performance&#39;, limit=5)&quot;
+- Parent IDs: &quot;document_parent_0&quot;
+- Chunk IDs: &quot;chunk_12345&quot;
+- Internal references: &quot;[Retrieved from source_id_789]&quot;
+
+Keep:
+- File names: &quot;research_paper.pdf&quot;
+- Section headers: &quot;## Performance Metrics&quot;
+- Technical terms: &quot;BERT&quot;, &quot;GLUE&quot;, &quot;attention mechanism&quot;
+</pre></div>
+</div>
+<p><strong>Step 4.2d: Source Organization</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;5. Organize all findings by source file. Each file section MUST start with: ### filename.pdf&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Source Organization:</strong></p>
+<ul class="simple">
+<li><p>Enables source attribution</p></li>
+<li><p>Facilitates verification</p></li>
+<li><p>Improves readability</p></li>
+<li><p>Supports multi-source synthesis</p></li>
+<li><p>Tracks information provenance</p></li>
+</ul>
+<p><strong>Source Organization Example:</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># Research Context Summary</span>
+
+<span class="gu">## Focus</span>
+What is the performance of BERT on GLUE benchmark?
+
+<span class="gu">## Structured Findings</span>
+
+<span class="gu">### bert_paper.pdf</span>
+<span class="k">-</span><span class="w"> </span>BERT-base achieves 80.5% on GLUE
+<span class="k">-</span><span class="w"> </span>Outperforms previous state-of-the-art by 7.7%
+<span class="k">-</span><span class="w"> </span>Specific scores: RTE (75%), MRPC (88%), CoLA (52%)
+
+<span class="gu">### nlp_benchmarks.pdf</span>
+<span class="k">-</span><span class="w"> </span>GLUE consists of 9 diverse NLU tasks
+<span class="k">-</span><span class="w"> </span>Benchmark released in 2018
+<span class="k">-</span><span class="w"> </span>Standard evaluation metric for NLU models
+
+<span class="gu">### transformer_comparison.pdf</span>
+<span class="k">-</span><span class="w"> </span>BERT compared to GPT and ELMo
+<span class="k">-</span><span class="w"> </span>BERT bidirectional, GPT unidirectional
+<span class="k">-</span><span class="w"> </span>BERT outperforms on most GLUE tasks
+
+<span class="gu">## Gaps</span>
+<span class="k">-</span><span class="w"> </span>Performance on GLUE v2 not found
+<span class="k">-</span><span class="w"> </span>Comparison with recent models (2023+) not available
+</pre></div>
+</div>
+<p><strong>Step 4.2e: Gap Highlighting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;6. Highlight missing or unresolved information in a dedicated &quot;Gaps&quot; section.&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Highlight Gaps:</strong></p>
+<ul class="simple">
+<li><p>Identifies incomplete information</p></li>
+<li><p>Guides further research</p></li>
+<li><p>Prevents false completeness</p></li>
+<li><p>Enables targeted retrieval</p></li>
+<li><p>Supports iterative research</p></li>
+</ul>
+<p><strong>Gap Highlighting Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Query: &quot;What are the applications of neural networks?&quot;
+
+Gaps:
+- Medical imaging applications not covered
+- Robotics applications not found
+- Recent applications (2023+) not available
+
+Query: &quot;How do I optimize PyTorch models?&quot;
+
+Gaps:
+- Quantization techniques not discussed
+- Pruning methods not covered
+- Hardware-specific optimizations missing
+</pre></div>
+</div>
+<p><strong>Step 4.2f: Structured Markdown Format</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Required Structure:</span>
+</pre></div>
+</div>
+<p># Research Context Summary</p>
+<p>## Focus
+[Brief technical restatement of the question]</p>
+<p>## Structured Findings
+### filename.pdf
+- Directly relevant facts
+- Supporting context (if needed)</p>
+<p>## Gaps
+- Missing or incomplete aspects”””</p>
+<p><strong>Why Structured Format:</strong></p>
+<ul class="simple">
+<li><p>Enables parsing by agents</p></li>
+<li><p>Improves readability</p></li>
+<li><p>Supports hierarchical organization</p></li>
+<li><p>Facilitates extraction</p></li>
+<li><p>Maintains consistency</p></li>
+</ul>
+<p><strong>Structured Format Example:</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># Research Context Summary</span>
+
+<span class="gu">## Focus</span>
+How do Transformers use attention mechanisms for sequence processing?
+
+<span class="gu">## Structured Findings</span>
+
+<span class="gu">### attention_paper.pdf</span>
+<span class="k">-</span><span class="w"> </span>Attention mechanism computes weighted sum of values
+<span class="k">-</span><span class="w"> </span>Query-key-dot-product determines attention weights
+<span class="k">-</span><span class="w"> </span>Multi-head attention uses multiple representation subspaces
+<span class="k">-</span><span class="w"> </span>Enables parallel processing of different representation types
+
+<span class="gu">### transformer_architecture.pdf</span>
+<span class="k">-</span><span class="w"> </span>Self-attention allows each token to attend to all other tokens
+<span class="k">-</span><span class="w"> </span>Positional encoding preserves sequence order
+<span class="k">-</span><span class="w"> </span>Transformer uses stacked attention layers
+<span class="k">-</span><span class="w"> </span>Each layer has 8 attention heads in base model
+
+<span class="gu">### nlp_applications.pdf</span>
+<span class="k">-</span><span class="w"> </span>Attention enables long-range dependencies
+<span class="k">-</span><span class="w"> </span>Outperforms RNNs on long sequences
+<span class="k">-</span><span class="w"> </span>Enables parallel training (unlike RNNs)
+
+<span class="gu">## Gaps</span>
+<span class="k">-</span><span class="w"> </span>Computational complexity analysis not found
+<span class="k">-</span><span class="w"> </span>Comparison with other attention variants missing
+<span class="k">-</span><span class="w"> </span>Recent attention improvements (2023+) not covered
+</pre></div>
+</div>
+<p><strong>Step 4.2g: Word Limit and Prioritization</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="sd">&quot;&quot;&quot;7. Limit the summary to roughly 400-600 words. If content exceeds this,</span>
+<span class="sd">prioritize critical facts and structured data.&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Word Limits:</strong></p>
+<ul class="simple">
+<li><p>Prevents context bloat</p></li>
+<li><p>Maintains efficiency</p></li>
+<li><p>Enables agent processing</p></li>
+<li><p>Reduces token usage</p></li>
+<li><p>Focuses on essentials</p></li>
+</ul>
+<p><strong>Prioritization Strategy:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Priority 1 (Always include):
+- Direct answers to the query
+- Exact figures and metrics
+- Technical specifications
+- Critical definitions
+
+Priority 2 (Include if space):
+- Supporting context
+- Related concepts
+- Comparative information
+
+Priority 3 (Exclude if needed):
+- Historical background
+- General explanations
+- Tangential details
+- Verbose descriptions
+</pre></div>
+</div>
+<p><strong>Word Limit Example:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Original content: 1200 words
+Target: 400-600 words
+
+Reduction strategy:
+1. Remove verbose explanations (200 words saved)
+2. Keep only direct facts (300 words saved)
+3. Consolidate related points (100 words saved)
+4. Result: 600 words (within target)
+</pre></div>
+</div>
+<p><strong>Advanced Context Compression Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compress_research_context</span><span class="p">(</span>
+    <span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">retrieved_content</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compress retrieved content for agent usage.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user_query: Original user question</span>
+<span class="sd">        retrieved_content: Raw retrieved documents</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Compressed, structured summary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_context_compression_prompt</span><span class="p">()</span>
+
+    <span class="c1"># Build input</span>
+    <span class="n">input_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>User Query: {user_query}</p>
+<p>Retrieved Content:
+{retrieved_content}”””</p>
+<blockquote>
+<div><p># Generate compressed summary
+response = llm.invoke(input_text)
+summary = response.content.strip()</p>
+<p># Validate structure
+summary = validate_compression_structure(summary)</p>
+<p># Verify word count
+word_count = len(summary.split())
+if word_count &gt; 600:</p>
+<blockquote>
+<div><p>summary = trim_to_word_limit(summary, 600)</p>
+</div></blockquote>
+<p>return summary</p>
+</div></blockquote>
+<p><strong>Example Compression Scenarios</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Technical Query with Multiple Sources
+==================================================
+Query: &quot;What is the performance of BERT on GLUE?&quot;
+
+Retrieved Content (1500 words):
+- BERT paper details
+- GLUE benchmark description
+- Performance metrics
+- Comparison with other models
+- Training details
+- Historical context
+
+Compressed Output (500 words):
+
+# Research Context Summary
+
+## Focus
+What performance does BERT achieve on the GLUE benchmark?
+
+## Structured Findings
+
+### bert_paper.pdf
+- BERT-base achieves 80.5% on GLUE
+- Outperforms previous SOTA by 7.7%
+- Task-specific scores: RTE (75%), MRPC (88%), CoLA (52%)
+- Uses 12 layers, 768 hidden units, 110M parameters
+
+### glue_benchmark.pdf
+- GLUE consists of 9 diverse NLU tasks
+- Standard evaluation metric for NLU models
+- Includes sentiment analysis, textual similarity, inference
+
+### model_comparison.pdf
+- BERT outperforms GPT on 8/9 GLUE tasks
+- BERT bidirectional vs GPT unidirectional
+- ELMo achieves 76.4% (lower than BERT)
+
+## Gaps
+- GLUE v2 performance not found
+- Recent model comparisons (2023+) not available
+
+Scenario 2: Configuration Query
+===============================
+Query: &quot;How do I configure PyTorch for GPU training?&quot;
+
+Retrieved Content (2000 words):
+- PyTorch installation
+- GPU setup
+- CUDA configuration
+- Performance optimization
+- Troubleshooting
+- Historical versions
+
+Compressed Output (450 words):
+
+# Research Context Summary
+
+## Focus
+What are the steps to configure PyTorch for GPU training?
+
+## Structured Findings
+
+### pytorch_gpu_guide.pdf
+- Install PyTorch with CUDA support: pip install torch torchvision torcuda
+- Verify GPU: torch.cuda.is_available() returns True
+- Set device: device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+- Move model to GPU: model.to(device)
+- Move data to GPU: inputs.to(device), labels.to(device)
+- Requires CUDA 11.8+ and cuDNN 8.6+
+
+### performance_optimization.pdf
+- Use torch.cuda.empty_cache() to free memory
+- Enable mixed precision: torch.cuda.amp.autocast()
+- Use DataLoader with pin_memory=True
+- Set num_workers for parallel data loading
+
+### troubleshooting.pdf
+- &quot;CUDA out of memory&quot;: Reduce batch size
+- &quot;CUDA not available&quot;: Check NVIDIA drivers
+- &quot;cuDNN error&quot;: Verify cuDNN installation
+
+## Gaps
+- Multi-GPU setup not covered
+- Distributed training configuration missing
+</pre></div>
+</div>
+<p><strong>Comparison: Basic vs Advanced Compression</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspect</p></th>
+<th class="head"><p>Basic Compression</p></th>
+<th class="head"><p>Advanced Compression</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Query Focus</p></td>
+<td><p>General reduction</p></td>
+<td><p>Query-specific</p></td>
+</tr>
+<tr class="row-odd"><td><p>Precision</p></td>
+<td><p>Best effort</p></td>
+<td><p>Exact preservation</p></td>
+</tr>
+<tr class="row-even"><td><p>Internal IDs</p></td>
+<td><p>May remain</p></td>
+<td><p>Explicitly removed</p></td>
+</tr>
+<tr class="row-odd"><td><p>Source Organization</p></td>
+<td><p>Not structured</p></td>
+<td><p>By file</p></td>
+</tr>
+<tr class="row-even"><td><p>Gap Highlighting</p></td>
+<td><p>Not present</p></td>
+<td><p>Explicit section</p></td>
+</tr>
+<tr class="row-odd"><td><p>Output Format</p></td>
+<td><p>Unstructured</p></td>
+<td><p>Markdown with sections</p></td>
+</tr>
+<tr class="row-even"><td><p>Word Limit</p></td>
+<td><p>Flexible</p></td>
+<td><p>400-600 words</p></td>
+</tr>
+<tr class="row-odd"><td><p>Agent Readiness</p></td>
+<td><p>Partial</p></td>
+<td><p>Fully ready</p></td>
+</tr>
+<tr class="row-even"><td><p>Use Case</p></td>
+<td><p>General compression</p></td>
+<td><p>Agent-ready summaries</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to Use Each Approach</strong></p>
+<p>Use <strong>Basic Compression</strong> when:</p>
+<ul class="simple">
+<li><p>Simple context reduction needed</p></li>
+<li><p>No specific query focus</p></li>
+<li><p>Flexible output format acceptable</p></li>
+<li><p>Speed is critical</p></li>
+</ul>
+<p>Use <strong>Advanced Compression</strong> when:</p>
+<ul class="simple">
+<li><p>Query-focused summaries needed</p></li>
+<li><p>Agent will use compressed context</p></li>
+<li><p>Precision is critical</p></li>
+<li><p>Multi-source synthesis required</p></li>
+<li><p>Gap identification important</p></li>
+<li><p>Structured output required</p></li>
+</ul>
+<p><strong>Integration with Agent Loop</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ResearchAgentWithCompression</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent with query-focused context compression.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compressed_context</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process query with compression.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_query</span> <span class="o">=</span> <span class="n">query</span>
+
+        <span class="c1"># Search and retrieve</span>
+        <span class="n">retrieved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_and_retrieve</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="c1"># Compress with query focus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compressed_context</span> <span class="o">=</span> <span class="n">compress_research_context</span><span class="p">(</span>
+            <span class="n">query</span><span class="p">,</span>
+            <span class="n">retrieved</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generate answer using compressed context</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">answer</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_and_retrieve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search and retrieve documents.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_answer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate answer from compressed context.&quot;&quot;&quot;</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Based on this research context, answer the query.</span>
+</pre></div>
+</div>
+<p>Query: {self.user_query}</p>
+<p>{self.compressed_context}”””</p>
+<blockquote>
+<div><p>response = llm.invoke(prompt)
+return response.content.strip()</p>
+</div></blockquote>
+<p><strong>Performance Considerations</strong></p>
+<p><strong>Compression Efficiency:</strong></p>
+<ul class="simple">
+<li><p>Compression time: 500-1000ms</p></li>
+<li><p>Reduction ratio: 60-70% (from raw content)</p></li>
+<li><p>Output size: 400-600 words</p></li>
+<li><p>Token savings: 50-60% reduction</p></li>
+</ul>
+<p><strong>Quality Metrics:</strong></p>
+<ul class="simple">
+<li><p>Information retention: 95%+ (for relevant facts)</p></li>
+<li><p>Precision preservation: 100% (exact figures)</p></li>
+<li><p>Gap identification: 90%+ accuracy</p></li>
+<li><p>Agent usability: 100% (structured format)</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compress incrementally</span>
+<span class="n">compressed</span> <span class="o">=</span> <span class="n">compress_research_context</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">chunk1</span><span class="p">)</span>
+<span class="n">compressed</span> <span class="o">+=</span> <span class="n">compress_research_context</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">chunk2</span><span class="p">)</span>
+
+<span class="c1"># Cache compressed contexts</span>
+<span class="n">cache</span><span class="p">[</span><span class="n">query</span><span class="p">]</span> <span class="o">=</span> <span class="n">compressed_context</span>
+
+<span class="c1"># Reuse for follow-ups</span>
+<span class="k">if</span> <span class="n">follow_up_query</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+    <span class="n">use_cached_context</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Troubleshooting</strong></p>
+<p><strong>Exceeding Word Limit</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Compressed output exceeds 600 words</span>
+<span class="c1"># Solution: Trim to word limit</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">trim_to_word_limit</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Trim text to word limit.&quot;&quot;&quot;</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">limit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="c1"># Keep structure, trim content</span>
+    <span class="n">trimmed</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">[:</span><span class="n">limit</span><span class="p">])</span>
+    <span class="c1"># Ensure ends with complete sentence</span>
+    <span class="n">trimmed</span> <span class="o">=</span> <span class="n">trimmed</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span>
+    <span class="k">return</span> <span class="n">trimmed</span>
+</pre></div>
+</div>
+<p><strong>Internal IDs Remaining</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Parent IDs or chunk IDs in output</span>
+<span class="c1"># Solution: Post-process to remove</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_internal_ids</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove internal identifiers.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+    <span class="c1"># Remove parent IDs</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;document_parent_\d+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="c1"># Remove chunk IDs</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;chunk_\d+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="c1"># Remove search queries</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;search_child_chunks\([^)]+\)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">text</span>
+</pre></div>
+</div>
+<p><strong>Missing Gap Section</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Gaps section not generated</span>
+<span class="c1"># Solution: Ensure prompt includes gap highlighting</span>
+
+<span class="c1"># Verify prompt includes:</span>
+<span class="c1"># &quot;6. Highlight missing or unresolved information in a dedicated &#39;Gaps&#39; section.&quot;</span>
+
+<span class="c1"># Post-process to add if missing</span>
+<span class="k">if</span> <span class="s2">&quot;## Gaps&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">compressed_context</span><span class="p">:</span>
+    <span class="n">compressed_context</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">## Gaps</span><span class="se">\n</span><span class="s2">- Information gaps not identified&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-2-fallback-response-prompt-with-research-limits">
+<h2>Step 4.2: Fallback Response Prompt with Research Limits<a class="headerlink" href="#step-4-2-fallback-response-prompt-with-research-limits" title="Link to this heading">¶</a></h2>
+<p>Define an advanced prompt for handling research limits and incomplete information:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_fallback_response_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert synthesis assistant. The system has reached its maximum research limit.</span>
+</pre></div>
+</div>
+<p>Your task is to provide the most complete answer possible using ONLY the information provided below.</p>
+<p>Input structure:
+- “Compressed Research Context”: summarized findings from prior search iterations — treat as reliable.
+- “Retrieved Data”: raw tool outputs from the current iteration — prefer over compressed context if conflicts arise.</p>
+<p>Either source alone is sufficient if the other is absent.</p>
+<p>Rules:
+1. Source Integrity: Use only facts explicitly present in the provided context.</p>
+<blockquote>
+<div><p>Do not infer, assume, or add any information not directly supported by the data.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Handling Missing Data: Cross-reference the USER QUERY against the available context.
+Flag ONLY aspects of the user’s question that cannot be answered from the provided data.
+Do not treat gaps mentioned in the Compressed Research Context as unanswered
+unless they are directly relevant to what the user asked.</p></li>
+<li><p>Tone: Professional, factual, and direct.</p></li>
+<li><p>Output only the final answer. Do not expose your reasoning, internal steps, or any meta-commentary
+about the retrieval process.</p></li>
+<li><p>Do NOT add closing remarks, final notes, disclaimers, summaries, or repeated statements after the Sources section.
+The Sources section is always the last element of your response. Stop immediately after it.</p></li>
+</ol>
+<p>Formatting:
+- Use Markdown (headings, bold, lists) for readability.
+- Write in flowing paragraphs where possible.
+- Conclude with a Sources section as described below.</p>
+<p>Sources section rules:
+- Include a “—\n**Sources:<a href="#id5"><span class="problematic" id="id6">**</span></a>\n” section at the end, followed by a bulleted list of file names.
+- List ONLY entries that have a real file extension (e.g. “.pdf”, “.docx”, “.txt”).
+- Any entry without a file extension is an internal chunk identifier — discard it entirely, never include it.
+- Deduplicate: if the same file appears multiple times, list it only once.
+- If no valid file names are present, omit the Sources section entirely.
+- THE SOURCES SECTION IS THE LAST THING YOU WRITE. Do not add anything after it.”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Handles edge cases where:</p>
+<ul class="simple">
+<li><p>Research limit reached</p></li>
+<li><p>Retrieved context is incomplete</p></li>
+<li><p>Query cannot be fully answered</p></li>
+<li><p>Multiple data sources available</p></li>
+<li><p>Need to synthesize partial information</p></li>
+</ul>
+<p><strong>Key Differences from Basic Fallback:</strong></p>
+<p>The advanced prompt differs in several important ways:</p>
+<ol class="arabic simple">
+<li><p><strong>Research Limit Awareness</strong>: Acknowledges maximum research reached</p></li>
+<li><p><strong>Dual Input Sources</strong>: Handles compressed context + raw data</p></li>
+<li><p><strong>Strict Grounding</strong>: No inference or assumptions allowed</p></li>
+<li><p><strong>Selective Gap Flagging</strong>: Only flag relevant missing information</p></li>
+<li><p><strong>Source Integrity</strong>: Explicit rules for source attribution</p></li>
+<li><p><strong>Conflict Resolution</strong>: Prefers raw data over compressed context</p></li>
+<li><p><strong>Strict Output Format</strong>: No meta-commentary or disclaimers</p></li>
+</ol>
+<p><strong>Step 4.2a: Research Limit Context</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;You are an expert synthesis assistant. The system has reached its maximum research limit.</span>
+</pre></div>
+</div>
+<p>Your task is to provide the most complete answer possible using ONLY the information provided below.”””</p>
+<p><strong>Why Research Limits Matter:</strong></p>
+<ul class="simple">
+<li><p>Prevents infinite loops in agent execution</p></li>
+<li><p>Manages API costs and latency</p></li>
+<li><p>Forces synthesis of available information</p></li>
+<li><p>Ensures timely responses</p></li>
+<li><p>Handles resource constraints</p></li>
+</ul>
+<p><strong>Research Limit Scenarios:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Limit Reached with Sufficient Data
+===============================================
+Query: &quot;What is backpropagation?&quot;
+Research Limit: 3 searches
+
+Search 1: Found relevant documents
+Search 2: Retrieved parent chunks
+Search 3: Retrieved additional context
+
+Result: Sufficient information to answer
+Action: Provide comprehensive answer
+
+Scenario 2: Limit Reached with Partial Data
+============================================
+Query: &quot;What are all applications of neural networks?&quot;
+Research Limit: 3 searches
+
+Search 1: Found general applications
+Search 2: Found computer vision applications
+Search 3: Found NLP applications
+
+Result: Partial information (medical, robotics not found)
+Action: Answer with available data, flag missing areas
+
+Scenario 3: Limit Reached with No Data
+=======================================
+Query: &quot;What is quantum backpropagation?&quot;
+Research Limit: 3 searches
+
+Search 1: No results
+Search 2: Broadened search, no results
+Search 3: Further broadened, no results
+
+Result: No relevant information found
+Action: Acknowledge limitation, provide general knowledge if applicable
+</pre></div>
+</div>
+<p><strong>Step 4.2b: Dual Input Sources</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Input structure:</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>“Compressed Research Context”: summarized findings from prior search iterations — treat as reliable.</p></li>
+<li><p>“Retrieved Data”: raw tool outputs from the current iteration — prefer over compressed context if conflicts arise.</p></li>
+</ul>
+<p>Either source alone is sufficient if the other is absent.”””</p>
+<p><strong>Why Dual Sources:</strong></p>
+<ul class="simple">
+<li><p>Compressed context: Efficient summary of prior research</p></li>
+<li><p>Retrieved data: Fresh, raw information from current iteration</p></li>
+<li><p>Conflict resolution: Raw data is more authoritative</p></li>
+<li><p>Flexibility: Works with either source alone</p></li>
+</ul>
+<p><strong>Input Structure Example:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[COMPRESSED RESEARCH CONTEXT]
+Prior searches found:
+- Neural networks consist of interconnected nodes
+- Backpropagation is the primary training algorithm
+- Applications include computer vision and NLP
+
+[RETRIEVED DATA]
+Current iteration results:
+- Detailed explanation of backpropagation mathematics
+- Performance metrics for different architectures
+- Recent advances in transformer models
+</pre></div>
+</div>
+<p><strong>Conflict Resolution Example:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compressed Context: &quot;Backpropagation is the primary training algorithm&quot;
+Retrieved Data: &quot;Backpropagation and gradient descent are both used&quot;
+
+Action: Prefer retrieved data (more recent and specific)
+Answer: &quot;Backpropagation and gradient descent are both used...&quot;
+</pre></div>
+</div>
+<p><strong>Step 4.2c: Source Integrity Rule</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Rules:</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Source Integrity: Use only facts explicitly present in the provided context.
+Do not infer, assume, or add any information not directly supported by the data.”””</p></li>
+</ol>
+<p><strong>Why Source Integrity:</strong></p>
+<ul class="simple">
+<li><p>Prevents hallucination</p></li>
+<li><p>Ensures accuracy</p></li>
+<li><p>Maintains trust</p></li>
+<li><p>Enables verification</p></li>
+<li><p>Grounds all claims</p></li>
+</ul>
+<p><strong>Source Integrity Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Good (Explicit):
+&quot;According to the research paper, neural networks use backpropagation
+ to adjust weights during training.&quot;
+
+Bad (Inferred):
+&quot;Neural networks probably use backpropagation because it&#39;s efficient.&quot;
+
+Good (Supported):
+&quot;The document states that transformers outperform RNNs on sequence tasks.&quot;
+
+Bad (Assumed):
+&quot;Transformers are better than RNNs in all scenarios.&quot;
+</pre></div>
+</div>
+<p><strong>Step 4.2d: Handling Missing Data Rule</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="sd">&quot;&quot;&quot;2. Handling Missing Data: Cross-reference the USER QUERY against the available context.</span>
+<span class="sd">Flag ONLY aspects of the user&#39;s question that cannot be answered from the provided data.</span>
+<span class="sd">Do not treat gaps mentioned in the Compressed Research Context as unanswered</span>
+<span class="sd">unless they are directly relevant to what the user asked.&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Why Selective Gap Flagging:</strong></p>
+<ul class="simple">
+<li><p>Avoids over-reporting missing information</p></li>
+<li><p>Focuses on user’s actual needs</p></li>
+<li><p>Prevents unnecessary disclaimers</p></li>
+<li><p>Maintains answer quality</p></li>
+<li><p>Distinguishes relevant from irrelevant gaps</p></li>
+</ul>
+<p><strong>Gap Flagging Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Query: &quot;What is backpropagation?&quot;
+Available: Detailed explanation of backpropagation
+Missing: Applications in computer vision
+
+Action: Answer the query fully, don&#39;t mention missing applications
+
+Query: &quot;What is backpropagation and its applications?&quot;
+Available: Detailed explanation of backpropagation
+Missing: Applications in computer vision
+
+Action: Answer backpropagation, flag missing applications
+
+Query: &quot;How does backpropagation work?&quot;
+Available: Overview of backpropagation
+Missing: Mathematical proofs
+
+Action: Answer with available overview, don&#39;t flag mathematical proofs
+        (not directly relevant to &quot;how it works&quot;)
+</pre></div>
+</div>
+<p><strong>Step 4.2e: Tone and Output Format</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;3. Tone: Professional, factual, and direct.</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Output only the final answer. Do not expose your reasoning, internal steps, or any meta-commentary
+about the retrieval process.”””</p></li>
+</ol>
+<p><strong>Why Professional Tone:</strong></p>
+<ul class="simple">
+<li><p>Builds user confidence</p></li>
+<li><p>Maintains credibility</p></li>
+<li><p>Ensures clarity</p></li>
+<li><p>Avoids confusion</p></li>
+<li><p>Presents information authoritatively</p></li>
+</ul>
+<p><strong>Tone Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Good (Professional):
+&quot;Backpropagation is a training algorithm that adjusts network weights
+ by computing gradients through the network layers.&quot;
+
+Bad (Casual):
+&quot;So like, backpropagation is this thing where you like, adjust weights
+ and stuff by computing gradients.&quot;
+
+Good (Direct):
+&quot;The research shows three main applications: computer vision, NLP, and robotics.&quot;
+
+Bad (Meta-commentary):
+&quot;I searched for applications and found three. Let me tell you about them.
+ The system found these in the documents...&quot;
+</pre></div>
+</div>
+<p><strong>Step 4.2f: Sources Section Rules</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Formatting:</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Use Markdown (headings, bold, lists) for readability.</p></li>
+<li><p>Write in flowing paragraphs where possible.</p></li>
+<li><p>Conclude with a Sources section as described below.</p></li>
+</ul>
+<p>Sources section rules:
+- Include a “—\n**Sources:<a href="#id7"><span class="problematic" id="id8">**</span></a>\n” section at the end, followed by a bulleted list of file names.
+- List ONLY entries that have a real file extension (e.g. “.pdf”, “.docx”, “.txt”).
+- Any entry without a file extension is an internal chunk identifier — discard it entirely, never include it.
+- Deduplicate: if the same file appears multiple times, list it only once.
+- If no valid file names are present, omit the Sources section entirely.
+- THE SOURCES SECTION IS THE LAST THING YOU WRITE. Do not add anything after it.”””</p>
+<p><strong>Why Strict Sources Rules:</strong></p>
+<ul class="simple">
+<li><p>Distinguishes real files from internal IDs</p></li>
+<li><p>Enables source verification</p></li>
+<li><p>Prevents confusion</p></li>
+<li><p>Maintains clean output</p></li>
+<li><p>Ensures proper attribution</p></li>
+</ul>
+<p><strong>Sources Section Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Good (Valid files):
+---
+**Sources:**
+- research_paper.pdf
+- technical_guide.docx
+- manual.txt
+
+Bad (Internal IDs included):
+---
+**Sources:**
+- research_paper.pdf
+- document_parent_0
+- technical_guide.docx
+- document_parent_1
+
+Good (Deduplicated):
+---
+**Sources:**
+- research_paper.pdf
+- technical_guide.docx
+
+Bad (Duplicates):
+---
+**Sources:**
+- research_paper.pdf
+- research_paper.pdf
+- technical_guide.docx
+
+Good (No valid files):
+(No Sources section at all)
+
+Bad (Empty sources):
+---
+**Sources:**
+(empty list)
+</pre></div>
+</div>
+<p><strong>Advanced Fallback Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">generate_fallback_response</span><span class="p">(</span>
+    <span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">compressed_context</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">retrieved_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate response at research limit.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user_query: Original user question</span>
+<span class="sd">        compressed_context: Summary of prior research</span>
+<span class="sd">        retrieved_data: Raw data from current iteration</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Final answer with sources</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_fallback_response_prompt</span><span class="p">()</span>
+
+    <span class="c1"># Build input</span>
+    <span class="n">input_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>USER QUERY: {user_query}</p>
+<p>[COMPRESSED RESEARCH CONTEXT]
+{compressed_context}</p>
+<p>[RETRIEVED DATA]
+{retrieved_data}”””</p>
+<blockquote>
+<div><p># Generate response
+response = llm.invoke(input_text)
+answer = response.content.strip()</p>
+<p># Validate sources section
+answer = validate_sources_section(answer)</p>
+<p>return answer</p>
+</div></blockquote>
+<p><strong>Example Fallback Response Scenarios</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Sufficient Data Available
+=====================================
+Query: &quot;What is backpropagation?&quot;
+
+Compressed Context:
+- Backpropagation is a training algorithm
+- Uses gradient descent
+- Adjusts weights iteratively
+
+Retrieved Data:
+- Mathematical formulation of backpropagation
+- Step-by-step algorithm
+- Computational complexity analysis
+
+Response:
+&quot;Backpropagation is a training algorithm that adjusts network weights
+ using gradient descent. The algorithm works by computing gradients
+ through the network layers and updating weights iteratively.
+ [Full explanation with all available details]
+
+---
+**Sources:**
+- research_paper.pdf&quot;
+
+Scenario 2: Partial Data with Gap Flagging
+==========================================
+Query: &quot;What are the applications of neural networks?&quot;
+
+Compressed Context:
+- Applications in computer vision
+- Applications in NLP
+
+Retrieved Data:
+- Detailed computer vision applications
+- Detailed NLP applications
+
+Response:
+&quot;Neural networks have numerous applications across multiple domains.
+ In computer vision, they are used for [details]. In natural language
+ processing, they power [details]. While other applications exist
+ (such as robotics and medical imaging), the available documents
+ focus primarily on these two domains.
+
+---
+**Sources:**
+- research_paper.pdf&quot;
+
+Scenario 3: No Relevant Data
+============================
+Query: &quot;What is quantum backpropagation?&quot;
+
+Compressed Context: (empty)
+Retrieved Data: (no relevant results)
+
+Response:
+&quot;The available documents do not contain specific information about
+ quantum backpropagation. However, based on general knowledge,
+ quantum computing approaches to machine learning are an emerging
+ field. To provide a comprehensive answer, documents specifically
+ addressing quantum machine learning would be needed.&quot;
+
+(No Sources section - no valid files)
+</pre></div>
+</div>
+<p><strong>Comparison: Basic vs Advanced Fallback</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspect</p></th>
+<th class="head"><p>Basic Fallback</p></th>
+<th class="head"><p>Advanced Fallback</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Research Limit Awareness</p></td>
+<td><p>Not mentioned</p></td>
+<td><p>Explicit</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dual Input Sources</p></td>
+<td><p>Not supported</p></td>
+<td><p>Fully supported</p></td>
+</tr>
+<tr class="row-even"><td><p>Conflict Resolution</p></td>
+<td><p>Not handled</p></td>
+<td><p>Raw data preferred</p></td>
+</tr>
+<tr class="row-odd"><td><p>Source Integrity</p></td>
+<td><p>Best effort</p></td>
+<td><p>Strict requirement</p></td>
+</tr>
+<tr class="row-even"><td><p>Gap Flagging</p></td>
+<td><p>All gaps</p></td>
+<td><p>Only relevant gaps</p></td>
+</tr>
+<tr class="row-odd"><td><p>Meta-commentary</p></td>
+<td><p>May be included</p></td>
+<td><p>Explicitly excluded</p></td>
+</tr>
+<tr class="row-even"><td><p>Sources Section</p></td>
+<td><p>Basic format</p></td>
+<td><p>Strict rules</p></td>
+</tr>
+<tr class="row-odd"><td><p>Use Case</p></td>
+<td><p>General fallback</p></td>
+<td><p>Research limit reached</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to Use Each Approach</strong></p>
+<p>Use <strong>Basic Fallback</strong> when:</p>
+<ul class="simple">
+<li><p>Insufficient information found</p></li>
+<li><p>Query outside knowledge base</p></li>
+<li><p>General knowledge acceptable</p></li>
+<li><p>Simple fallback needed</p></li>
+</ul>
+<p>Use <strong>Advanced Fallback</strong> when:</p>
+<ul class="simple">
+<li><p>Research limit reached</p></li>
+<li><p>Multiple data sources available</p></li>
+<li><p>Strict grounding required</p></li>
+<li><p>Source attribution critical</p></li>
+<li><p>Partial information acceptable</p></li>
+<li><p>Professional context</p></li>
+</ul>
+<p><strong>Integration with Agent Loop</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ResearchAgentWithFallback</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent with fallback handling at research limits.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_research_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span> <span class="o">=</span> <span class="n">max_research_iterations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iteration_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compressed_context</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieved_data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">research</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Conduct research with fallback at limit.&quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">iteration_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span><span class="p">:</span>
+            <span class="c1"># Conduct research iteration</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_and_retrieve</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">retrieved_data</span> <span class="o">=</span> <span class="n">results</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">iteration_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_sufficient_data</span><span class="p">():</span>
+                <span class="c1"># Generate normal answer</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="c1"># Research limit reached</span>
+        <span class="k">return</span> <span class="n">generate_fallback_response</span><span class="p">(</span>
+            <span class="n">query</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compressed_context</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">retrieved_data</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_sufficient_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if sufficient data for answer.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation specific logic</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_and_retrieve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search and retrieve data.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate normal answer.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<p><strong>Performance Considerations</strong></p>
+<p><strong>Fallback Efficiency:</strong></p>
+<ul class="simple">
+<li><p>No additional searches needed</p></li>
+<li><p>Synthesis only: 100-300ms</p></li>
+<li><p>Source extraction: 10-50ms</p></li>
+<li><p>Total: Faster than continued research</p></li>
+</ul>
+<p><strong>Memory Usage:</strong></p>
+<ul class="simple">
+<li><p>Compressed context: 500-2000 characters</p></li>
+<li><p>Retrieved data: 2000-5000 characters</p></li>
+<li><p>Total: Minimal overhead</p></li>
+</ul>
+<p><strong>Quality Metrics:</strong></p>
+<ul class="simple">
+<li><p>Source accuracy: 100% (only explicit facts)</p></li>
+<li><p>Gap coverage: Depends on prior research</p></li>
+<li><p>User satisfaction: High (complete answer with limits acknowledged)</p></li>
+</ul>
+<p><strong>Troubleshooting</strong></p>
+<p><strong>Sources Section Issues</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Internal IDs in sources</span>
+<span class="c1"># Solution: Filter by file extension</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_sources_section</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove internal IDs from sources.&quot;&quot;&quot;</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">in_sources</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;**Sources:**&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">in_sources</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">in_sources</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;- &#39;</span><span class="p">):</span>
+            <span class="c1"># Check for file extension</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;.docx&#39;</span><span class="p">,</span> <span class="s1">&#39;.txt&#39;</span><span class="p">]):</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Meta-commentary Leakage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Answer includes reasoning steps</span>
+<span class="c1"># Solution: Post-process to remove meta-commentary</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_meta_commentary</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove internal reasoning from answer.&quot;&quot;&quot;</span>
+    <span class="c1"># Remove phrases like &quot;I searched for...&quot;, &quot;The system found...&quot;</span>
+    <span class="n">phrases_to_remove</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;I searched for&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;The system found&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Based on my research&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Let me tell you about&quot;</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">phrases_to_remove</span><span class="p">:</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">phrase</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p><strong>Gap Flagging Over-reporting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Flagging irrelevant gaps</span>
+<span class="c1"># Solution: Cross-reference with user query</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">should_flag_gap</span><span class="p">(</span><span class="n">gap</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if gap is relevant to user query.&quot;&quot;&quot;</span>
+    <span class="c1"># Simple keyword matching</span>
+    <span class="n">gap_keywords</span> <span class="o">=</span> <span class="n">gap</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">query_keywords</span> <span class="o">=</span> <span class="n">user_query</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="c1"># Flag only if gap keywords appear in query</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">kw</span> <span class="ow">in</span> <span class="n">query_keywords</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">gap_keywords</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With system prompts defined, you can proceed to:</p>
+<ul class="simple">
+<li><p>Implementing the agent loop with prompt orchestration</p></li>
+<li><p>Building conversation management with summarization</p></li>
+<li><p>Creating query processing pipelines</p></li>
+<li><p>Implementing context retrieval and compression</p></li>
+<li><p>Building the complete RAG application with all components</p></li>
+</ul>
+</section>
+<section id="step-5-fallback-response-prompt">
+<h2>Step 5: Fallback Response Prompt<a class="headerlink" href="#step-5-fallback-response-prompt" title="Link to this heading">¶</a></h2>
+<p>Define the prompt for handling insufficient information:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_fallback_response_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are a helpful assistant handling queries with limited information.</span>
+</pre></div>
+</div>
+<p>Your task is to provide a helpful response when sufficient context is unavailable.</p>
+<p>Guidelines:
+- Acknowledge the limitation clearly
+- Provide general knowledge if applicable
+- Suggest alternative approaches
+- Offer to search for more specific information
+- Be honest about knowledge gaps</p>
+<p>Output:
+- Return ONLY the response.
+- Do NOT include explanations.
+- Keep response concise and helpful.”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Handles edge cases where:</p>
+<ul class="simple">
+<li><p>No relevant documents are found</p></li>
+<li><p>Retrieved context is insufficient</p></li>
+<li><p>Query is outside knowledge base</p></li>
+<li><p>Information is incomplete</p></li>
+</ul>
+<p><strong>Prompt Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Role Definition</strong>: “You are a helpful assistant handling queries with limited information”</p>
+<ul class="simple">
+<li><p>Establishes empathetic, helpful tone</p></li>
+<li><p>Acknowledges limitations</p></li>
+</ul>
+</li>
+<li><p><strong>Task Specification</strong>: “Provide helpful response with limited context”</p>
+<ul class="simple">
+<li><p>Clear objective: help despite limitations</p></li>
+<li><p>Maintain user satisfaction</p></li>
+</ul>
+</li>
+<li><p><strong>Guidelines</strong>: Fallback strategies</p>
+<ul class="simple">
+<li><p>Acknowledge limitation: Be transparent</p></li>
+<li><p>Provide general knowledge: Use training data</p></li>
+<li><p>Suggest alternatives: Offer solutions</p></li>
+<li><p>Offer more search: Enable refinement</p></li>
+<li><p>Be honest: Don’t fabricate</p></li>
+</ul>
+</li>
+<li><p><strong>Output Format</strong>: Strict formatting</p>
+<ul class="simple">
+<li><p>“Return ONLY the response”</p></li>
+<li><p>“Do NOT include explanations”</p></li>
+<li><p>“Keep concise and helpful”</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">generate_fallback_response</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_fallback_response_prompt</span><span class="p">()</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Query: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="step-6-answer-aggregation-prompt">
+<h2>Step 6: Answer Aggregation Prompt<a class="headerlink" href="#step-6-answer-aggregation-prompt" title="Link to this heading">¶</a></h2>
+<p>Define the prompt for combining multiple sources:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_answer_aggregation_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert answer aggregator.</span>
+</pre></div>
+</div>
+<p>Your task is to synthesize information from multiple sources into a coherent answer.</p>
+<p>Guidelines:
+- Combine information from all sources
+- Resolve contradictions by citing sources
+- Maintain logical flow and structure
+- Attribute information to sources
+- Highlight consensus and disagreements
+- Provide a comprehensive answer</p>
+<p>Output:
+- Return ONLY the aggregated answer.
+- Do NOT include explanations.
+- Use clear formatting for readability.”””</p>
+<p><strong>Prompt Purpose:</strong></p>
+<p>Synthesizes information from multiple sources by:</p>
+<ul class="simple">
+<li><p>Combining relevant information</p></li>
+<li><p>Resolving contradictions</p></li>
+<li><p>Maintaining coherence</p></li>
+<li><p>Attributing sources</p></li>
+<li><p>Highlighting consensus</p></li>
+<li><p>Providing comprehensive answers</p></li>
+</ul>
+<p><strong>Prompt Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Role Definition</strong>: “You are an expert answer aggregator”</p>
+<ul class="simple">
+<li><p>Establishes synthesis expertise</p></li>
+<li><p>Sets integration expectations</p></li>
+</ul>
+</li>
+<li><p><strong>Task Specification</strong>: “Synthesize information from multiple sources”</p>
+<ul class="simple">
+<li><p>Clear objective: combine sources</p></li>
+<li><p>Create coherent answer</p></li>
+</ul>
+</li>
+<li><p><strong>Guidelines</strong>: Aggregation rules</p>
+<ul class="simple">
+<li><p>Combine information: Integrate all sources</p></li>
+<li><p>Resolve contradictions: Cite sources</p></li>
+<li><p>Maintain flow: Logical structure</p></li>
+<li><p>Attribute sources: Clear citations</p></li>
+<li><p>Highlight consensus: Show agreement</p></li>
+<li><p>Comprehensive: Complete answer</p></li>
+</ul>
+</li>
+<li><p><strong>Output Format</strong>: Strict formatting</p>
+<ul class="simple">
+<li><p>“Return ONLY aggregated answer”</p></li>
+<li><p>“Do NOT include explanations”</p></li>
+<li><p>“Use clear formatting”</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">aggregate_answer</span><span class="p">(</span><span class="n">sources</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">get_answer_aggregation_prompt</span><span class="p">()</span>
+    <span class="n">sources_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Sources:</span><span class="se">\n</span><span class="si">{</span><span class="n">sources_text</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Query: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-system-prompts-module">
+<h2>Complete System Prompts Module<a class="headerlink" href="#complete-system-prompts-module" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete system prompts module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_conversation_summary_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt for summarizing conversations.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert conversation summarizer.</span>
+</pre></div>
+</div>
+<p>Your task is to create a brief 1-2 sentence summary of the conversation (max 30-50 words).</p>
+<p>Include:
+- Main topics discussed
+- Important facts or entities mentioned
+- Any unresolved questions if applicable
+- Sources file name (e.g., file1.pdf) or documents referenced</p>
+<p>Exclude:
+- Greetings, misunderstandings, off-topic content.</p>
+<p>Output:
+- Return ONLY the summary.
+- Do NOT include any explanations or justifications.
+- If no meaningful topics exist, return an empty string.”””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def get_query_rewriting_prompt() -&gt; str:</dt><dd><p>“””Prompt for rewriting queries.”””
+return “””You are an expert query optimizer.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Your task is to rewrite the user’s query to improve retrieval effectiveness.</p>
+<p>Guidelines:
+- Expand abbreviations and acronyms
+- Add relevant context or domain terms
+- Remove ambiguity and clarify intent
+- Maintain the original meaning
+- Keep the query concise (under 100 words)</p>
+<p>Output:
+- Return ONLY the rewritten query.
+- Do NOT include explanations.
+- If the query is already optimal, return it unchanged.”””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def get_agent_orchestration_prompt() -&gt; str:</dt><dd><p>“””Prompt for agent tool orchestration.”””
+return “””You are an intelligent agent orchestrator.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Your task is to decide which tools to use and in what order to answer user queries.</p>
+<p>Available Tools:
+1. search_child_chunks(query, limit) - Search for relevant document chunks
+2. retrieve_parent_chunks(parent_id) - Get full context from parent chunks</p>
+<p>Decision Logic:
+- Always start with search_child_chunks to find relevant information
+- Use retrieve_parent_chunks if you need more context for a specific topic
+- Combine results from multiple searches if needed
+- Stop when you have sufficient information to answer</p>
+<p>Output:
+- Explain your tool selection strategy
+- Execute tools in the optimal order
+- Provide reasoning for each tool call”””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def get_context_compression_prompt() -&gt; str:</dt><dd><p>“””Prompt for compressing context.”””
+return “””You are an expert context compressor.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Your task is to compress the retrieved context while preserving key information.</p>
+<p>Guidelines:
+- Remove redundant information
+- Keep essential facts and definitions
+- Maintain technical accuracy
+- Preserve source attribution
+- Reduce length by 30-50%</p>
+<p>Output:
+- Return ONLY the compressed context.
+- Do NOT include explanations.
+- Maintain the original structure if possible.”””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def get_fallback_response_prompt() -&gt; str:</dt><dd><p>“””Prompt for fallback responses.”””
+return “””You are a helpful assistant handling queries with limited information.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Your task is to provide a helpful response when sufficient context is unavailable.</p>
+<p>Guidelines:
+- Acknowledge the limitation clearly
+- Provide general knowledge if applicable
+- Suggest alternative approaches
+- Offer to search for more specific information
+- Be honest about knowledge gaps</p>
+<p>Output:
+- Return ONLY the response.
+- Do NOT include explanations.
+- Keep response concise and helpful.”””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def get_answer_aggregation_prompt() -&gt; str:</dt><dd><p>“””Prompt for aggregating answers from multiple sources.”””
+return “””You are an expert answer aggregator.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Your task is to synthesize information from multiple sources into a coherent answer.</p>
+<p>Guidelines:
+- Combine information from all sources
+- Resolve contradictions by citing sources
+- Maintain logical flow and structure
+- Attribute information to sources
+- Highlight consensus and disagreements
+- Provide a comprehensive answer</p>
+<p>Output:
+- Return ONLY the aggregated answer.
+- Do NOT include explanations.
+- Use clear formatting for readability.”””</p>
+</section>
+<section id="prompt-engineering-best-practices">
+<h2>Prompt Engineering Best Practices<a class="headerlink" href="#prompt-engineering-best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Clear Role Definition</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Specific role</span>
+<span class="s2">&quot;You are an expert conversation summarizer with 10+ years of experience.&quot;</span>
+
+<span class="c1"># Avoid: Vague role</span>
+<span class="s2">&quot;You are helpful.&quot;</span>
+</pre></div>
+</div>
+<p><strong>2. Specific Task Description</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Specific task</span>
+<span class="s2">&quot;Create a 1-2 sentence summary (max 50 words) of the conversation.&quot;</span>
+
+<span class="c1"># Avoid: Vague task</span>
+<span class="s2">&quot;Summarize the conversation.&quot;</span>
+</pre></div>
+</div>
+<p><strong>3. Clear Guidelines</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Specific guidelines</span>
+<span class="s2">&quot;Include: main topics, important facts, sources</span>
+ <span class="n">Exclude</span><span class="p">:</span> <span class="n">greetings</span><span class="p">,</span> <span class="n">off</span><span class="o">-</span><span class="n">topic</span> <span class="n">content</span><span class="s2">&quot;</span>
+
+<span class="c1"># Avoid: Vague guidelines</span>
+<span class="s2">&quot;Be helpful and accurate.&quot;</span>
+</pre></div>
+</div>
+<p><strong>4. Explicit Output Format</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Explicit format</span>
+<span class="s2">&quot;Return ONLY the summary. Do NOT include explanations.&quot;</span>
+
+<span class="c1"># Avoid: Implicit format</span>
+<span class="s2">&quot;Provide a summary.&quot;</span>
+</pre></div>
+</div>
+<p><strong>5. Edge Case Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Handle edge cases</span>
+<span class="s2">&quot;If no meaningful topics exist, return an empty string.&quot;</span>
+
+<span class="c1"># Avoid: No edge case handling</span>
+<span class="s2">&quot;Return a summary.&quot;</span>
+</pre></div>
+</div>
+<p><strong>6. Constraint Specification</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Specific constraints</span>
+<span class="s2">&quot;Keep response under 100 words. Use simple language.&quot;</span>
+
+<span class="c1"># Avoid: Vague constraints</span>
+<span class="s2">&quot;Keep it brief.&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="prompt-optimization-techniques">
+<h2>Prompt Optimization Techniques<a class="headerlink" href="#prompt-optimization-techniques" title="Link to this heading">¶</a></h2>
+<p><strong>1. Few-Shot Examples</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_summary_prompt_with_examples</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert conversation summarizer.</span>
+</pre></div>
+</div>
+<p>Your task is to create a brief 1-2 sentence summary.</p>
+<p>Examples:
+Input: User asked about neural networks. Assistant explained backpropagation.
+Output: “Discussed neural networks and backpropagation learning mechanism.”</p>
+<p>Input: User greeted. Assistant responded. User asked about weather.
+Output: “”</p>
+<p>Guidelines:
+- Include main topics and important facts
+- Exclude greetings and off-topic content
+- Keep to 1-2 sentences, max 50 words”””</p>
+<p><strong>2. Chain-of-Thought Prompting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_reasoning_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are an expert reasoner.</span>
+</pre></div>
+</div>
+<p>Your task is to answer questions by thinking step-by-step.</p>
+<p>Process:
+1. Understand the question
+2. Identify relevant information
+3. Reason through the answer
+4. Provide the final answer</p>
+<p>Output:
+- Show your reasoning steps
+- Provide the final answer”””</p>
+<p><strong>3. Role-Based Prompting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_expert_prompt</span><span class="p">(</span><span class="n">expertise</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are an expert </span><span class="si">{</span><span class="n">expertise</span><span class="si">}</span><span class="s2">.</span>
+</pre></div>
+</div>
+<p>Your task is to provide expert-level insights on the given topic.</p>
+<p>Guidelines:
+- Use domain-specific terminology
+- Provide accurate, detailed information
+- Consider edge cases and nuances
+- Cite relevant sources when applicable”””</p>
+<p><strong>4. Constraint-Based Prompting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_constrained_prompt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;You are a helpful assistant.</span>
+</pre></div>
+</div>
+<p>Your task is to answer questions with the following constraints:</p>
+<p>Constraints:
+- Maximum 100 words
+- Use simple language
+- Avoid technical jargon
+- Provide examples when helpful”””</p>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Prompt Length Impact:</strong></p>
+<ul class="simple">
+<li><p>Short prompts (&lt; 100 words): Faster processing, less context</p></li>
+<li><p>Medium prompts (100-500 words): Balanced performance</p></li>
+<li><p>Long prompts (&gt; 500 words): Slower processing, more context</p></li>
+</ul>
+<p><strong>Token Usage:</strong></p>
+<ul class="simple">
+<li><p>Conversation summary: ~50-100 tokens</p></li>
+<li><p>Query rewriting: ~100-150 tokens</p></li>
+<li><p>Agent orchestration: ~200-300 tokens</p></li>
+<li><p>Context compression: ~150-250 tokens</p></li>
+<li><p>Fallback response: ~100-200 tokens</p></li>
+<li><p>Answer aggregation: ~200-400 tokens</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use shorter prompts for faster processing</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Summarize in 1 sentence.&quot;</span>
+
+<span class="c1"># Cache prompts to avoid re-generation</span>
+<span class="n">PROMPTS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="n">get_conversation_summary_prompt</span><span class="p">(),</span>
+    <span class="s2">&quot;rewrite&quot;</span><span class="p">:</span> <span class="n">get_query_rewriting_prompt</span><span class="p">(),</span>
+    <span class="c1"># ...</span>
+<span class="p">}</span>
+
+<span class="c1"># Use prompt templates for dynamic content</span>
+<span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;Summarize this: </span><span class="si">{content}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>LLM Ignoring Prompt Instructions</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: LLM not following format instructions</span>
+<span class="c1"># Solution: Make instructions more explicit</span>
+
+<span class="c1"># Before</span>
+<span class="s2">&quot;Return the summary.&quot;</span>
+
+<span class="c1"># After</span>
+<span class="s2">&quot;Return ONLY the summary. Do NOT include any other text.&quot;</span>
+</pre></div>
+</div>
+<p><strong>Inconsistent Output Format</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Output format varies</span>
+<span class="c1"># Solution: Add examples and stricter constraints</span>
+
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Return output in this exact format:</span>
+<span class="s2">SUMMARY: [summary text]</span>
+<span class="s2">SOURCES: [source list]&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>LLM Hallucinating Information</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: LLM adding information not in context</span>
+<span class="c1"># Solution: Add explicit constraints</span>
+
+<span class="s2">&quot;Only use information from the provided context.</span>
+ <span class="n">Do</span> <span class="n">NOT</span> <span class="n">add</span> <span class="n">information</span> <span class="kn">from</span><span class="w"> </span><span class="nn">your</span> <span class="n">training</span> <span class="n">data</span><span class="o">.</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Prompt Too Long</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Prompt exceeds token limits</span>
+<span class="c1"># Solution: Compress and prioritize</span>
+
+<span class="c1"># Remove unnecessary examples</span>
+<span class="c1"># Combine related guidelines</span>
+<span class="c1"># Use shorter sentences</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h2>Next Steps<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<p>With system prompts defined, you can proceed to:</p>
+<ul class="simple">
+<li><p>Implementing the agent loop with prompt orchestration</p></li>
+<li><p>Building conversation management with summarization</p></li>
+<li><p>Creating query processing pipelines</p></li>
+<li><p>Implementing context retrieval and compression</p></li>
+<li><p>Building the complete RAG application with all components</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch05_define_agent_tools.html" class="btn btn-neutral float-left" title="Topic 5: Define Agent Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

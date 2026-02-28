@@ -1,0 +1,958 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 4: Hierarchical Document Indexing &mdash; GitHub Book Template 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Topic 5: Define Agent Tools" href="ch05_define_agent_tools.html" />
+    <link rel="prev" title="Topic 3: PDFs to Markdown" href="ch03_pdfs_to_markdown.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GitHub Book Template
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 4: Hierarchical Document Indexing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-merge-small-parents-function">Step 2: Merge Small Parents Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-split-large-parents-function">Step 3: Split Large Parents Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-clean-small-chunks-function">Step 4: Clean Small Chunks Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-initialize-vector-store">Step 5: Initialize Vector Store</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-main-indexing-function">Step 6: Main Indexing Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-indexing-pipeline">Complete Indexing Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hierarchical-retrieval-strategy">Hierarchical Retrieval Strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-structure-and-storage">Data Structure and Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GitHub Book Template</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 4: Hierarchical Document Indexing</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch04_hierarchical_document_indexing.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-4-hierarchical-document-indexing">
+<h1>Topic 4: Hierarchical Document Indexing<a class="headerlink" href="#topic-4-hierarchical-document-indexing" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the hierarchical document indexing strategy using Parent/Child chunk splitting. This approach creates a two-level hierarchy where parent chunks maintain document context and structure, while child chunks enable fine-grained retrieval. This strategy significantly improves retrieval quality and context preservation in RAG systems.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>Hierarchical indexing addresses a fundamental challenge in RAG systems: balancing context preservation with retrieval precision. The Parent/Child strategy provides:</p>
+<ul class="simple">
+<li><p><strong>Context Preservation</strong>: Parent chunks maintain document structure and broader context</p></li>
+<li><p><strong>Precise Retrieval</strong>: Child chunks enable fine-grained, relevant results</p></li>
+<li><p><strong>Efficient Storage</strong>: Reduces redundancy while maintaining relationships</p></li>
+<li><p><strong>Flexible Querying</strong>: Retrieve child chunks, augment with parent context</p></li>
+<li><p><strong>Scalability</strong>: Handles documents of varying sizes and structures</p></li>
+</ul>
+<p>The indexing workflow:</p>
+<ol class="arabic simple">
+<li><p>Load Markdown documents</p></li>
+<li><p>Split by headers to create parent chunks</p></li>
+<li><p>Merge small parents and split large parents</p></li>
+<li><p>Create child chunks from parents</p></li>
+<li><p>Store children in vector database</p></li>
+<li><p>Store parents in JSON files for context retrieval</p></li>
+</ol>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_text_splitters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MarkdownHeaderTextSplitter</span><span class="p">,</span>
+    <span class="n">RecursiveCharacterTextSplitter</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: File system operations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">glob</span></code>: Pattern-based file discovery</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">json</span></code>: JSON serialization for storing parent chunks</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code>: Object-oriented path handling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MarkdownHeaderTextSplitter</span></code>: Splits Markdown by headers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RecursiveCharacterTextSplitter</span></code>: Splits text recursively by delimiters</p></li>
+</ul>
+</section>
+<section id="step-2-merge-small-parents-function">
+<h2>Step 2: Merge Small Parents Function<a class="headerlink" href="#step-2-merge-small-parents-function" title="Link to this heading">¶</a></h2>
+<p>Define a function to merge parent chunks that are too small:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">merge_small_parents</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="n">min_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge parent chunks that are smaller than min_size.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        chunks (list): List of Document objects</span>
+<span class="sd">        min_size (int): Minimum size threshold in characters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: Merged chunks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">chunks</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">merged</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="p">[],</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">chunk</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current</span><span class="o">.</span><span class="n">page_content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chunk</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                    <span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">page_content</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_size</span><span class="p">:</span>
+            <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">current</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">merged</span><span class="p">:</span>
+            <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">current</span><span class="o">.</span><span class="n">page_content</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                    <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">merged</span>
+</pre></div>
+</div>
+<p><strong>Function Purpose:</strong></p>
+<p>Prevents fragmentation by merging chunks smaller than the minimum size threshold. This ensures parent chunks have sufficient context.</p>
+<p><strong>Algorithm:</strong></p>
+<ol class="arabic simple">
+<li><p>Iterate through chunks sequentially</p></li>
+<li><p>Accumulate content until reaching min_size</p></li>
+<li><p>Merge metadata with arrow notation (<code class="docutils literal notranslate"><span class="pre">-&gt;</span></code> indicates merged sections)</p></li>
+<li><p>Append to result when threshold is reached</p></li>
+<li><p>Handle remaining chunks at the end</p></li>
+</ol>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input: 3 chunks of 500, 300, 600 characters (min_size=1000)</span>
+<span class="c1"># Process:</span>
+<span class="c1">#   - Chunk 1 (500): accumulate</span>
+<span class="c1">#   - Chunk 2 (300): merge with Chunk 1 (800 total)</span>
+<span class="c1">#   - Chunk 3 (600): merge with accumulated (1400 total) -&gt; append</span>
+<span class="c1"># Output: 1 merged chunk of 1400 characters</span>
+</pre></div>
+</div>
+<p><strong>Metadata Merging:</strong></p>
+<p>When chunks are merged, metadata is combined with arrow notation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Original metadata</span>
+<span class="n">chunk1</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;section&quot;</span><span class="p">:</span> <span class="s2">&quot;Introduction&quot;</span><span class="p">}</span>
+<span class="n">chunk2</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;section&quot;</span><span class="p">:</span> <span class="s2">&quot;Background&quot;</span><span class="p">}</span>
+
+<span class="c1"># After merge</span>
+<span class="n">merged</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;section&quot;</span><span class="p">:</span> <span class="s2">&quot;Introduction -&gt; Background&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-split-large-parents-function">
+<h2>Step 3: Split Large Parents Function<a class="headerlink" href="#step-3-split-large-parents-function" title="Link to this heading">¶</a></h2>
+<p>Define a function to split parent chunks that are too large:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">split_large_parents</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="n">max_size</span><span class="p">,</span> <span class="n">splitter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Split parent chunks that exceed max_size.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        chunks (list): List of Document objects</span>
+<span class="sd">        max_size (int): Maximum size threshold in characters</span>
+<span class="sd">        splitter: RecursiveCharacterTextSplitter instance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: Split chunks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">split_chunks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_size</span><span class="p">:</span>
+            <span class="n">split_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">large_splitter</span> <span class="o">=</span> <span class="n">RecursiveCharacterTextSplitter</span><span class="p">(</span>
+                <span class="n">chunk_size</span><span class="o">=</span><span class="n">max_size</span><span class="p">,</span>
+                <span class="n">chunk_overlap</span><span class="o">=</span><span class="n">splitter</span><span class="o">.</span><span class="n">_chunk_overlap</span>
+            <span class="p">)</span>
+            <span class="n">sub_chunks</span> <span class="o">=</span> <span class="n">large_splitter</span><span class="o">.</span><span class="n">split_documents</span><span class="p">([</span><span class="n">chunk</span><span class="p">])</span>
+            <span class="n">split_chunks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sub_chunks</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">split_chunks</span>
+</pre></div>
+</div>
+<p><strong>Function Purpose:</strong></p>
+<p>Prevents excessively large parent chunks by splitting them while maintaining overlap for context continuity.</p>
+<p><strong>Algorithm:</strong></p>
+<ol class="arabic simple">
+<li><p>Iterate through chunks</p></li>
+<li><p>Keep chunks within max_size unchanged</p></li>
+<li><p>For oversized chunks, create a new splitter with max_size</p></li>
+<li><p>Preserve chunk_overlap from original splitter</p></li>
+<li><p>Extend results with split sub-chunks</p></li>
+</ol>
+<p><strong>Why Preserve Overlap:</strong></p>
+<p>Overlap ensures context continuity between split chunks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Without overlap: Information at boundaries is lost</span>
+<span class="c1"># Chunk 1: &quot;...end of section&quot;</span>
+<span class="c1"># Chunk 2: &quot;start of next section...&quot;</span>
+
+<span class="c1"># With overlap: Context is preserved</span>
+<span class="c1"># Chunk 1: &quot;...middle of section...end of section&quot;</span>
+<span class="c1"># Chunk 2: &quot;...end of section...start of next section...&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-clean-small-chunks-function">
+<h2>Step 4: Clean Small Chunks Function<a class="headerlink" href="#step-4-clean-small-chunks-function" title="Link to this heading">¶</a></h2>
+<p>Define a function to clean up remaining small chunks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">clean_small_chunks</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="n">min_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove or merge chunks smaller than min_size.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        chunks (list): List of Document objects</span>
+<span class="sd">        min_size (int): Minimum size threshold in characters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: Cleaned chunks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunks</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_size</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cleaned</span><span class="p">:</span>
+                <span class="c1"># Merge with previous chunk</span>
+                <span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chunk</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                        <span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Merge with next chunk</span>
+                <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chunk</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                        <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">chunks</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Last chunk, keep as is</span>
+                <span class="n">cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cleaned</span>
+</pre></div>
+</div>
+<p><strong>Function Purpose:</strong></p>
+<p>Final cleanup pass to eliminate fragmentation by merging remaining small chunks with neighbors.</p>
+<p><strong>Algorithm:</strong></p>
+<ol class="arabic simple">
+<li><p>Iterate through chunks</p></li>
+<li><p>For small chunks:
+- If previous chunk exists: merge with it
+- Else if next chunk exists: merge with it
+- Else: keep as is (last chunk)</p></li>
+<li><p>For normal chunks: keep unchanged</p></li>
+</ol>
+<p><strong>Merging Strategy:</strong></p>
+<ul class="simple">
+<li><p><strong>Prefer previous</strong>: Maintains document flow</p></li>
+<li><p><strong>Fallback to next</strong>: Ensures no data loss</p></li>
+<li><p><strong>Keep last</strong>: Prevents orphaned chunks</p></li>
+</ul>
+</section>
+<section id="step-5-initialize-vector-store">
+<h2>Step 5: Initialize Vector Store<a class="headerlink" href="#step-5-initialize-vector-store" title="Link to this heading">¶</a></h2>
+<p>Set up the vector store for child chunks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">client</span><span class="o">.</span><span class="n">collection_exists</span><span class="p">(</span><span class="n">CHILD_COLLECTION</span><span class="p">):</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">CHILD_COLLECTION</span><span class="p">)</span>
+    <span class="n">ensure_collection</span><span class="p">(</span><span class="n">CHILD_COLLECTION</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ensure_collection</span><span class="p">(</span><span class="n">CHILD_COLLECTION</span><span class="p">)</span>
+
+<span class="n">child_vector_store</span> <span class="o">=</span> <span class="n">QdrantVectorStore</span><span class="p">(</span>
+    <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+    <span class="n">collection_name</span><span class="o">=</span><span class="n">CHILD_COLLECTION</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="o">=</span><span class="n">dense_embeddings</span><span class="p">,</span>
+    <span class="n">sparse_embedding</span><span class="o">=</span><span class="n">sparse_embeddings</span><span class="p">,</span>
+    <span class="n">retrieval_mode</span><span class="o">=</span><span class="n">RetrievalMode</span><span class="o">.</span><span class="n">HYBRID</span><span class="p">,</span>
+    <span class="n">sparse_vector_name</span><span class="o">=</span><span class="s2">&quot;sparse&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Collection Reset</strong>: Deletes and recreates collection for fresh indexing</p></li>
+<li><p><strong>Dense Embeddings</strong>: Uses sentence-transformers for semantic search</p></li>
+<li><p><strong>Sparse Embeddings</strong>: Uses BM25 for keyword matching</p></li>
+<li><p><strong>Hybrid Mode</strong>: Combines both search methods</p></li>
+<li><p><strong>Sparse Vector Name</strong>: Identifies sparse vectors in Qdrant</p></li>
+</ul>
+</section>
+<section id="step-6-main-indexing-function">
+<h2>Step 6: Main Indexing Function<a class="headerlink" href="#step-6-main-indexing-function" title="Link to this heading">¶</a></h2>
+<p>Define the main function that orchestrates the entire indexing process:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">index_documents</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Index all Markdown documents using hierarchical Parent/Child strategy.</span>
+
+<span class="sd">    Process:</span>
+<span class="sd">    1. Load Markdown files</span>
+<span class="sd">    2. Split by headers to create parent chunks</span>
+<span class="sd">    3. Merge small and split large parents</span>
+<span class="sd">    4. Create child chunks from parents</span>
+<span class="sd">    5. Store children in vector database</span>
+<span class="sd">    6. Store parents in JSON files</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Step 6a: Configure Header Splitting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">headers_to_split_on</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;H1&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;##&quot;</span><span class="p">,</span> <span class="s2">&quot;H2&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;###&quot;</span><span class="p">,</span> <span class="s2">&quot;H3&quot;</span><span class="p">)]</span>
+<span class="n">parent_splitter</span> <span class="o">=</span> <span class="n">MarkdownHeaderTextSplitter</span><span class="p">(</span>
+    <span class="n">headers_to_split_on</span><span class="o">=</span><span class="n">headers_to_split_on</span><span class="p">,</span>
+    <span class="n">strip_headers</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>H1 (#)</strong>: Top-level headers</p></li>
+<li><p><strong>H2 (##)</strong>: Section headers</p></li>
+<li><p><strong>H3 (###)</strong>: Subsection headers</p></li>
+<li><p><strong>strip_headers=False</strong>: Keeps headers in content for context</p></li>
+</ul>
+<p><strong>Why These Headers:</strong></p>
+<ul class="simple">
+<li><p>Preserves document structure</p></li>
+<li><p>Creates meaningful semantic boundaries</p></li>
+<li><p>Maintains hierarchy information in metadata</p></li>
+</ul>
+<p><strong>Step 6b: Configure Child Splitter</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">child_splitter</span> <span class="o">=</span> <span class="n">RecursiveCharacterTextSplitter</span><span class="p">(</span>
+    <span class="n">chunk_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">chunk_overlap</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>chunk_size=500</strong>: Child chunks are 500 characters</p></li>
+<li><p><strong>chunk_overlap=100</strong>: 100 character overlap between chunks</p></li>
+<li><p><strong>Recursive</strong>: Splits by multiple delimiters (newlines, spaces, characters)</p></li>
+</ul>
+<p><strong>Why These Values:</strong></p>
+<ul class="simple">
+<li><p>500 chars ≈ 100-150 tokens (good for LLM context)</p></li>
+<li><p>100 char overlap ≈ 20% (maintains context continuity)</p></li>
+<li><p>Recursive splitting preserves semantic boundaries</p></li>
+</ul>
+<p><strong>Step 6c: Set Size Thresholds</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">min_parent_size</span> <span class="o">=</span> <span class="mi">2000</span>      <span class="c1"># Minimum parent chunk size</span>
+<span class="n">max_parent_size</span> <span class="o">=</span> <span class="mi">4000</span>      <span class="c1"># Maximum parent chunk size</span>
+</pre></div>
+</div>
+<p><strong>Size Rationale:</strong></p>
+<ul class="simple">
+<li><p><strong>min_parent_size=2000</strong>: Ensures sufficient context (400-600 tokens)</p></li>
+<li><p><strong>max_parent_size=4000</strong>: Prevents excessively large chunks (800-1200 tokens)</p></li>
+<li><p><strong>Ratio 1:2</strong>: Balanced range for flexibility</p></li>
+</ul>
+<p><strong>Step 6d: Process Markdown Files</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">all_parent_pairs</span><span class="p">,</span> <span class="n">all_child_chunks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">md_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">,</span> <span class="s2">&quot;*.md&quot;</span><span class="p">)))</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">md_files</span><span class="p">:</span>
+    <span class="k">return</span>
+
+<span class="k">for</span> <span class="n">doc_path_str</span> <span class="ow">in</span> <span class="n">md_files</span><span class="p">:</span>
+    <span class="n">doc_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">doc_path_str</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">doc_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">md_text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">continue</span>
+</pre></div>
+</div>
+<p><strong>Processing Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Sorted files</strong>: Ensures consistent ordering</p></li>
+<li><p><strong>Error handling</strong>: Skips files that can’t be read</p></li>
+<li><p><strong>UTF-8 encoding</strong>: Handles special characters</p></li>
+</ul>
+<p><strong>Step 6e: Create Parent Chunks</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parent_chunks</span> <span class="o">=</span> <span class="n">parent_splitter</span><span class="o">.</span><span class="n">split_text</span><span class="p">(</span><span class="n">md_text</span><span class="p">)</span>
+<span class="n">merged_parents</span> <span class="o">=</span> <span class="n">merge_small_parents</span><span class="p">(</span><span class="n">parent_chunks</span><span class="p">,</span> <span class="n">min_parent_size</span><span class="p">)</span>
+<span class="n">split_parents</span> <span class="o">=</span> <span class="n">split_large_parents</span><span class="p">(</span><span class="n">merged_parents</span><span class="p">,</span> <span class="n">max_parent_size</span><span class="p">,</span> <span class="n">child_splitter</span><span class="p">)</span>
+<span class="n">cleaned_parents</span> <span class="o">=</span> <span class="n">clean_small_chunks</span><span class="p">(</span><span class="n">split_parents</span><span class="p">,</span> <span class="n">min_parent_size</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Processing Pipeline:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>split_text()</strong>: Split by headers</p></li>
+<li><p><strong>merge_small_parents()</strong>: Combine small chunks</p></li>
+<li><p><strong>split_large_parents()</strong>: Break oversized chunks</p></li>
+<li><p><strong>clean_small_chunks()</strong>: Final cleanup</p></li>
+</ol>
+<p><strong>Step 6f: Create Child Chunks and Store</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p_chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cleaned_parents</span><span class="p">):</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc_path</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">_parent_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">p_chunk</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">doc_path</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;parent_id&quot;</span><span class="p">:</span> <span class="n">parent_id</span>
+    <span class="p">})</span>
+    <span class="n">all_parent_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">parent_id</span><span class="p">,</span> <span class="n">p_chunk</span><span class="p">))</span>
+
+    <span class="n">children</span> <span class="o">=</span> <span class="n">child_splitter</span><span class="o">.</span><span class="n">split_documents</span><span class="p">([</span><span class="n">p_chunk</span><span class="p">])</span>
+    <span class="n">all_child_chunks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">children</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Details:</strong></p>
+<ul class="simple">
+<li><p><strong>parent_id</strong>: Unique identifier for each parent chunk</p></li>
+<li><p><strong>source</strong>: Original PDF filename</p></li>
+<li><p><strong>children</strong>: Split from parent for fine-grained retrieval</p></li>
+<li><p><strong>Metadata propagation</strong>: Children inherit parent metadata</p></li>
+</ul>
+<p><strong>Step 6g: Store in Vector Database</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">all_child_chunks</span><span class="p">:</span>
+    <span class="k">return</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">child_vector_store</span><span class="o">.</span><span class="n">add_documents</span><span class="p">(</span><span class="n">all_child_chunks</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">return</span>
+</pre></div>
+</div>
+<p>Stores all child chunks in Qdrant with both dense and sparse embeddings.</p>
+<p><strong>Step 6h: Store Parent Chunks as JSON</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="n">item</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">parent_id</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">all_parent_pairs</span><span class="p">:</span>
+    <span class="n">doc_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;page_content&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">page_content</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">metadata</span>
+    <span class="p">}</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">doc_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Storage Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Clear old files</strong>: Removes previous parent chunks</p></li>
+<li><p><strong>JSON format</strong>: Easy to load and parse</p></li>
+<li><p><strong>Filename</strong>: Uses parent_id for quick lookup</p></li>
+<li><p><strong>UTF-8 encoding</strong>: Preserves special characters</p></li>
+</ul>
+<p><strong>Step 6i: Execute Indexing</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">index_documents</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-indexing-pipeline">
+<h2>Complete Indexing Pipeline<a class="headerlink" href="#complete-indexing-pipeline" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete hierarchical indexing code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_text_splitters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MarkdownHeaderTextSplitter</span><span class="p">,</span>
+    <span class="n">RecursiveCharacterTextSplitter</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_qdrant</span><span class="w"> </span><span class="kn">import</span> <span class="n">QdrantVectorStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_qdrant.qdrant</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetrievalMode</span>
+
+<span class="c1"># Configuration</span>
+<span class="n">MARKDOWN_DIR</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span>
+<span class="n">PARENT_STORE_PATH</span> <span class="o">=</span> <span class="s2">&quot;parent_store&quot;</span>
+<span class="n">CHILD_COLLECTION</span> <span class="o">=</span> <span class="s2">&quot;document_child_chunks&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_small_parents</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="n">min_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Merge small parent chunks.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">chunks</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">merged</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="p">[],</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">chunk</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current</span><span class="o">.</span><span class="n">page_content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chunk</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                    <span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">page_content</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_size</span><span class="p">:</span>
+            <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">current</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">merged</span><span class="p">:</span>
+            <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">current</span><span class="o">.</span><span class="n">page_content</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">current</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                    <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">merged</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">split_large_parents</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="n">max_size</span><span class="p">,</span> <span class="n">splitter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split large parent chunks.&quot;&quot;&quot;</span>
+    <span class="n">split_chunks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_size</span><span class="p">:</span>
+            <span class="n">split_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">large_splitter</span> <span class="o">=</span> <span class="n">RecursiveCharacterTextSplitter</span><span class="p">(</span>
+                <span class="n">chunk_size</span><span class="o">=</span><span class="n">max_size</span><span class="p">,</span>
+                <span class="n">chunk_overlap</span><span class="o">=</span><span class="n">splitter</span><span class="o">.</span><span class="n">_chunk_overlap</span>
+            <span class="p">)</span>
+            <span class="n">sub_chunks</span> <span class="o">=</span> <span class="n">large_splitter</span><span class="o">.</span><span class="n">split_documents</span><span class="p">([</span><span class="n">chunk</span><span class="p">])</span>
+            <span class="n">split_chunks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sub_chunks</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">split_chunks</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_small_chunks</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="n">min_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean up remaining small chunks.&quot;&quot;&quot;</span>
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunks</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_size</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cleaned</span><span class="p">:</span>
+                <span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chunk</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                        <span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">cleaned</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">.</span><span class="n">page_content</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chunk</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                        <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">chunks</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">chunks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cleaned</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">index_documents</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Index all documents with hierarchical Parent/Child strategy.&quot;&quot;&quot;</span>
+    <span class="n">headers_to_split_on</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;H1&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;##&quot;</span><span class="p">,</span> <span class="s2">&quot;H2&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;###&quot;</span><span class="p">,</span> <span class="s2">&quot;H3&quot;</span><span class="p">)]</span>
+    <span class="n">parent_splitter</span> <span class="o">=</span> <span class="n">MarkdownHeaderTextSplitter</span><span class="p">(</span>
+        <span class="n">headers_to_split_on</span><span class="o">=</span><span class="n">headers_to_split_on</span><span class="p">,</span>
+        <span class="n">strip_headers</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">child_splitter</span> <span class="o">=</span> <span class="n">RecursiveCharacterTextSplitter</span><span class="p">(</span>
+        <span class="n">chunk_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">chunk_overlap</span><span class="o">=</span><span class="mi">100</span>
+    <span class="p">)</span>
+
+    <span class="n">min_parent_size</span> <span class="o">=</span> <span class="mi">2000</span>
+    <span class="n">max_parent_size</span> <span class="o">=</span> <span class="mi">4000</span>
+
+    <span class="n">all_parent_pairs</span><span class="p">,</span> <span class="n">all_child_chunks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">md_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">,</span> <span class="s2">&quot;*.md&quot;</span><span class="p">)))</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">md_files</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Markdown files found&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">md_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> Markdown files...&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">doc_path_str</span> <span class="ow">in</span> <span class="n">md_files</span><span class="p">:</span>
+        <span class="n">doc_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">doc_path_str</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">doc_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">md_text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error reading </span><span class="si">{</span><span class="n">doc_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">parent_chunks</span> <span class="o">=</span> <span class="n">parent_splitter</span><span class="o">.</span><span class="n">split_text</span><span class="p">(</span><span class="n">md_text</span><span class="p">)</span>
+        <span class="n">merged_parents</span> <span class="o">=</span> <span class="n">merge_small_parents</span><span class="p">(</span><span class="n">parent_chunks</span><span class="p">,</span> <span class="n">min_parent_size</span><span class="p">)</span>
+        <span class="n">split_parents</span> <span class="o">=</span> <span class="n">split_large_parents</span><span class="p">(</span><span class="n">merged_parents</span><span class="p">,</span> <span class="n">max_parent_size</span><span class="p">,</span> <span class="n">child_splitter</span><span class="p">)</span>
+        <span class="n">cleaned_parents</span> <span class="o">=</span> <span class="n">clean_small_chunks</span><span class="p">(</span><span class="n">split_parents</span><span class="p">,</span> <span class="n">min_parent_size</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p_chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cleaned_parents</span><span class="p">):</span>
+            <span class="n">parent_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc_path</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">_parent_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">p_chunk</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">doc_path</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;parent_id&quot;</span><span class="p">:</span> <span class="n">parent_id</span>
+            <span class="p">})</span>
+            <span class="n">all_parent_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">parent_id</span><span class="p">,</span> <span class="n">p_chunk</span><span class="p">))</span>
+
+            <span class="n">children</span> <span class="o">=</span> <span class="n">child_splitter</span><span class="o">.</span><span class="n">split_documents</span><span class="p">([</span><span class="n">p_chunk</span><span class="p">])</span>
+            <span class="n">all_child_chunks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">children</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">all_child_chunks</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No child chunks created&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Storing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_child_chunks</span><span class="p">)</span><span class="si">}</span><span class="s2"> child chunks in vector database...&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">child_vector_store</span><span class="o">.</span><span class="n">add_documents</span><span class="p">(</span><span class="n">all_child_chunks</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error storing chunks: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Storing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_parent_pairs</span><span class="p">)</span><span class="si">}</span><span class="s2"> parent chunks as JSON...&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="n">item</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">parent_id</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">all_parent_pairs</span><span class="p">:</span>
+        <span class="n">doc_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;page_content&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">page_content</span><span class="p">,</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">metadata</span>
+        <span class="p">}</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">doc_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Indexing complete: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_parent_pairs</span><span class="p">)</span><span class="si">}</span><span class="s2"> parents, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_child_chunks</span><span class="p">)</span><span class="si">}</span><span class="s2"> children&quot;</span><span class="p">)</span>
+
+<span class="c1"># Execute indexing</span>
+<span class="n">index_documents</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="hierarchical-retrieval-strategy">
+<h2>Hierarchical Retrieval Strategy<a class="headerlink" href="#hierarchical-retrieval-strategy" title="Link to this heading">¶</a></h2>
+<p><strong>How Parent/Child Retrieval Works:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Query Processing</strong>: Convert user query to embeddings</p></li>
+<li><p><strong>Child Retrieval</strong>: Find most relevant child chunks using hybrid search</p></li>
+<li><p><strong>Parent Lookup</strong>: Retrieve parent chunks using parent_id from child metadata</p></li>
+<li><p><strong>Context Augmentation</strong>: Combine child chunks with parent context</p></li>
+<li><p><strong>Response Generation</strong>: Use LLM with augmented context</p></li>
+</ol>
+<p><strong>Example Retrieval Flow:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Query: &quot;How do neural networks work?&quot;</span>
+
+<span class="c1"># Step 1: Find relevant child chunks</span>
+<span class="n">child_results</span> <span class="o">=</span> <span class="n">child_vector_store</span><span class="o">.</span><span class="n">similarity_search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># Returns: 3 child chunks about neural networks</span>
+
+<span class="c1"># Step 2: Get parent IDs from child metadata</span>
+<span class="n">parent_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;parent_id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_results</span><span class="p">]</span>
+<span class="c1"># Returns: [&quot;doc1_parent_2&quot;, &quot;doc1_parent_2&quot;, &quot;doc2_parent_1&quot;]</span>
+
+<span class="c1"># Step 3: Load parent chunks</span>
+<span class="n">parents</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">parent_id</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">parent_ids</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;parent_store/</span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">parents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+<span class="c1"># Step 4: Combine for context</span>
+<span class="n">context</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;page_content&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">])</span>
+
+<span class="c1"># Step 5: Generate response with LLM</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Context: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Question: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="data-structure-and-storage">
+<h2>Data Structure and Storage<a class="headerlink" href="#data-structure-and-storage" title="Link to this heading">¶</a></h2>
+<p><strong>Vector Database Structure:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Qdrant Collection: document_child_chunks
+├── Dense Vectors (768 dimensions)
+│   └── Semantic embeddings from sentence-transformers
+├── Sparse Vectors (BM25)
+│   └── Keyword embeddings
+└── Metadata
+    ├── source: &quot;document.pdf&quot;
+    ├── parent_id: &quot;document_parent_0&quot;
+    ├── section: &quot;Introduction&quot;
+    └── ...
+</pre></div>
+</div>
+<p><strong>Parent Store Structure:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>parent_store/
+├── document_parent_0.json
+├── document_parent_1.json
+├── document_parent_2.json
+└── ...
+</pre></div>
+</div>
+<p><strong>JSON File Format:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;page_content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Full parent chunk text...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;document.pdf&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;parent_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;document_parent_0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;section&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Introduction&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;subsection&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Background&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Size Configuration</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For technical documents</span>
+<span class="n">min_parent_size</span> <span class="o">=</span> <span class="mi">2000</span>      <span class="c1"># ~400 tokens</span>
+<span class="n">max_parent_size</span> <span class="o">=</span> <span class="mi">4000</span>      <span class="c1"># ~800 tokens</span>
+<span class="n">child_chunk_size</span> <span class="o">=</span> <span class="mi">500</span>      <span class="c1"># ~100 tokens</span>
+
+<span class="c1"># For narrative documents</span>
+<span class="n">min_parent_size</span> <span class="o">=</span> <span class="mi">3000</span>
+<span class="n">max_parent_size</span> <span class="o">=</span> <span class="mi">6000</span>
+<span class="n">child_chunk_size</span> <span class="o">=</span> <span class="mi">800</span>
+</pre></div>
+</div>
+<p><strong>2. Header Configuration</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For well-structured documents</span>
+<span class="n">headers_to_split_on</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;H1&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;##&quot;</span><span class="p">,</span> <span class="s2">&quot;H2&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;###&quot;</span><span class="p">,</span> <span class="s2">&quot;H3&quot;</span><span class="p">)]</span>
+
+<span class="c1"># For documents with many levels</span>
+<span class="n">headers_to_split_on</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;H1&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;##&quot;</span><span class="p">,</span> <span class="s2">&quot;H2&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;###&quot;</span><span class="p">,</span> <span class="s2">&quot;H3&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;####&quot;</span><span class="p">,</span> <span class="s2">&quot;H4&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;#####&quot;</span><span class="p">,</span> <span class="s2">&quot;H5&quot;</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>3. Overlap Configuration</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For technical documents (preserve context)</span>
+<span class="n">chunk_overlap</span> <span class="o">=</span> <span class="mi">100</span>         <span class="c1"># ~20% overlap</span>
+
+<span class="c1"># For narrative documents (less overlap needed)</span>
+<span class="n">chunk_overlap</span> <span class="o">=</span> <span class="mi">50</span>          <span class="c1"># ~10% overlap</span>
+</pre></div>
+</div>
+<p><strong>4. Error Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">index_documents_safe</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Index with comprehensive error handling.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ... indexing code ...</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Indexing failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Log error, notify user, etc.</span>
+</pre></div>
+</div>
+<p><strong>5. Progress Tracking</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="k">for</span> <span class="n">doc_path_str</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">md_files</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing documents&quot;</span><span class="p">):</span>
+    <span class="c1"># ... process document ...</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Indexing Speed:</strong></p>
+<ul class="simple">
+<li><p>Average document: 1-5 seconds</p></li>
+<li><p>Large documents (100+ pages): 10-30 seconds</p></li>
+<li><p>Batch of 100 documents: 2-5 minutes</p></li>
+</ul>
+<p><strong>Storage Requirements:</strong></p>
+<ul class="simple">
+<li><p>Dense vectors: ~3KB per child chunk</p></li>
+<li><p>Sparse vectors: ~5KB per child chunk</p></li>
+<li><p>Parent JSON: ~2KB per parent chunk</p></li>
+<li><p>Total: ~10KB per child chunk</p></li>
+</ul>
+<p><strong>Memory Usage:</strong></p>
+<ul class="simple">
+<li><p>Processing: ~100-200MB per document</p></li>
+<li><p>Vector database: ~1GB per 100,000 chunks</p></li>
+<li><p>Parent store: ~200MB per 100,000 chunks</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process in batches</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">md_files</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">md_files</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">batch_size</span><span class="p">]</span>
+    <span class="c1"># Process batch</span>
+
+<span class="c1"># Use smaller chunks for faster retrieval</span>
+<span class="n">child_chunk_size</span> <span class="o">=</span> <span class="mi">300</span>  <span class="c1"># Faster but less context</span>
+
+<span class="c1"># Reduce overlap for faster processing</span>
+<span class="n">chunk_overlap</span> <span class="o">=</span> <span class="mi">50</span>      <span class="c1"># Less redundancy</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>Empty Child Chunks</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: No child chunks created</span>
+<span class="c1"># Solution: Check parent chunk sizes</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">all_child_chunks</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Debug: Check parent chunk creation&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parent chunks: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cleaned_parents</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">cleaned_parents</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Size: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">page_content</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Vector Store Errors</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Error adding documents to vector store</span>
+<span class="c1"># Solution: Verify collection exists and is properly configured</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">child_vector_store</span><span class="o">.</span><span class="n">add_documents</span><span class="p">(</span><span class="n">all_child_chunks</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Recreate collection</span>
+    <span class="n">ensure_collection</span><span class="p">(</span><span class="n">CHILD_COLLECTION</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Parent Lookup Failures</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Cannot find parent chunks</span>
+<span class="c1"># Solution: Verify parent_id in child metadata</span>
+
+<span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">all_child_chunks</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;parent_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing parent_id in child: </span><span class="si">{</span><span class="n">child</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Memory Issues</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Out of memory during indexing</span>
+<span class="c1"># Solution: Process documents in smaller batches</span>
+
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">md_files</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">md_files</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">batch_size</span><span class="p">]</span>
+    <span class="c1"># Process batch</span>
+    <span class="c1"># Clear memory between batches</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With hierarchical indexing complete, you can proceed to:</p>
+<ul class="simple">
+<li><p>Implementing retrieval functions using parent/child strategy</p></li>
+<li><p>Building query processing pipelines</p></li>
+<li><p>Integrating with LLM for response generation</p></li>
+<li><p>Implementing hybrid search optimization</p></li>
+<li><p>Building the complete RAG application</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch03_pdfs_to_markdown.html" class="btn btn-neutral float-left" title="Topic 3: PDFs to Markdown" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch05_define_agent_tools.html" class="btn btn-neutral float-right" title="Topic 5: Define Agent Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

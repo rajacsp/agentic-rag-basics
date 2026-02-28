@@ -12,6 +12,10 @@ Contents
    preface
    ch01_initial_setup_configuration
    ch02_configure_vector_database
+   ch03_pdfs_to_markdown
+   ch04_hierarchical_document_indexing
+   ch05_define_agent_tools
+   ch06_define_system_prompts
 
 Quick Facts
 -----------

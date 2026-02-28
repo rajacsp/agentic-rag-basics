@@ -1,0 +1,886 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 5: Define Agent Tools &mdash; GitHub Book Template 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Topic 6: Define System Prompts" href="ch06_define_system_prompts.html" />
+    <link rel="prev" title="Topic 4: Hierarchical Document Indexing" href="ch04_hierarchical_document_indexing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GitHub Book Template
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 5: Define Agent Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-search-child-chunks-tool">Step 2: Search Child Chunks Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-retrieve-parent-chunks-tool">Step 3: Retrieve Parent Chunks Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-bind-tools-to-language-model">Step 4: Bind Tools to Language Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-tool-definition-code">Complete Tool Definition Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tool-usage-workflow">Tool Usage Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tool-design-patterns">Tool Design Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-tool-features">Advanced Tool Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GitHub Book Template</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 5: Define Agent Tools</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch05_define_agent_tools.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-5-define-agent-tools">
+<h1>Topic 5: Define Agent Tools<a class="headerlink" href="#topic-5-define-agent-tools" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the creation of retrieval tools that enable the LLM agent to access indexed documents. These tools form the bridge between the language model and the knowledge base, allowing the agent to search for relevant information and retrieve full context when needed. By defining clear, well-structured tools, we enable the agent to make intelligent decisions about what information to retrieve.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>Agent tools serve as the interface between the LLM and external systems. In a RAG system, tools enable:</p>
+<ul class="simple">
+<li><p><strong>Semantic Search</strong>: Find relevant child chunks using hybrid search</p></li>
+<li><p><strong>Context Retrieval</strong>: Access full parent chunks for comprehensive context</p></li>
+<li><p><strong>Error Handling</strong>: Gracefully handle retrieval failures</p></li>
+<li><p><strong>Tool Binding</strong>: Connect tools to the LLM for autonomous invocation</p></li>
+<li><p><strong>Structured Responses</strong>: Return consistent, parseable results</p></li>
+</ul>
+<p>The tool architecture:</p>
+<ol class="arabic simple">
+<li><p>Define retrieval functions as LangChain tools</p></li>
+<li><p>Implement error handling and validation</p></li>
+<li><p>Format responses for LLM consumption</p></li>
+<li><p>Bind tools to the language model</p></li>
+<li><p>Enable agent to invoke tools autonomously</p></li>
+</ol>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">tool</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">json</span></code>: For parsing and serializing JSON data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: For file system operations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typing.List</span></code>: Type hints for function signatures</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">langchain_core.tools.tool</span></code>: Decorator for creating LangChain tools</p></li>
+</ul>
+<p><strong>Why These Imports:</strong></p>
+<ul class="simple">
+<li><p>Type hints improve code clarity and IDE support</p></li>
+<li><p>LangChain’s tool decorator handles schema generation</p></li>
+<li><p>JSON support enables parent chunk retrieval</p></li>
+<li><p>OS operations access the parent store</p></li>
+</ul>
+</section>
+<section id="step-2-search-child-chunks-tool">
+<h2>Step 2: Search Child Chunks Tool<a class="headerlink" href="#step-2-search-child-chunks-tool" title="Link to this heading">¶</a></h2>
+<p>Define the first tool for searching child chunks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search for the top K most relevant child chunks.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query: Search query string</span>
+<span class="sd">        limit: Maximum number of results to return</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">child_vector_store</span><span class="o">.</span><span class="n">similarity_search</span><span class="p">(</span>
+            <span class="n">query</span><span class="p">,</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+            <span class="n">score_threshold</span><span class="o">=</span><span class="mf">0.7</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;NO_RELEVANT_CHUNKS&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="sa">f</span><span class="s2">&quot;Parent ID: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;File Name: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Content: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">page_content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="p">])</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;RETRIEVAL_ERROR: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Tool Purpose:</strong></p>
+<p>Enables the agent to search the vector database for relevant child chunks using hybrid search (dense + sparse embeddings).</p>
+<p><strong>Step 2a: Tool Decorator</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;tool</span></code> decorator:</p>
+<ul class="simple">
+<li><p>Converts the function into a LangChain tool</p></li>
+<li><p>Automatically generates tool schema from docstring and type hints</p></li>
+<li><p>Makes the tool available for agent invocation</p></li>
+<li><p>Handles parameter validation</p></li>
+</ul>
+<p><strong>Step 2b: Function Parameters</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</pre></div>
+</div>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><strong>query (str)</strong>: The search query provided by the agent</p>
+<ul>
+<li><p>Example: “How do neural networks process information?”</p></li>
+<li><p>Used for embedding generation and similarity search</p></li>
+</ul>
+</li>
+<li><p><strong>limit (int)</strong>: Maximum number of results to return</p>
+<ul>
+<li><p>Typical values: 3-5 for focused results</p></li>
+<li><p>Prevents overwhelming the LLM with too much context</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Return Type:</strong></p>
+<ul class="simple">
+<li><p><strong>str</strong>: String representation of results</p>
+<ul>
+<li><p>Allows LLM to parse and understand results</p></li>
+<li><p>Consistent format for error handling</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Step 2c: Similarity Search</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">child_vector_store</span><span class="o">.</span><span class="n">similarity_search</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">,</span>
+    <span class="n">k</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+    <span class="n">score_threshold</span><span class="o">=</span><span class="mf">0.7</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Search Parameters:</strong></p>
+<ul class="simple">
+<li><p><strong>query</strong>: Automatically embedded using dense embeddings</p></li>
+<li><p><strong>k=limit</strong>: Return top K results</p></li>
+<li><p><strong>score_threshold=0.7</strong>: Minimum similarity score (0-1 scale)</p></li>
+</ul>
+<p><strong>Score Threshold Explanation:</strong></p>
+<ul class="simple">
+<li><p><strong>0.7</strong>: Moderate threshold, balances precision and recall</p></li>
+<li><p><strong>0.8+</strong>: High threshold, only very relevant results</p></li>
+<li><p><strong>0.5-0.7</strong>: Lower threshold, more results but potentially less relevant</p></li>
+<li><p><strong>Cosine distance</strong>: 0 = identical, 1 = completely different</p></li>
+</ul>
+<p><strong>Why Hybrid Search:</strong></p>
+<p>The vector store uses both dense and sparse embeddings:</p>
+<ul class="simple">
+<li><p><strong>Dense</strong>: Captures semantic meaning</p></li>
+<li><p><strong>Sparse</strong>: Captures keyword relevance</p></li>
+<li><p><strong>Combined</strong>: Best of both worlds</p></li>
+</ul>
+<p><strong>Step 2d: Result Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;NO_RELEVANT_CHUNKS&quot;</span>
+</pre></div>
+</div>
+<p>Returns a special token when no results are found, allowing the agent to recognize and handle this case.</p>
+<p><strong>Step 2e: Format Results</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+    <span class="sa">f</span><span class="s2">&quot;Parent ID: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;File Name: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;Content: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">page_content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">results</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Formatting Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Parent ID</strong>: Enables parent chunk retrieval</p></li>
+<li><p><strong>File Name</strong>: Provides source attribution</p></li>
+<li><p><strong>Content</strong>: The actual chunk text</p></li>
+<li><p><strong>Double newlines</strong>: Separates multiple results for readability</p></li>
+</ul>
+<p><strong>Example Output:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Parent ID: document_parent_0
+File Name: research_paper.pdf
+Content: Neural networks are computational models inspired by biological neurons...
+
+Parent ID: document_parent_1
+File Name: research_paper.pdf
+Content: The architecture of neural networks consists of layers of interconnected nodes...
+</pre></div>
+</div>
+<p><strong>Step 2f: Error Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;RETRIEVAL_ERROR: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Catches any exceptions during retrieval and returns an error message, preventing agent crashes.</p>
+<p><strong>Error Cases:</strong></p>
+<ul class="simple">
+<li><p>Vector store connection failures</p></li>
+<li><p>Invalid query format</p></li>
+<li><p>Database errors</p></li>
+<li><p>Memory issues</p></li>
+</ul>
+</section>
+<section id="step-3-retrieve-parent-chunks-tool">
+<h2>Step 3: Retrieve Parent Chunks Tool<a class="headerlink" href="#step-3-retrieve-parent-chunks-tool" title="Link to this heading">¶</a></h2>
+<p>Define the second tool for retrieving full parent chunks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_parent_chunks</span><span class="p">(</span><span class="n">parent_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve full parent chunks by their IDs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        parent_id: Parent chunk ID to retrieve</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="n">parent_id</span> <span class="k">if</span> <span class="n">parent_id</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;NO_PARENT_DOCUMENT&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Parent ID: </span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;File Name: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Content: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page_content&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Tool Purpose:</strong></p>
+<p>Enables the agent to retrieve full parent chunks for comprehensive context, using parent_id from child chunk search results.</p>
+<p><strong>Step 3a: Function Parameters</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">retrieve_parent_chunks</span><span class="p">(</span><span class="n">parent_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</pre></div>
+</div>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><strong>parent_id (str)</strong>: The parent chunk identifier</p>
+<ul>
+<li><p>Format: “document_parent_0”</p></li>
+<li><p>Obtained from child chunk search results</p></li>
+<li><p>Used to locate JSON file in parent store</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Step 3b: File Path Construction</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">file_name</span> <span class="o">=</span> <span class="n">parent_id</span> <span class="k">if</span> <span class="n">parent_id</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Path Construction Logic:</strong></p>
+<ul class="simple">
+<li><p>Handles both formats: “parent_id” and “parent_id.json”</p></li>
+<li><p>Constructs full path using PARENT_STORE_PATH</p></li>
+<li><p>Ensures cross-platform compatibility with os.path.join</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input: &quot;document_parent_0&quot;</span>
+<span class="c1"># Output: &quot;parent_store/document_parent_0.json&quot;</span>
+
+<span class="c1"># Input: &quot;document_parent_0.json&quot;</span>
+<span class="c1"># Output: &quot;parent_store/document_parent_0.json&quot;</span>
+</pre></div>
+</div>
+<p><strong>Step 3c: File Existence Check</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;NO_PARENT_DOCUMENT&quot;</span>
+</pre></div>
+</div>
+<p>Validates that the parent chunk file exists before attempting to read it.</p>
+<p><strong>Why This Matters:</strong></p>
+<ul class="simple">
+<li><p>Prevents FileNotFoundError exceptions</p></li>
+<li><p>Allows agent to handle missing parents gracefully</p></li>
+<li><p>Enables debugging of parent_id mismatches</p></li>
+</ul>
+<p><strong>Step 3d: Load JSON Data</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Reads and parses the JSON file containing the parent chunk.</p>
+<p><strong>JSON Structure:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;page_content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Full parent chunk text...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;document.pdf&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;parent_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;document_parent_0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;section&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Introduction&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Step 3e: Format and Return</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;Parent ID: </span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;File Name: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;Content: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page_content&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Formatting Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Parent ID</strong>: Confirms which parent was retrieved</p></li>
+<li><p><strong>File Name</strong>: Source attribution</p></li>
+<li><p><strong>Content</strong>: Full parent chunk text</p></li>
+<li><p><strong>Safe access</strong>: Uses .get() to handle missing keys</p></li>
+</ul>
+<p><strong>Example Output:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Parent ID: document_parent_0
+File Name: research_paper.pdf
+Content: # Introduction
+
+This section introduces the fundamental concepts of neural networks...
+[Full parent chunk content]
+</pre></div>
+</div>
+</section>
+<section id="step-4-bind-tools-to-language-model">
+<h2>Step 4: Bind Tools to Language Model<a class="headerlink" href="#step-4-bind-tools-to-language-model" title="Link to this heading">¶</a></h2>
+<p>Connect the tools to the LLM for autonomous invocation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">llm_with_tools</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">bind_tools</span><span class="p">([</span>
+    <span class="n">search_child_chunks</span><span class="p">,</span>
+    <span class="n">retrieve_parent_chunks</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Tool Binding Details:</strong></p>
+<ul class="simple">
+<li><p><strong>bind_tools()</strong>: Attaches tools to the LLM</p></li>
+<li><p><strong>Tool List</strong>: Array of tool functions</p></li>
+<li><p><strong>Result</strong>: LLM instance with tool capabilities</p></li>
+</ul>
+<p><strong>What Binding Does:</strong></p>
+<ol class="arabic simple">
+<li><p>Generates tool schemas from function signatures</p></li>
+<li><p>Adds tools to LLM’s available functions</p></li>
+<li><p>Enables LLM to decide when to use tools</p></li>
+<li><p>Formats tool calls for execution</p></li>
+</ol>
+<p><strong>Tool Schema Generation:</strong></p>
+<p>The decorator automatically generates schemas like:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;search_child_chunks&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Search for the top K most relevant child chunks.&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;parameters&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Search query string&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Maximum number of results to return&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;limit&quot;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-tool-definition-code">
+<h2>Complete Tool Definition Code<a class="headerlink" href="#complete-tool-definition-code" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete tool definition code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">tool</span>
+
+<span class="c1"># Configuration (from previous setup)</span>
+<span class="n">PARENT_STORE_PATH</span> <span class="o">=</span> <span class="s2">&quot;parent_store&quot;</span>
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search for the top K most relevant child chunks.</span>
+
+<span class="sd">    This tool searches the vector database using hybrid search</span>
+<span class="sd">    (dense + sparse embeddings) to find relevant document chunks.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query: Search query string (e.g., &quot;How do neural networks work?&quot;)</span>
+<span class="sd">        limit: Maximum number of results to return (typically 3-5)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        String containing formatted search results with parent IDs,</span>
+<span class="sd">        file names, and chunk content. Returns &quot;NO_RELEVANT_CHUNKS&quot;</span>
+<span class="sd">        if no results found, or &quot;RETRIEVAL_ERROR&quot; if an error occurs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">child_vector_store</span><span class="o">.</span><span class="n">similarity_search</span><span class="p">(</span>
+            <span class="n">query</span><span class="p">,</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+            <span class="n">score_threshold</span><span class="o">=</span><span class="mf">0.7</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;NO_RELEVANT_CHUNKS&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="sa">f</span><span class="s2">&quot;Parent ID: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;File Name: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Content: </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">page_content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="p">])</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;RETRIEVAL_ERROR: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_parent_chunks</span><span class="p">(</span><span class="n">parent_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve full parent chunks by their IDs.</span>
+
+<span class="sd">    This tool retrieves the complete parent chunk from the JSON store,</span>
+<span class="sd">    providing full context for a specific parent chunk ID.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        parent_id: Parent chunk ID to retrieve (e.g., &quot;document_parent_0&quot;)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        String containing formatted parent chunk with ID, file name,</span>
+<span class="sd">        and full content. Returns &quot;NO_PARENT_DOCUMENT&quot; if not found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="n">parent_id</span> <span class="k">if</span> <span class="n">parent_id</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;NO_PARENT_DOCUMENT&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Parent ID: </span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;File Name: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Content: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page_content&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+<span class="c1"># Bind tools to LLM</span>
+<span class="n">llm_with_tools</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">bind_tools</span><span class="p">([</span>
+    <span class="n">search_child_chunks</span><span class="p">,</span>
+    <span class="n">retrieve_parent_chunks</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="tool-usage-workflow">
+<h2>Tool Usage Workflow<a class="headerlink" href="#tool-usage-workflow" title="Link to this heading">¶</a></h2>
+<p><strong>How the Agent Uses Tools:</strong></p>
+<ol class="arabic">
+<li><p><strong>User Query</strong>: “What are neural networks?”</p></li>
+<li><p><strong>Agent Decision</strong>: LLM decides to search for relevant information</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># LLM calls tool</span>
+<span class="n">search_child_chunks</span><span class="p">(</span>
+    <span class="n">query</span><span class="o">=</span><span class="s2">&quot;What are neural networks?&quot;</span><span class="p">,</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Tool Execution</strong>: Search returns relevant chunks</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Parent ID: doc_parent_0
+File Name: research.pdf
+Content: Neural networks are computational models...
+</pre></div>
+</div>
+</li>
+<li><p><strong>Agent Analysis</strong>: LLM reads results and decides if more context needed</p></li>
+<li><p><strong>Parent Retrieval</strong>: If needed, retrieve full parent chunk</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">retrieve_parent_chunks</span><span class="p">(</span><span class="n">parent_id</span><span class="o">=</span><span class="s2">&quot;doc_parent_0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Response Generation</strong>: LLM generates answer using all retrieved context</p></li>
+</ol>
+<p><strong>Example Agent Interaction:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: &quot;Explain how neural networks learn&quot;
+
+Agent: I&#39;ll search for information about neural network learning.
+[Calls: search_child_chunks(&quot;neural network learning&quot;, limit=3)]
+
+Found 3 relevant chunks. Let me get more context from the parent.
+[Calls: retrieve_parent_chunks(&quot;doc_parent_1&quot;)]
+
+Based on the retrieved information, neural networks learn through
+a process called backpropagation...
+</pre></div>
+</div>
+</section>
+<section id="tool-design-patterns">
+<h2>Tool Design Patterns<a class="headerlink" href="#tool-design-patterns" title="Link to this heading">¶</a></h2>
+<p><strong>1. Error Handling Pattern</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">safe_tool</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool with comprehensive error handling.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Main logic</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">perform_operation</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;FILE_NOT_FOUND&quot;</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;INVALID_INPUT: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ERROR: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>2. Validation Pattern</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validated_tool</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool with input validation.&quot;&quot;&quot;</span>
+    <span class="c1"># Validate inputs</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;EMPTY_QUERY&quot;</span>
+
+    <span class="k">if</span> <span class="n">limit</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;INVALID_LIMIT&quot;</span>
+
+    <span class="c1"># Proceed with operation</span>
+    <span class="k">return</span> <span class="n">perform_search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>3. Logging Pattern</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">logged_tool</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool with logging.&quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool called with param: </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">perform_operation</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool succeeded: </span><span class="si">{</span><span class="n">result</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ERROR: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>4. Caching Pattern</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_parent_cached</span><span class="p">(</span><span class="n">parent_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cached parent retrieval.&quot;&quot;&quot;</span>
+    <span class="c1"># Load from file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;parent_store/</span><span class="si">{</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_parent_chunks_cached</span><span class="p">(</span><span class="n">parent_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve with caching.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">get_parent_cached</span><span class="p">(</span><span class="n">parent_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">format_result</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ERROR: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="advanced-tool-features">
+<h2>Advanced Tool Features<a class="headerlink" href="#advanced-tool-features" title="Link to this heading">¶</a></h2>
+<p><strong>1. Tool Metadata</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;search_documents&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;retrieval&quot;</span><span class="p">,</span> <span class="s2">&quot;search&quot;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search for relevant document chunks.&quot;&quot;&quot;</span>
+    <span class="c1"># Implementation</span>
+</pre></div>
+</div>
+<p><strong>2. Tool with Multiple Return Types</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">flexible_tool</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool that can return different types.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">param</span> <span class="o">==</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Success&quot;</span>
+</pre></div>
+</div>
+<p><strong>3. Tool with Async Support</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="nd">@tool</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_tool</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Async tool for non-blocking operations.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">perform_async_search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+<p><strong>4. Tool with Context</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">contextual_tool</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool that uses context from previous calls.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">context</span><span class="p">:</span>
+        <span class="c1"># Use context from previous tool calls</span>
+        <span class="n">previous_results</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;previous_results&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="k">return</span> <span class="n">perform_search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Clear Documentation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">well_documented_tool</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search for relevant information.</span>
+
+<span class="sd">    This tool performs a hybrid search combining semantic and</span>
+<span class="sd">    keyword-based matching to find the most relevant documents.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query: The search query (e.g., &quot;How do transformers work?&quot;)</span>
+<span class="sd">        limit: Number of results (1-10, default 5)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Formatted string with search results or error message</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Returns error string instead of raising exceptions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>2. Consistent Return Format</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Consistent format</span>
+<span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="se">\n</span><span class="s2">Source: </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="c1"># Avoid: Inconsistent formats</span>
+<span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">data</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;failed&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>3. Meaningful Error Messages</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Specific error messages</span>
+<span class="k">return</span> <span class="s2">&quot;NO_RELEVANT_CHUNKS&quot;</span>
+<span class="k">return</span> <span class="s2">&quot;INVALID_PARENT_ID&quot;</span>
+<span class="k">return</span> <span class="s2">&quot;DATABASE_CONNECTION_ERROR&quot;</span>
+
+<span class="c1"># Avoid: Generic messages</span>
+<span class="k">return</span> <span class="s2">&quot;ERROR&quot;</span>
+<span class="k">return</span> <span class="s2">&quot;FAILED&quot;</span>
+</pre></div>
+</div>
+<p><strong>4. Type Hints</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Clear type hints</span>
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">typed_tool</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="c1"># Avoid: Missing type hints</span>
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">untyped_tool</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">limit</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p><strong>5. Reasonable Defaults</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Sensible defaults</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="c1"># Avoid: No defaults</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Search Performance:</strong></p>
+<ul class="simple">
+<li><p>Average search: 100-500ms</p></li>
+<li><p>With score threshold: Slightly faster (fewer results)</p></li>
+<li><p>Hybrid search: Slightly slower than dense-only</p></li>
+</ul>
+<p><strong>Parent Retrieval Performance:</strong></p>
+<ul class="simple">
+<li><p>File I/O: 10-50ms per parent</p></li>
+<li><p>JSON parsing: 1-5ms per parent</p></li>
+<li><p>Total: 20-100ms per parent</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cache frequently accessed parents</span>
+<span class="n">parent_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_parent_chunks_cached</span><span class="p">(</span><span class="n">parent_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parent_id</span> <span class="ow">in</span> <span class="n">parent_cache</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">parent_cache</span><span class="p">[</span><span class="n">parent_id</span><span class="p">]</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">retrieve_parent_chunks</span><span class="p">(</span><span class="n">parent_id</span><span class="p">)</span>
+    <span class="n">parent_cache</span><span class="p">[</span><span class="n">parent_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="c1"># Limit search results</span>
+<span class="n">search_child_chunks</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Faster than limit=10</span>
+
+<span class="c1"># Use higher score threshold</span>
+<span class="n">score_threshold</span><span class="o">=</span><span class="mf">0.8</span>  <span class="c1"># Fewer results, faster</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>Tool Not Appearing in Agent</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Tool not available to agent</span>
+<span class="c1"># Solution: Ensure tool is bound to LLM</span>
+
+<span class="n">llm_with_tools</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">bind_tools</span><span class="p">([</span>
+    <span class="n">search_child_chunks</span><span class="p">,</span>
+    <span class="n">retrieve_parent_chunks</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Tool Returns Empty Results</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: search_child_chunks returns &quot;NO_RELEVANT_CHUNKS&quot;</span>
+<span class="c1"># Solution: Check score threshold or query quality</span>
+
+<span class="c1"># Lower threshold for more results</span>
+<span class="n">score_threshold</span><span class="o">=</span><span class="mf">0.5</span>
+
+<span class="c1"># Verify query is meaningful</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;neural networks&quot;</span>  <span class="c1"># Good</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;the&quot;</span>              <span class="c1"># Bad</span>
+</pre></div>
+</div>
+<p><strong>Parent Not Found</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: retrieve_parent_chunks returns &quot;NO_PARENT_DOCUMENT&quot;</span>
+<span class="c1"># Solution: Verify parent_id format and file exists</span>
+
+<span class="c1"># Check parent store</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;parent_store&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available parents: </span><span class="si">{</span><span class="n">files</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Tool Execution Timeout</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Tool takes too long</span>
+<span class="c1"># Solution: Optimize search or add timeout</span>
+
+<span class="c1"># Reduce limit</span>
+<span class="n">limit</span><span class="o">=</span><span class="mi">3</span>  <span class="c1"># Faster than limit=10</span>
+
+<span class="c1"># Increase score threshold</span>
+<span class="n">score_threshold</span><span class="o">=</span><span class="mf">0.8</span>  <span class="c1"># Fewer results to process</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With agent tools defined, you can proceed to:</p>
+<ul class="simple">
+<li><p>Building the agent loop for autonomous tool invocation</p></li>
+<li><p>Implementing response generation with retrieved context</p></li>
+<li><p>Creating the complete RAG application</p></li>
+<li><p>Adding tool monitoring and logging</p></li>
+<li><p>Optimizing tool performance and caching</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch04_hierarchical_document_indexing.html" class="btn btn-neutral float-left" title="Topic 4: Hierarchical Document Indexing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch06_define_system_prompts.html" class="btn btn-neutral float-right" title="Topic 6: Define System Prompts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
