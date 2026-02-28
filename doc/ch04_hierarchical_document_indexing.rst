@@ -1,5 +1,5 @@
-Topic 4: Hierarchical Document Indexing
-========================================
+4: Hierarchical Document Indexing
+==================================
 
 Overview
 --------

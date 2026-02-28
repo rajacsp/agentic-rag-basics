@@ -1,5 +1,5 @@
-Topic 7: Define State and Data Models
-=====================================
+7: Define State and Data Models
+===============================
 
 Overview
 --------

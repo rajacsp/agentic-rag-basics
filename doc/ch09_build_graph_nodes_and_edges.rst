@@ -1,5 +1,5 @@
-Topic 9: Build Graph Node and Edge Functions
-==============================================
+9: Build Graph Node and Edge Functions
+=======================================
 
 Overview
 --------

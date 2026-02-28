@@ -1,5 +1,5 @@
-Topic 8: Agent Configuration
-============================
+8: Agent Configuration
+======================
 
 Overview
 --------

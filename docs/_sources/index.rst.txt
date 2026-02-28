@@ -22,6 +22,20 @@ Contents
    ch10_build_langgraph_graphs
    ch11_create_chat_interface
 
+.. This will display as:
+   Preface
+   1: Initial Setup and Configuration
+   2: Configure Vector Database
+   3: PDFs to Markdown
+   4: Hierarchical Document Indexing
+   5: Define Agent Tools
+   6: Define System Prompts
+   7: Define State and Data Models
+   8: Agent Configuration
+   9: Build Graph Node and Edge Functions
+   10: Build the LangGraph Graphs
+   11: Create Chat Interface
+
 Key Features
 ------------
 

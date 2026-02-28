@@ -1,5 +1,5 @@
-Topic 5: Define Agent Tools
-===========================
+5: Define Agent Tools
+=====================
 
 Overview
 --------

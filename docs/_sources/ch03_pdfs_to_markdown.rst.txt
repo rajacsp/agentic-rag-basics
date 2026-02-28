@@ -1,5 +1,5 @@
-Topic 3: PDFs to Markdown
-=========================
+3: PDFs to Markdown
+===================
 
 Overview
 --------

@@ -1,5 +1,5 @@
-Topic 10: Build the LangGraph Graphs
-====================================
+10: Build the LangGraph Graphs
+==============================
 
 Overview
 --------

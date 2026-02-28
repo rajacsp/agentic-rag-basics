@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Topic 3: PDFs to Markdown &mdash; Agentic RAG Basics 1.00 documentation</title>
+  <title>3: PDFs to Markdown &mdash; Agentic RAG Basics 1.00 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Topic 4: Hierarchical Document Indexing" href="ch04_hierarchical_document_indexing.html" />
-    <link rel="prev" title="Topic 2: Configure Vector Database" href="ch02_configure_vector_database.html" /> 
+    <link rel="next" title="4: Hierarchical Document Indexing" href="ch04_hierarchical_document_indexing.html" />
+    <link rel="prev" title="2: Configure Vector Database" href="ch02_configure_vector_database.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,9 +44,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 3: PDFs to Markdown</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">2: Configure Vector Database</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3: PDFs to Markdown</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#purpose-and-workflow">Purpose and Workflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
@@ -62,14 +62,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">Topic 7: Define State and Data Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">Topic 8: Agent Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">Topic 9: Build Graph Node and Edge Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">Topic 10: Build the LangGraph Graphs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">Topic 11: Create Chat Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">5: Define Agent Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">6: Define System Prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">7: Define State and Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">8: Agent Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">9: Build Graph Node and Edge Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">10: Build the LangGraph Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">11: Create Chat Interface</a></li>
 </ul>
 
         </div>
@@ -86,7 +86,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Topic 3: PDFs to Markdown</li>
+      <li class="breadcrumb-item active">3: PDFs to Markdown</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch03_pdfs_to_markdown.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -96,8 +96,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="topic-3-pdfs-to-markdown">
-<h1>Topic 3: PDFs to Markdown<a class="headerlink" href="#topic-3-pdfs-to-markdown" title="Link to this heading">¶</a></h1>
+  <section id="pdfs-to-markdown">
+<h1>3: PDFs to Markdown<a class="headerlink" href="#pdfs-to-markdown" title="Link to this heading">¶</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>This chapter covers the conversion of PDF documents to Markdown format, a crucial preprocessing step in the RAG pipeline. Converting PDFs to Markdown enables easier text extraction, better preservation of document structure, and improved compatibility with downstream processing tasks.</p>
@@ -610,8 +610,8 @@ Content continues on the next page.
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="ch02_configure_vector_database.html" class="btn btn-neutral float-left" title="Topic 2: Configure Vector Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="ch04_hierarchical_document_indexing.html" class="btn btn-neutral float-right" title="Topic 4: Hierarchical Document Indexing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ch02_configure_vector_database.html" class="btn btn-neutral float-left" title="2: Configure Vector Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch04_hierarchical_document_indexing.html" class="btn btn-neutral float-right" title="4: Hierarchical Document Indexing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

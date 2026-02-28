@@ -1,5 +1,5 @@
-Topic 1: Initial Setup and Configuration
-==========================================
+1: Initial Setup and Configuration
+===================================
 
 Overview
 --------

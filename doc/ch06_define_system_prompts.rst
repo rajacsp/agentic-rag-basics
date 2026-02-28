@@ -1,5 +1,5 @@
-Topic 6: Define System Prompts
-==============================
+6: Define System Prompts
+========================
 
 Overview
 --------

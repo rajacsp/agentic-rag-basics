@@ -1,5 +1,5 @@
-Topic 11: Create Chat Interface
-===============================
+11: Create Chat Interface
+=========================
 
 Overview
 --------

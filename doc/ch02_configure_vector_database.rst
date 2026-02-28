@@ -1,5 +1,5 @@
-Topic 2: Configure Vector Database
-===================================
+2: Configure Vector Database
+=============================
 
 Overview
 --------

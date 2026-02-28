@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Topic 6: Define System Prompts &mdash; Agentic RAG Basics 1.00 documentation</title>
+  <title>6: Define System Prompts &mdash; Agentic RAG Basics 1.00 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Topic 7: Define State and Data Models" href="ch07_define_state_and_data_models.html" />
-    <link rel="prev" title="Topic 5: Define Agent Tools" href="ch05_define_agent_tools.html" /> 
+    <link rel="next" title="7: Define State and Data Models" href="ch07_define_state_and_data_models.html" />
+    <link rel="prev" title="5: Define Agent Tools" href="ch05_define_agent_tools.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,12 +44,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 6: Define System Prompts</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">3: PDFs to Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">5: Define Agent Tools</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6: Define System Prompts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-1-conversation-summary-prompt">Step 1: Conversation Summary Prompt</a></li>
@@ -71,11 +71,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#id9">Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">Topic 7: Define State and Data Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">Topic 8: Agent Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">Topic 9: Build Graph Node and Edge Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">Topic 10: Build the LangGraph Graphs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">Topic 11: Create Chat Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">7: Define State and Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">8: Agent Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">9: Build Graph Node and Edge Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">10: Build the LangGraph Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">11: Create Chat Interface</a></li>
 </ul>
 
         </div>
@@ -92,7 +92,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Topic 6: Define System Prompts</li>
+      <li class="breadcrumb-item active">6: Define System Prompts</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch06_define_system_prompts.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -102,8 +102,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="topic-6-define-system-prompts">
-<h1>Topic 6: Define System Prompts<a class="headerlink" href="#topic-6-define-system-prompts" title="Link to this heading">¶</a></h1>
+  <section id="define-system-prompts">
+<h1>6: Define System Prompts<a class="headerlink" href="#define-system-prompts" title="Link to this heading">¶</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>This chapter covers the creation of system prompts that guide the LLM’s behavior across different stages of the RAG pipeline. System prompts are critical instructions that shape how the agent processes queries, retrieves information, and generates responses. Well-designed prompts ensure consistent, high-quality outputs and enable the agent to handle complex tasks effectively.</p>
@@ -2981,8 +2981,8 @@ Output: “”</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="ch05_define_agent_tools.html" class="btn btn-neutral float-left" title="Topic 5: Define Agent Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="ch07_define_state_and_data_models.html" class="btn btn-neutral float-right" title="Topic 7: Define State and Data Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ch05_define_agent_tools.html" class="btn btn-neutral float-left" title="5: Define Agent Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch07_define_state_and_data_models.html" class="btn btn-neutral float-right" title="7: Define State and Data Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
