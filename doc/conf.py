@@ -139,9 +139,9 @@ html_context = {
     # Set the following variables to generate the resulting github URL for each page. 
     # Format Template: https://{{ github_host|default("github.com") }}/{{ github_user }}
     #/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ suffix }}
-    #https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/index.rst
-    'github_user': 'runawayhorse001',
-    'github_repo': 'SphinxGithub',
+    #https://github.com/rajacsp/agentic-rag-basics/blob/master/doc/index.rst
+    'github_user': 'rajacsp',
+    'github_repo': 'agentic-rag-basics',
     'github_version': 'master/doc/' ,
 }
 
@@ -260,9 +260,8 @@ def linkcode_resolve(domain, info):
     # tag = subprocess.Popen(['git', 'rev-parse', 'HEAD'],
     #                        stdout=subprocess.PIPE,
     #                        universal_newlines=True).communicate()[0][:-1]
-    # https://github.com/runawayhorse001/statspy/blob/master/statspy/basics.py
-    # https://github.com/runawayhorse001/SphinxGithub/blob/master/statspy/basics.py
-    return "https://github.com/runawayhorse001/SphinxGithub/blob/master/%s" % (filename)
+
+    return "https://github.com/rajacsp/agentic-rag-basics/blob/master/%s" % (filename)
 
 # Options for LaTeX output
 # ------------------------
