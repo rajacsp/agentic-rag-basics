@@ -56,8 +56,7 @@ pip install -r requirements.txt
 ### Building Documentation
 
 ```bash
-cd doc
-make html
+cd doc && rm -rf ../docs && python scripts/docgen.py --nopdf
 ```
 
 The built documentation will be available in `docs/` directory.
