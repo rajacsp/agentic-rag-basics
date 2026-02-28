@@ -1,0 +1,907 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 8: Agent Configuration &mdash; Agentic RAG Basics 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Topic 9: Build Graph Node and Edge Functions" href="ch09_build_graph_nodes_and_edges.html" />
+    <link rel="prev" title="Topic 7: Define State and Data Models" href="ch07_define_state_and_data_models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Agentic RAG Basics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">Topic 7: Define State and Data Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 8: Agent Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-define-hard-limits">Step 2: Define Hard Limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-define-token-thresholds">Step 3: Define Token Thresholds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-token-counting-function">Step 4: Token Counting Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-agent-configuration-module">Complete Agent Configuration Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-usage-patterns">Configuration Usage Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-monitoring">Configuration Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">Topic 9: Build Graph Node and Edge Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">Topic 10: Build the LangGraph Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">Topic 11: Create Chat Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Agentic RAG Basics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 8: Agent Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch08_agent_configuration.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-8-agent-configuration">
+<h1>Topic 8: Agent Configuration<a class="headerlink" href="#topic-8-agent-configuration" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the configuration of agent execution parameters, including hard limits on tool calls and iterations, token counting for context management, and dynamic compression thresholds. Proper configuration prevents infinite loops, manages memory efficiently, and ensures predictable agent behavior.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>Agent configuration serves as the “control system” for the RAG agent, managing:</p>
+<ul class="simple">
+<li><p><strong>Execution Limits</strong>: Maximum tool calls and iterations</p></li>
+<li><p><strong>Token Management</strong>: Counting and tracking token usage</p></li>
+<li><p><strong>Context Compression</strong>: Dynamic thresholds based on token growth</p></li>
+<li><p><strong>Resource Constraints</strong>: Memory and latency management</p></li>
+<li><p><strong>Safety Guardrails</strong>: Preventing runaway execution</p></li>
+</ul>
+<p>The configuration architecture includes:</p>
+<ol class="arabic simple">
+<li><p><strong>Hard Limits</strong>: Tool calls and iterations</p></li>
+<li><p><strong>Token Thresholds</strong>: Initial and dynamic</p></li>
+<li><p><strong>Token Counting</strong>: Estimating context size</p></li>
+<li><p><strong>Compression Strategy</strong>: Adaptive compression</p></li>
+</ol>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tiktoken</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tiktoken</span></code>: OpenAI’s token counting library for accurate token estimation</p></li>
+</ul>
+<p><strong>Why This Import:</strong></p>
+<ul class="simple">
+<li><p>Provides accurate token counting for various models</p></li>
+<li><p>Enables precise context size estimation</p></li>
+<li><p>Supports multiple model encodings</p></li>
+<li><p>Essential for token-based compression decisions</p></li>
+</ul>
+</section>
+<section id="step-2-define-hard-limits">
+<h2>Step 2: Define Hard Limits<a class="headerlink" href="#step-2-define-hard-limits" title="Link to this heading">¶</a></h2>
+<p>Define maximum execution limits to prevent infinite loops:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MAX_TOOL_CALLS</span> <span class="o">=</span> <span class="mi">8</span>       <span class="c1"># Maximum tool calls per agent run</span>
+<span class="n">MAX_ITERATIONS</span> <span class="o">=</span> <span class="mi">10</span>      <span class="c1"># Maximum agent loop iterations</span>
+</pre></div>
+</div>
+<p><strong>Step 2a: Maximum Tool Calls</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MAX_TOOL_CALLS</span> <span class="o">=</span> <span class="mi">8</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Limits total tool invocations per agent run</p></li>
+<li><p>Prevents excessive API calls</p></li>
+<li><p>Controls costs and latency</p></li>
+<li><p>Ensures timely responses</p></li>
+</ul>
+<p><strong>Why 8 Calls:</strong></p>
+<ul class="simple">
+<li><p>Typical research needs 2-4 searches + 2-4 retrievals</p></li>
+<li><p>Provides buffer for complex queries</p></li>
+<li><p>Balances thoroughness with efficiency</p></li>
+<li><p>Prevents runaway tool usage</p></li>
+</ul>
+<p><strong>Tool Call Scenarios:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Simple Query
+========================
+Query: &quot;What is backpropagation?&quot;
+
+Tool Calls:
+1. search_child_chunks(&quot;backpropagation&quot;, limit=5)
+2. retrieve_parent_chunks(&quot;document_parent_0&quot;)
+3. retrieve_parent_chunks(&quot;document_parent_1&quot;)
+
+Total: 3 calls (within limit)
+
+Scenario 2: Complex Query
+==========================
+Query: &quot;Compare backpropagation with other training methods&quot;
+
+Tool Calls:
+1. search_child_chunks(&quot;backpropagation&quot;, limit=5)
+2. search_child_chunks(&quot;training methods comparison&quot;, limit=5)
+3. retrieve_parent_chunks(&quot;document_parent_0&quot;)
+4. retrieve_parent_chunks(&quot;document_parent_1&quot;)
+5. retrieve_parent_chunks(&quot;document_parent_2&quot;)
+6. retrieve_parent_chunks(&quot;document_parent_3&quot;)
+
+Total: 6 calls (within limit)
+
+Scenario 3: Excessive Queries
+==============================
+Query: &quot;Tell me everything about neural networks&quot;
+
+Tool Calls:
+1. search_child_chunks(&quot;neural networks&quot;, limit=5)
+2. search_child_chunks(&quot;neural network architecture&quot;, limit=5)
+3. search_child_chunks(&quot;neural network training&quot;, limit=5)
+4. search_child_chunks(&quot;neural network applications&quot;, limit=5)
+5. retrieve_parent_chunks(&quot;document_parent_0&quot;)
+6. retrieve_parent_chunks(&quot;document_parent_1&quot;)
+7. retrieve_parent_chunks(&quot;document_parent_2&quot;)
+8. retrieve_parent_chunks(&quot;document_parent_3&quot;)
+
+Total: 8 calls (at limit - stops here)
+</pre></div>
+</div>
+<p><strong>Adjusting MAX_TOOL_CALLS:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Conservative (4-5 calls):
+- Limited resources
+- Cost-sensitive applications
+- Real-time requirements
+
+Balanced (6-8 calls):
+- Standard RAG applications
+- Good balance of quality and efficiency
+- Recommended for most use cases
+
+Generous (10-15 calls):
+- Research-focused applications
+- Comprehensive answers needed
+- Cost not a primary concern
+</pre></div>
+</div>
+<p><strong>Step 2b: Maximum Iterations</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MAX_ITERATIONS</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Limits agent loop iterations</p></li>
+<li><p>Prevents infinite loops</p></li>
+<li><p>Controls execution time</p></li>
+<li><p>Ensures bounded behavior</p></li>
+</ul>
+<p><strong>Why 10 Iterations:</strong></p>
+<ul class="simple">
+<li><p>Typical research completes in 2-5 iterations</p></li>
+<li><p>Provides buffer for complex research</p></li>
+<li><p>Prevents runaway loops</p></li>
+<li><p>Reasonable timeout (usually &lt; 30 seconds)</p></li>
+</ul>
+<p><strong>Iteration Scenarios:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Quick Answer
+========================
+Query: &quot;What is backpropagation?&quot;
+
+Iterations:
+1. Analyze query
+2. Search for information
+3. Retrieve parent chunks
+4. Generate answer
+
+Total: 4 iterations (within limit)
+
+Scenario 2: Multi-Question Research
+====================================
+Query: &quot;What is backpropagation and how is it used?&quot;
+
+Iterations:
+1. Analyze query (split into 2 questions)
+2. Process question 1: Search
+3. Process question 1: Retrieve
+4. Process question 1: Generate answer
+5. Process question 2: Search
+6. Process question 2: Retrieve
+7. Process question 2: Generate answer
+8. Aggregate answers
+
+Total: 8 iterations (within limit)
+
+Scenario 3: Iterative Refinement
+=================================
+Query: &quot;Complex research question&quot;
+
+Iterations:
+1. Analyze query
+2. Search iteration 1
+3. Retrieve iteration 1
+4. Evaluate results
+5. Search iteration 2 (refined)
+6. Retrieve iteration 2
+7. Evaluate results
+8. Search iteration 3 (further refined)
+9. Retrieve iteration 3
+10. Generate final answer
+
+Total: 10 iterations (at limit - stops here)
+</pre></div>
+</div>
+<p><strong>Adjusting MAX_ITERATIONS:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Conservative (3-5 iterations):
+- Real-time applications
+- Latency-sensitive
+- Simple queries only
+
+Balanced (8-10 iterations):
+- Standard RAG applications
+- Good balance of quality and speed
+- Recommended for most use cases
+
+Generous (15-20 iterations):
+- Research-focused applications
+- Comprehensive answers needed
+- Batch processing acceptable
+</pre></div>
+</div>
+</section>
+<section id="step-3-define-token-thresholds">
+<h2>Step 3: Define Token Thresholds<a class="headerlink" href="#step-3-define-token-thresholds" title="Link to this heading">¶</a></h2>
+<p>Define token-based compression thresholds:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">BASE_TOKEN_THRESHOLD</span> <span class="o">=</span> <span class="mi">2000</span>     <span class="c1"># Initial token threshold for compression</span>
+<span class="n">TOKEN_GROWTH_FACTOR</span> <span class="o">=</span> <span class="mf">0.9</span>       <span class="c1"># Multiplier applied after each compression</span>
+</pre></div>
+</div>
+<p><strong>Step 3a: Base Token Threshold</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">BASE_TOKEN_THRESHOLD</span> <span class="o">=</span> <span class="mi">2000</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Initial token limit before compression</p></li>
+<li><p>Triggers compression when exceeded</p></li>
+<li><p>Balances context size and quality</p></li>
+<li><p>Prevents context bloat</p></li>
+</ul>
+<p><strong>Why 2000 Tokens:</strong></p>
+<ul class="simple">
+<li><p>Approximately 1500-2000 words</p></li>
+<li><p>Sufficient for most queries</p></li>
+<li><p>Leaves room for LLM processing</p></li>
+<li><p>Typical context window: 4000-8000 tokens</p></li>
+</ul>
+<p><strong>Token Threshold Scenarios:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Small Context
+=========================
+Context tokens: 800
+Threshold: 2000
+
+Action: No compression needed
+
+Scenario 2: Medium Context
+===========================
+Context tokens: 1800
+Threshold: 2000
+
+Action: No compression needed (just under)
+
+Scenario 3: Large Context
+==========================
+Context tokens: 2500
+Threshold: 2000
+
+Action: Compress context
+New threshold: 2000 * 0.9 = 1800
+
+Scenario 4: Very Large Context
+===============================
+Context tokens: 3500
+Threshold: 1800 (after compression)
+
+Action: Compress again
+New threshold: 1800 * 0.9 = 1620
+</pre></div>
+</div>
+<p><strong>Adjusting BASE_TOKEN_THRESHOLD:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Conservative (1000-1500 tokens):
+- Limited context window
+- Aggressive compression
+- Smaller models
+
+Balanced (2000-3000 tokens):
+- Standard context window
+- Moderate compression
+- Recommended for most cases
+
+Generous (4000-5000 tokens):
+- Large context window
+- Minimal compression
+- Large models (GPT-4, Claude)
+</pre></div>
+</div>
+<p><strong>Step 3b: Token Growth Factor</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TOKEN_GROWTH_FACTOR</span> <span class="o">=</span> <span class="mf">0.9</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Multiplier for dynamic threshold adjustment</p></li>
+<li><p>Reduces threshold after each compression</p></li>
+<li><p>Prevents context re-expansion</p></li>
+<li><p>Enables progressive compression</p></li>
+</ul>
+<p><strong>How It Works:</strong></p>
+<ol class="arabic simple">
+<li><p>Initial threshold: 2000 tokens</p></li>
+<li><p>After compression: 2000 × 0.9 = 1800 tokens</p></li>
+<li><p>After next compression: 1800 × 0.9 = 1620 tokens</p></li>
+<li><p>Continues until reaching minimum</p></li>
+</ol>
+<p><strong>Token Growth Factor Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Factor 0.9 (10% reduction):
+===========================
+Iteration 1: 2000 tokens
+Iteration 2: 1800 tokens (2000 × 0.9)
+Iteration 3: 1620 tokens (1800 × 0.9)
+Iteration 4: 1458 tokens (1620 × 0.9)
+Iteration 5: 1312 tokens (1458 × 0.9)
+
+Factor 0.8 (20% reduction):
+===========================
+Iteration 1: 2000 tokens
+Iteration 2: 1600 tokens (2000 × 0.8)
+Iteration 3: 1280 tokens (1600 × 0.8)
+Iteration 4: 1024 tokens (1280 × 0.8)
+
+Factor 0.95 (5% reduction):
+===========================
+Iteration 1: 2000 tokens
+Iteration 2: 1900 tokens (2000 × 0.95)
+Iteration 3: 1805 tokens (1900 × 0.95)
+Iteration 4: 1715 tokens (1805 × 0.95)
+</pre></div>
+</div>
+<p><strong>Adjusting TOKEN_GROWTH_FACTOR:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Aggressive (0.7-0.8):
+- Rapid compression
+- Minimal context retention
+- Limited context window
+
+Balanced (0.85-0.95):
+- Moderate compression
+- Good context retention
+- Recommended for most cases
+
+Conservative (0.95-1.0):
+- Minimal compression
+- Maximum context retention
+- Large context window
+</pre></div>
+</div>
+</section>
+<section id="step-4-token-counting-function">
+<h2>Step 4: Token Counting Function<a class="headerlink" href="#step-4-token-counting-function" title="Link to this heading">¶</a></h2>
+<p>Define the function for estimating context tokens:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">estimate_context_tokens</span><span class="p">(</span><span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate total tokens in message list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        messages: List of message objects with content</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Estimated token count</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">encoding_for_model</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="s2">&quot;cl100k_base&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">encoding</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">messages</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">msg</span><span class="o">.</span><span class="n">content</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Step 4a: Model-Specific Encoding</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">encoding_for_model</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="s2">&quot;cl100k_base&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Gets appropriate tokenizer for model</p></li>
+<li><p>Falls back to standard encoding if unavailable</p></li>
+<li><p>Ensures accurate token counting</p></li>
+</ul>
+<p><strong>Why This Matters:</strong></p>
+<ul class="simple">
+<li><p>Different models use different tokenizers</p></li>
+<li><p>GPT-4 uses cl100k_base encoding</p></li>
+<li><p>Fallback ensures robustness</p></li>
+<li><p>Prevents crashes on unavailable models</p></li>
+</ul>
+<p><strong>Supported Models:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>GPT-4 models:
+- gpt-4
+- gpt-4-turbo
+- gpt-4-32k
+
+GPT-3.5 models:
+- gpt-3.5-turbo
+- text-davinci-003
+- text-davinci-002
+
+Fallback:
+- cl100k_base (most common)
+- p50k_base (older models)
+- r50k_base (legacy)
+</pre></div>
+</div>
+<p><strong>Step 4b: Token Encoding</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">encoding</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">messages</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">msg</span><span class="o">.</span><span class="n">content</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Encodes each message to tokens</p></li>
+<li><p>Sums total token count</p></li>
+<li><p>Handles missing content gracefully</p></li>
+</ul>
+<p><strong>How It Works:</strong></p>
+<ol class="arabic simple">
+<li><p>Iterate through messages</p></li>
+<li><p>Check if message has content attribute</p></li>
+<li><p>Convert content to string</p></li>
+<li><p>Encode to tokens</p></li>
+<li><p>Count tokens</p></li>
+<li><p>Sum all counts</p></li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span>
+
+<span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;What is backpropagation?&quot;</span><span class="p">),</span>
+    <span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;Backpropagation is a training algorithm...&quot;</span><span class="p">),</span>
+    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;How does it work?&quot;</span><span class="p">),</span>
+    <span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;It works by computing gradients...&quot;</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">tokens</span> <span class="o">=</span> <span class="n">estimate_context_tokens</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+<span class="c1"># Output: ~150 tokens</span>
+</pre></div>
+</div>
+<p><strong>Token Counting Examples:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Short message:
+&quot;What is backpropagation?&quot;
+Tokens: ~5
+
+Medium message:
+&quot;Backpropagation is a training algorithm that adjusts network weights
+ using gradient descent. It computes gradients by propagating errors
+ backwards through the network.&quot;
+Tokens: ~40
+
+Long message:
+&quot;Neural networks consist of interconnected nodes organized in layers.
+ During training, the network learns by adjusting the connections between
+ nodes through a process called backpropagation. This process calculates
+ how much each connection contributed to errors and adjusts them accordingly.
+ For example, in a network trained on image recognition, early layers might
+ learn to detect edges, while later layers learn to recognize shapes.&quot;
+Tokens: ~120
+</pre></div>
+</div>
+</section>
+<section id="complete-agent-configuration-module">
+<h2>Complete Agent Configuration Module<a class="headerlink" href="#complete-agent-configuration-module" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete agent configuration code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tiktoken</span>
+
+<span class="c1"># Hard limits</span>
+<span class="n">MAX_TOOL_CALLS</span> <span class="o">=</span> <span class="mi">8</span>              <span class="c1"># Maximum tool calls per agent run</span>
+<span class="n">MAX_ITERATIONS</span> <span class="o">=</span> <span class="mi">10</span>             <span class="c1"># Maximum agent loop iterations</span>
+
+<span class="c1"># Token thresholds</span>
+<span class="n">BASE_TOKEN_THRESHOLD</span> <span class="o">=</span> <span class="mi">2000</span>     <span class="c1"># Initial token threshold for compression</span>
+<span class="n">TOKEN_GROWTH_FACTOR</span> <span class="o">=</span> <span class="mf">0.9</span>       <span class="c1"># Multiplier applied after each compression</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_context_tokens</span><span class="p">(</span><span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate total tokens in message list.</span>
+
+<span class="sd">    Uses tiktoken to accurately count tokens based on model encoding.</span>
+<span class="sd">    Falls back to cl100k_base if model-specific encoding unavailable.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        messages: List of message objects with content attribute</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Estimated token count for all messages</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; messages = [HumanMessage(content=&quot;Hello&quot;)]</span>
+<span class="sd">        &gt;&gt;&gt; tokens = estimate_context_tokens(messages)</span>
+<span class="sd">        &gt;&gt;&gt; print(tokens)</span>
+<span class="sd">        2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">encoding_for_model</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="s2">&quot;cl100k_base&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">encoding</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">messages</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">msg</span><span class="o">.</span><span class="n">content</span>
+    <span class="p">)</span>
+
+<span class="c1"># Configuration validation</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_configuration</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate configuration parameters.&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">MAX_TOOL_CALLS</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MAX_TOOL_CALLS must be positive&quot;</span>
+    <span class="k">assert</span> <span class="n">MAX_ITERATIONS</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MAX_ITERATIONS must be positive&quot;</span>
+    <span class="k">assert</span> <span class="n">BASE_TOKEN_THRESHOLD</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;BASE_TOKEN_THRESHOLD must be positive&quot;</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">TOKEN_GROWTH_FACTOR</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;TOKEN_GROWTH_FACTOR must be between 0 and 1&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-usage-patterns">
+<h2>Configuration Usage Patterns<a class="headerlink" href="#configuration-usage-patterns" title="Link to this heading">¶</a></h2>
+<p><strong>Pattern 1: Checking Tool Call Limit</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">should_continue_tool_calls</span><span class="p">(</span><span class="n">tool_call_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if more tool calls are allowed.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tool_call_count</span> <span class="o">&lt;</span> <span class="n">MAX_TOOL_CALLS</span>
+</pre></div>
+</div>
+<p><strong>Pattern 2: Checking Iteration Limit</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">should_continue_iterations</span><span class="p">(</span><span class="n">iteration_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if more iterations are allowed.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">iteration_count</span> <span class="o">&lt;</span> <span class="n">MAX_ITERATIONS</span>
+</pre></div>
+</div>
+<p><strong>Pattern 3: Dynamic Threshold Calculation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">calculate_dynamic_threshold</span><span class="p">(</span><span class="n">compression_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate dynamic token threshold after compressions.&quot;&quot;&quot;</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">BASE_TOKEN_THRESHOLD</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">compression_count</span><span class="p">):</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">threshold</span> <span class="o">*</span> <span class="n">TOKEN_GROWTH_FACTOR</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">threshold</span>
+</pre></div>
+</div>
+<p><strong>Pattern 4: Compression Decision</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">should_compress_context</span><span class="p">(</span>
+    <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">compression_count</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decide if context should be compressed.&quot;&quot;&quot;</span>
+    <span class="n">current_tokens</span> <span class="o">=</span> <span class="n">estimate_context_tokens</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">calculate_dynamic_threshold</span><span class="p">(</span><span class="n">compression_count</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">current_tokens</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+</pre></div>
+</div>
+<p><strong>Pattern 5: Complete Agent Loop</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">agent_loop</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main agent loop with limits and compression.&quot;&quot;&quot;</span>
+    <span class="n">tool_call_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">iteration_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">compression_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="n">should_continue_iterations</span><span class="p">(</span><span class="n">iteration_count</span><span class="p">):</span>
+        <span class="n">iteration_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Check if compression needed</span>
+        <span class="k">if</span> <span class="n">should_compress_context</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">compression_count</span><span class="p">):</span>
+            <span class="n">messages</span> <span class="o">=</span> <span class="n">compress_messages</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+            <span class="n">compression_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Execute agent step</span>
+        <span class="n">tool_calls</span> <span class="o">=</span> <span class="n">execute_agent_step</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">messages</span><span class="p">)</span>
+
+        <span class="c1"># Check tool call limit</span>
+        <span class="k">if</span> <span class="n">tool_call_count</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">tool_calls</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_TOOL_CALLS</span><span class="p">:</span>
+            <span class="c1"># Limit tool calls</span>
+            <span class="n">tool_calls</span> <span class="o">=</span> <span class="n">tool_calls</span><span class="p">[:</span><span class="n">MAX_TOOL_CALLS</span> <span class="o">-</span> <span class="n">tool_call_count</span><span class="p">]</span>
+
+        <span class="n">tool_call_count</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tool_calls</span><span class="p">)</span>
+
+        <span class="c1"># Execute tools</span>
+        <span class="k">for</span> <span class="n">tool_call</span> <span class="ow">in</span> <span class="n">tool_calls</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">execute_tool</span><span class="p">(</span><span class="n">tool_call</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="c1"># Check if done</span>
+        <span class="k">if</span> <span class="n">is_done</span><span class="p">(</span><span class="n">messages</span><span class="p">):</span>
+            <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">generate_final_answer</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-monitoring">
+<h2>Configuration Monitoring<a class="headerlink" href="#configuration-monitoring" title="Link to this heading">¶</a></h2>
+<p><strong>Pattern 1: Log Configuration</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">log_configuration</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Log current configuration.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAX_TOOL_CALLS: </span><span class="si">{</span><span class="n">MAX_TOOL_CALLS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAX_ITERATIONS: </span><span class="si">{</span><span class="n">MAX_ITERATIONS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BASE_TOKEN_THRESHOLD: </span><span class="si">{</span><span class="n">BASE_TOKEN_THRESHOLD</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TOKEN_GROWTH_FACTOR: </span><span class="si">{</span><span class="n">TOKEN_GROWTH_FACTOR</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Pattern 2: Monitor Execution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">monitor_execution</span><span class="p">(</span>
+    <span class="n">tool_call_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">iteration_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">token_count</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Monitor execution against limits.&quot;&quot;&quot;</span>
+    <span class="n">tool_call_pct</span> <span class="o">=</span> <span class="p">(</span><span class="n">tool_call_count</span> <span class="o">/</span> <span class="n">MAX_TOOL_CALLS</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="n">iteration_pct</span> <span class="o">=</span> <span class="p">(</span><span class="n">iteration_count</span> <span class="o">/</span> <span class="n">MAX_ITERATIONS</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool calls: </span><span class="si">{</span><span class="n">tool_call_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">MAX_TOOL_CALLS</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">tool_call_pct</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iterations: </span><span class="si">{</span><span class="n">iteration_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">MAX_ITERATIONS</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">iteration_pct</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tokens: </span><span class="si">{</span><span class="n">token_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Pattern 3: Alert on Limits</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_limits_alert</span><span class="p">(</span>
+    <span class="n">tool_call_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">iteration_count</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Alert if approaching limits.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tool_call_count</span> <span class="o">&gt;=</span> <span class="n">MAX_TOOL_CALLS</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: Approaching tool call limit&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">iteration_count</span> <span class="o">&gt;=</span> <span class="n">MAX_ITERATIONS</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: Approaching iteration limit&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Configuration Validation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Validate on startup</span>
+<span class="n">validate_configuration</span><span class="p">()</span>
+
+<span class="c1"># Avoid: No validation</span>
+<span class="c1"># (may fail silently later)</span>
+</pre></div>
+</div>
+<p><strong>2. Reasonable Defaults</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Balanced defaults</span>
+<span class="n">MAX_TOOL_CALLS</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">MAX_ITERATIONS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">BASE_TOKEN_THRESHOLD</span> <span class="o">=</span> <span class="mi">2000</span>
+
+<span class="c1"># Avoid: Extreme values</span>
+<span class="n">MAX_TOOL_CALLS</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Too high</span>
+<span class="n">MAX_ITERATIONS</span> <span class="o">=</span> <span class="mi">1</span>    <span class="c1"># Too low</span>
+</pre></div>
+</div>
+<p><strong>3. Environment-Specific Configuration</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1"># Good: Environment-based configuration</span>
+<span class="n">MAX_TOOL_CALLS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAX_TOOL_CALLS&quot;</span><span class="p">,</span> <span class="s2">&quot;8&quot;</span><span class="p">))</span>
+<span class="n">MAX_ITERATIONS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAX_ITERATIONS&quot;</span><span class="p">,</span> <span class="s2">&quot;10&quot;</span><span class="p">))</span>
+
+<span class="c1"># Avoid: Hardcoded values</span>
+<span class="n">MAX_TOOL_CALLS</span> <span class="o">=</span> <span class="mi">8</span>
+</pre></div>
+</div>
+<p><strong>4. Monitoring and Logging</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Good: Log configuration and execution</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Agent configured: </span><span class="si">{</span><span class="n">MAX_TOOL_CALLS</span><span class="si">}</span><span class="s2"> tool calls, </span><span class="si">{</span><span class="n">MAX_ITERATIONS</span><span class="si">}</span><span class="s2"> iterations&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool calls used: </span><span class="si">{</span><span class="n">tool_call_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">MAX_TOOL_CALLS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Avoid: No logging</span>
+<span class="c1"># (hard to debug issues)</span>
+</pre></div>
+</div>
+<p><strong>5. Graceful Degradation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Handle limit gracefully</span>
+<span class="k">if</span> <span class="n">tool_call_count</span> <span class="o">&gt;=</span> <span class="n">MAX_TOOL_CALLS</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Tool call limit reached, generating answer with available context&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">generate_answer</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+
+<span class="c1"># Avoid: Crash on limit</span>
+<span class="k">assert</span> <span class="n">tool_call_count</span> <span class="o">&lt;</span> <span class="n">MAX_TOOL_CALLS</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Token Counting Performance:</strong></p>
+<ul class="simple">
+<li><p>Encoding initialization: 100-500ms (first call)</p></li>
+<li><p>Token counting: 1-5ms per message</p></li>
+<li><p>Total for 10 messages: 10-50ms</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cache encoding</span>
+<span class="n">_encoding</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_encoding</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">_encoding</span>
+    <span class="k">if</span> <span class="n">_encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">encoding_for_model</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">_encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="s2">&quot;cl100k_base&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_encoding</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_context_tokens_cached</span><span class="p">(</span><span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Faster token counting with cached encoding.&quot;&quot;&quot;</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="n">get_encoding</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">encoding</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">messages</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">msg</span><span class="o">.</span><span class="n">content</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Memory Considerations:</strong></p>
+<ul class="simple">
+<li><p>Configuration: ~100 bytes</p></li>
+<li><p>Encoding object: ~1-5MB</p></li>
+<li><p>Token cache: ~1-10MB (if caching)</p></li>
+</ul>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>Tool Call Limit Reached</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Agent stops before finding answer</span>
+<span class="c1"># Solution: Increase MAX_TOOL_CALLS</span>
+
+<span class="n">MAX_TOOL_CALLS</span> <span class="o">=</span> <span class="mi">12</span>  <span class="c1"># Increased from 8</span>
+</pre></div>
+</div>
+<p><strong>Iteration Limit Reached</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Agent stops mid-research</span>
+<span class="c1"># Solution: Increase MAX_ITERATIONS</span>
+
+<span class="n">MAX_ITERATIONS</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># Increased from 10</span>
+</pre></div>
+</div>
+<p><strong>Token Counting Errors</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: tiktoken not installed</span>
+<span class="c1"># Solution: Install tiktoken</span>
+
+<span class="c1"># pip install tiktoken</span>
+</pre></div>
+</div>
+<p><strong>Compression Too Aggressive</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Context compressed too much</span>
+<span class="c1"># Solution: Increase BASE_TOKEN_THRESHOLD or TOKEN_GROWTH_FACTOR</span>
+
+<span class="n">BASE_TOKEN_THRESHOLD</span> <span class="o">=</span> <span class="mi">3000</span>  <span class="c1"># Increased from 2000</span>
+<span class="n">TOKEN_GROWTH_FACTOR</span> <span class="o">=</span> <span class="mf">0.95</span>   <span class="c1"># Increased from 0.9</span>
+</pre></div>
+</div>
+<p><strong>Compression Not Happening</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Context never compressed</span>
+<span class="c1"># Solution: Lower BASE_TOKEN_THRESHOLD</span>
+
+<span class="n">BASE_TOKEN_THRESHOLD</span> <span class="o">=</span> <span class="mi">1500</span>  <span class="c1"># Decreased from 2000</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With agent configuration defined, you can proceed to:</p>
+<ul class="simple">
+<li><p>Building the agent graph with configured limits</p></li>
+<li><p>Implementing node functions with limit checks</p></li>
+<li><p>Creating the complete agent workflow</p></li>
+<li><p>Integrating with LangGraph for execution</p></li>
+<li><p>Building the complete RAG application with monitoring</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch07_define_state_and_data_models.html" class="btn btn-neutral float-left" title="Topic 7: Define State and Data Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch09_build_graph_nodes_and_edges.html" class="btn btn-neutral float-right" title="Topic 9: Build Graph Node and Edge Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

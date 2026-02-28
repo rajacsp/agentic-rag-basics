@@ -1,0 +1,909 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 11: Create Chat Interface &mdash; Agentic RAG Basics 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Topic 10: Build the LangGraph Graphs" href="ch10_build_langgraph_graphs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Agentic RAG Basics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">Topic 7: Define State and Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">Topic 8: Agent Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">Topic 9: Build Graph Node and Edge Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">Topic 10: Build the LangGraph Graphs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 11: Create Chat Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-create-thread-id-function">Step 2: Create Thread ID Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-clear-session-function">Step 3: Clear Session Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-chat-function">Step 4: Chat Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-initialize-configuration">Step 5: Initialize Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-build-gradio-interface">Step 6: Build Gradio Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-chat-interface-code">Complete Chat Interface Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interface-features">Interface Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-interface-customization">Advanced Interface Customization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment-options">Deployment Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-end-to-end-system">Complete End-to-End System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Agentic RAG Basics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 11: Create Chat Interface</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch11_create_chat_interface.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-11-create-chat-interface">
+<h1>Topic 11: Create Chat Interface<a class="headerlink" href="#topic-11-create-chat-interface" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the creation of a Gradio-based chat interface that provides a user-friendly way to interact with the RAG system. The interface includes conversation persistence, multi-turn support, and human-in-the-loop clarification, enabling seamless end-to-end document research and question answering.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>The chat interface serves as the “user-facing layer” of the RAG system, providing:</p>
+<ul class="simple">
+<li><p><strong>Conversation Interface</strong>: Chat-like interaction with the agent</p></li>
+<li><p><strong>State Persistence</strong>: Maintains conversation history across turns</p></li>
+<li><p><strong>Session Management</strong>: Unique thread IDs for each conversation</p></li>
+<li><p><strong>Human-in-the-Loop</strong>: Supports clarification requests</p></li>
+<li><p><strong>User Experience</strong>: Clean, intuitive interface with Gradio</p></li>
+</ul>
+<p>The interface architecture includes:</p>
+<ol class="arabic simple">
+<li><p><strong>Thread Management</strong>: Unique IDs for conversation sessions</p></li>
+<li><p><strong>State Handling</strong>: Resuming interrupted executions</p></li>
+<li><p><strong>Message Processing</strong>: Converting user input to agent input</p></li>
+<li><p><strong>Response Display</strong>: Formatting agent output for users</p></li>
+<li><p><strong>Session Clearing</strong>: Resetting conversations</p></li>
+</ol>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">gradio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gradio</span></code>: Web UI framework for machine learning models</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code>: Generates unique identifiers for sessions</p></li>
+</ul>
+<p><strong>Why These Imports:</strong></p>
+<ul class="simple">
+<li><p><strong>Gradio</strong>: Simple, no-code UI creation</p></li>
+<li><p><strong>UUID</strong>: Ensures unique conversation sessions</p></li>
+<li><p><strong>Built-in</strong>: No external dependencies beyond Gradio</p></li>
+</ul>
+</section>
+<section id="step-2-create-thread-id-function">
+<h2>Step 2: Create Thread ID Function<a class="headerlink" href="#step-2-create-thread-id-function" title="Link to this heading">¶</a></h2>
+<p>Define the function for generating unique conversation sessions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_thread_id</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a unique thread ID for each conversation.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Configuration with thread ID and recursion limit</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())},</span>
+        <span class="s2">&quot;recursion_limit&quot;</span><span class="p">:</span> <span class="mi">50</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Step 2a: UUID Generation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Generates unique identifier for conversation</p></li>
+<li><p>Enables state persistence</p></li>
+<li><p>Supports multi-user scenarios</p></li>
+<li><p>Prevents session conflicts</p></li>
+</ul>
+<p><strong>Why UUID:</strong></p>
+<ul class="simple">
+<li><p>Globally unique</p></li>
+<li><p>No collisions</p></li>
+<li><p>Simple to generate</p></li>
+<li><p>Standard format</p></li>
+</ul>
+<p><strong>Example Thread IDs:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>550e8400-e29b-41d4-a716-446655440000
+6ba7b810-9dad-11d1-80b4-00c04fd430c8
+f47ac10b-58cc-4372-a567-0e02b2c3d479
+</pre></div>
+</div>
+<p><strong>Step 2b: Recursion Limit</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;recursion_limit&quot;</span><span class="p">:</span> <span class="mi">50</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Prevents infinite loops in graph execution</p></li>
+<li><p>Limits maximum iterations</p></li>
+<li><p>Ensures bounded execution time</p></li>
+<li><p>Protects against runaway agents</p></li>
+</ul>
+<p><strong>Why 50:</strong></p>
+<ul class="simple">
+<li><p>Sufficient for complex queries</p></li>
+<li><p>Prevents excessive computation</p></li>
+<li><p>Balances thoroughness and efficiency</p></li>
+<li><p>Typical queries complete in 5-20 iterations</p></li>
+</ul>
+<p><strong>Step 2c: Configuration Structure</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="p">{</span>
+    <span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())},</span>
+    <span class="s2">&quot;recursion_limit&quot;</span><span class="p">:</span> <span class="mi">50</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Returns LangGraph-compatible configuration</p></li>
+<li><p>Enables checkpointing with thread ID</p></li>
+<li><p>Sets execution limits</p></li>
+</ul>
+<p><strong>Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">create_thread_id</span><span class="p">()</span>
+<span class="c1"># Output: {</span>
+<span class="c1">#     &quot;configurable&quot;: {&quot;thread_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;},</span>
+<span class="c1">#     &quot;recursion_limit&quot;: 50</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-clear-session-function">
+<h2>Step 3: Clear Session Function<a class="headerlink" href="#step-3-clear-session-function" title="Link to this heading">¶</a></h2>
+<p>Define the function for resetting conversations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">clear_session</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear thread for new conversation.</span>
+
+<span class="sd">    Deletes checkpointed state and creates new thread ID.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">config</span>
+    <span class="n">agent_graph</span><span class="o">.</span><span class="n">checkpointer</span><span class="o">.</span><span class="n">delete_thread</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;configurable&quot;</span><span class="p">][</span><span class="s2">&quot;thread_id&quot;</span><span class="p">])</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">create_thread_id</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Step 3a: Delete Checkpointed State</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_graph</span><span class="o">.</span><span class="n">checkpointer</span><span class="o">.</span><span class="n">delete_thread</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;configurable&quot;</span><span class="p">][</span><span class="s2">&quot;thread_id&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Removes saved conversation state</p></li>
+<li><p>Clears message history</p></li>
+<li><p>Resets agent memory</p></li>
+<li><p>Enables fresh start</p></li>
+</ul>
+<p><strong>Why Delete:</strong></p>
+<ul class="simple">
+<li><p>Prevents state carryover</p></li>
+<li><p>Ensures clean slate</p></li>
+<li><p>Frees memory</p></li>
+<li><p>Supports multiple conversations</p></li>
+</ul>
+<p><strong>Step 3b: Create New Thread</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">create_thread_id</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Generates new thread ID</p></li>
+<li><p>Resets configuration</p></li>
+<li><p>Enables new conversation</p></li>
+<li><p>Updates global config</p></li>
+</ul>
+<p><strong>Clear Session Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Before clear</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440000&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;recursion_limit&quot;</span><span class="p">:</span> <span class="mi">50</span>
+<span class="p">}</span>
+
+<span class="c1"># After clear</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="s2">&quot;6ba7b810-9dad-11d1-80b4-00c04fd430c8&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;recursion_limit&quot;</span><span class="p">:</span> <span class="mi">50</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-chat-function">
+<h2>Step 4: Chat Function<a class="headerlink" href="#step-4-chat-function" title="Link to this heading">¶</a></h2>
+<p>Define the main chat interaction function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process user message and return agent response.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        message (str): User&#39;s input message</span>
+<span class="sd">        history (list): Conversation history</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Agent&#39;s response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">current_state</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current_state</span><span class="o">.</span><span class="n">next</span><span class="p">:</span>
+        <span class="n">agent_graph</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())]}</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())]},</span>
+            <span class="n">config</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;messages&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+</pre></div>
+</div>
+<p><strong>Step 4a: Get Current State</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">current_state</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Retrieves current graph state</p></li>
+<li><p>Checks if execution is interrupted</p></li>
+<li><p>Determines if resuming or starting fresh</p></li>
+</ul>
+<p><strong>State Information:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">current_state</span><span class="o">.</span><span class="n">next</span>  <span class="c1"># Next node to execute</span>
+<span class="n">current_state</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Current state values</span>
+<span class="n">current_state</span><span class="o">.</span><span class="n">tasks</span>  <span class="c1"># Pending tasks</span>
+</pre></div>
+</div>
+<p><strong>Step 4b: Handle Interrupted Execution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">current_state</span><span class="o">.</span><span class="n">next</span><span class="p">:</span>
+    <span class="n">agent_graph</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span>
+        <span class="n">config</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())]}</span>
+    <span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Resumes interrupted execution</p></li>
+<li><p>Updates state with user input</p></li>
+<li><p>Continues from interrupt point</p></li>
+<li><p>Handles clarification responses</p></li>
+</ul>
+<p><strong>When This Happens:</strong></p>
+<ul class="simple">
+<li><p>User provides clarification</p></li>
+<li><p>Graph was interrupted at request_clarification</p></li>
+<li><p>Execution resumes with new message</p></li>
+</ul>
+<p><strong>Step 4c: Handle Fresh Execution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">else</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())]},</span>
+        <span class="n">config</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Starts new execution</p></li>
+<li><p>Provides initial state</p></li>
+<li><p>Begins from START node</p></li>
+<li><p>Processes new query</p></li>
+</ul>
+<p><strong>When This Happens:</strong></p>
+<ul class="simple">
+<li><p>First message in conversation</p></li>
+<li><p>No prior interrupts</p></li>
+<li><p>Fresh query processing</p></li>
+</ul>
+<p><strong>Step 4d: Extract Response</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;messages&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Gets last message from result</p></li>
+<li><p>Extracts text content</p></li>
+<li><p>Returns to user</p></li>
+<li><p>Formats for display</p></li>
+</ul>
+<p><strong>Chat Function Usage Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First message (fresh execution)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">chat_with_agent</span><span class="p">(</span><span class="s2">&quot;What is backpropagation?&quot;</span><span class="p">,</span> <span class="p">[])</span>
+<span class="c1"># Output: &quot;Backpropagation is a training algorithm...&quot;</span>
+
+<span class="c1"># Clarification response (resumed execution)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">chat_with_agent</span><span class="p">(</span><span class="s2">&quot;neural networks and training&quot;</span><span class="p">,</span> <span class="p">[])</span>
+<span class="c1"># Output: &quot;Based on your clarification, here&#39;s the answer...&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-5-initialize-configuration">
+<h2>Step 5: Initialize Configuration<a class="headerlink" href="#step-5-initialize-configuration" title="Link to this heading">¶</a></h2>
+<p>Initialize the global configuration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">create_thread_id</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Creates initial thread ID</p></li>
+<li><p>Sets up configuration</p></li>
+<li><p>Enables first conversation</p></li>
+<li><p>Initializes global state</p></li>
+</ul>
+</section>
+<section id="step-6-build-gradio-interface">
+<h2>Step 6: Build Gradio Interface<a class="headerlink" href="#step-6-build-gradio-interface" title="Link to this heading">¶</a></h2>
+<p>Create the chat interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Blocks</span><span class="p">()</span> <span class="k">as</span> <span class="n">demo</span><span class="p">:</span>
+    <span class="n">chatbot</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Chatbot</span><span class="p">()</span>
+    <span class="n">chatbot</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">clear_session</span><span class="p">)</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">ChatInterface</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">chat_with_agent</span><span class="p">,</span> <span class="n">chatbot</span><span class="o">=</span><span class="n">chatbot</span><span class="p">)</span>
+
+<span class="n">demo</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="n">theme</span><span class="o">=</span><span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Citrus</span><span class="p">())</span>
+</pre></div>
+</div>
+<p><strong>Step 6a: Create Blocks</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Blocks</span><span class="p">()</span> <span class="k">as</span> <span class="n">demo</span><span class="p">:</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Creates Gradio interface container</p></li>
+<li><p>Enables custom layout</p></li>
+<li><p>Allows component configuration</p></li>
+</ul>
+<p><strong>Step 6b: Add Chatbot Component</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">chatbot</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Chatbot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Creates chat display area</p></li>
+<li><p>Shows conversation history</p></li>
+<li><p>Formats messages nicely</p></li>
+<li><p>Handles message rendering</p></li>
+</ul>
+<p><strong>Chatbot Features:</strong></p>
+<ul class="simple">
+<li><p>Displays user and assistant messages</p></li>
+<li><p>Shows message history</p></li>
+<li><p>Formats with different styles</p></li>
+<li><p>Supports markdown</p></li>
+</ul>
+<p><strong>Step 6c: Clear on Reset</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">chatbot</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">clear_session</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Calls clear_session when user clears chat</p></li>
+<li><p>Resets conversation state</p></li>
+<li><p>Generates new thread ID</p></li>
+<li><p>Enables fresh conversation</p></li>
+</ul>
+<p><strong>Step 6d: Add Chat Interface</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gr</span><span class="o">.</span><span class="n">ChatInterface</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">chat_with_agent</span><span class="p">,</span> <span class="n">chatbot</span><span class="o">=</span><span class="n">chatbot</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Creates chat input and interaction</p></li>
+<li><p>Connects to chat_with_agent function</p></li>
+<li><p>Handles message sending</p></li>
+<li><p>Manages conversation flow</p></li>
+</ul>
+<p><strong>ChatInterface Features:</strong></p>
+<ul class="simple">
+<li><p>Text input field</p></li>
+<li><p>Send button</p></li>
+<li><p>Message history display</p></li>
+<li><p>Auto-scrolling</p></li>
+<li><p>Keyboard shortcuts</p></li>
+</ul>
+<p><strong>Step 6e: Launch with Theme</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">demo</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="n">theme</span><span class="o">=</span><span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Citrus</span><span class="p">())</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Starts web server</p></li>
+<li><p>Applies Citrus theme</p></li>
+<li><p>Opens browser interface</p></li>
+<li><p>Enables user interaction</p></li>
+</ul>
+<p><strong>Available Themes:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Default</span><span class="p">()</span>
+<span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Soft</span><span class="p">()</span>
+<span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Monochrome</span><span class="p">()</span>
+<span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Citrus</span><span class="p">()</span>
+<span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Ocean</span><span class="p">()</span>
+<span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Base</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-chat-interface-code">
+<h2>Complete Chat Interface Code<a class="headerlink" href="#complete-chat-interface-code" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete chat interface code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">gradio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_thread_id</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a unique thread ID for each conversation.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())},</span>
+        <span class="s2">&quot;recursion_limit&quot;</span><span class="p">:</span> <span class="mi">50</span>
+    <span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">clear_session</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear thread for new conversation.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">config</span>
+    <span class="n">agent_graph</span><span class="o">.</span><span class="n">checkpointer</span><span class="o">.</span><span class="n">delete_thread</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;configurable&quot;</span><span class="p">][</span><span class="s2">&quot;thread_id&quot;</span><span class="p">])</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">create_thread_id</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process user message and return agent response.&quot;&quot;&quot;</span>
+    <span class="n">current_state</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current_state</span><span class="o">.</span><span class="n">next</span><span class="p">:</span>
+        <span class="c1"># Resume interrupted execution</span>
+        <span class="n">agent_graph</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())]}</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Start fresh execution</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())]},</span>
+            <span class="n">config</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;messages&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+
+<span class="c1"># Initialize configuration</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">create_thread_id</span><span class="p">()</span>
+
+<span class="c1"># Build interface</span>
+<span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Blocks</span><span class="p">()</span> <span class="k">as</span> <span class="n">demo</span><span class="p">:</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;# Agentic RAG Chat Interface&quot;</span><span class="p">)</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;Ask questions about your documents. The system will search, retrieve, and synthesize answers.&quot;</span><span class="p">)</span>
+
+    <span class="n">chatbot</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Chatbot</span><span class="p">()</span>
+    <span class="n">chatbot</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">clear_session</span><span class="p">)</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">ChatInterface</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">chat_with_agent</span><span class="p">,</span> <span class="n">chatbot</span><span class="o">=</span><span class="n">chatbot</span><span class="p">)</span>
+
+<span class="c1"># Launch</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="n">theme</span><span class="o">=</span><span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Citrus</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="interface-features">
+<h2>Interface Features<a class="headerlink" href="#interface-features" title="Link to this heading">¶</a></h2>
+<p><strong>Conversation Persistence:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: &quot;What is backpropagation?&quot;
+Agent: &quot;Backpropagation is a training algorithm...&quot;
+
+User: &quot;How is it used?&quot;
+Agent: &quot;Based on our prior discussion, backpropagation is used in...&quot;
+
+(Conversation history maintained across turns)
+</pre></div>
+</div>
+<p><strong>Human-in-the-Loop:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: &quot;unclear query&quot;
+Agent: &quot;I need clarification. Could you rephrase?&quot;
+(Execution pauses at interrupt point)
+
+User: &quot;I meant to ask about neural networks&quot;
+Agent: &quot;Now I understand. Neural networks are...&quot;
+(Execution resumes with clarification)
+</pre></div>
+</div>
+<p><strong>Session Management:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User clicks &quot;Clear&quot;
+→ clear_session() called
+→ Old thread deleted
+→ New thread created
+→ Fresh conversation starts
+</pre></div>
+</div>
+<p><strong>Multi-Turn Conversations:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Turn 1: User query → Agent research → Response
+Turn 2: Follow-up → Agent uses prior context → Response
+Turn 3: Another question → Agent maintains history → Response
+</pre></div>
+</div>
+</section>
+<section id="advanced-interface-customization">
+<h2>Advanced Interface Customization<a class="headerlink" href="#advanced-interface-customization" title="Link to this heading">¶</a></h2>
+<p><strong>Custom Layout:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Blocks</span><span class="p">()</span> <span class="k">as</span> <span class="n">demo</span><span class="p">:</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;# RAG Chat System&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Row</span><span class="p">():</span>
+        <span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">chatbot</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Chatbot</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">gr</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;## Settings&quot;</span><span class="p">)</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+            <span class="n">max_tokens</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+
+    <span class="n">gr</span><span class="o">.</span><span class="n">ChatInterface</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">chat_with_agent</span><span class="p">,</span> <span class="n">chatbot</span><span class="o">=</span><span class="n">chatbot</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Custom Styling:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Blocks</span><span class="p">(</span><span class="n">css</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    .chatbot-container {</span>
+<span class="s2">        max-width: 800px;</span>
+<span class="s2">        margin: 0 auto;</span>
+<span class="s2">    }</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">demo</span><span class="p">:</span>
+    <span class="n">chatbot</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Chatbot</span><span class="p">(</span><span class="n">elem_classes</span><span class="o">=</span><span class="s2">&quot;chatbot-container&quot;</span><span class="p">)</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">ChatInterface</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">chat_with_agent</span><span class="p">,</span> <span class="n">chatbot</span><span class="o">=</span><span class="n">chatbot</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Additional Components:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Blocks</span><span class="p">()</span> <span class="k">as</span> <span class="n">demo</span><span class="p">:</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;# RAG Chat System&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Chat area</span>
+    <span class="n">chatbot</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Chatbot</span><span class="p">()</span>
+
+    <span class="c1"># Settings</span>
+    <span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Row</span><span class="p">():</span>
+        <span class="n">clear_btn</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Clear Conversation&quot;</span><span class="p">)</span>
+        <span class="n">settings_btn</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Settings&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Chat interface</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">ChatInterface</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">chat_with_agent</span><span class="p">,</span> <span class="n">chatbot</span><span class="o">=</span><span class="n">chatbot</span><span class="p">)</span>
+
+    <span class="c1"># Clear button handler</span>
+    <span class="n">clear_btn</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">clear_session</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Error Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process user message with error handling.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">current_state</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">current_state</span><span class="o">.</span><span class="n">next</span><span class="p">:</span>
+            <span class="n">agent_graph</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())]})</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())]},</span> <span class="n">config</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;messages&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>2. Input Validation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process user message with validation.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">message</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">&quot;Please enter a message.&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Message too long. Please keep it under 5000 characters.&quot;</span>
+
+    <span class="c1"># Process message</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p><strong>3. Response Formatting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process user message with formatted response.&quot;&quot;&quot;</span>
+    <span class="c1"># ... execution code ...</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;messages&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+
+    <span class="c1"># Format response</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2000</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="p">[:</span><span class="mi">2000</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...</span><span class="se">\n\n</span><span class="s2">(Response truncated)&quot;</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+<p><strong>4. Logging</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process user message with logging.&quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User message: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ... execution code ...</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Agent response: </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;Error processing message&quot;</span>
+</pre></div>
+</div>
+<p><strong>5. Performance Optimization</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_agent_graph</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cache compiled graph.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">agent_graph</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process user message with cached graph.&quot;&quot;&quot;</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">get_agent_graph</span><span class="p">()</span>
+    <span class="c1"># ... use graph ...</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Response Time:</strong></p>
+<ul class="simple">
+<li><p>Simple query: 2-5 seconds</p></li>
+<li><p>Complex query: 5-15 seconds</p></li>
+<li><p>With clarification: 10-20 seconds</p></li>
+</ul>
+<p><strong>Memory Usage:</strong></p>
+<ul class="simple">
+<li><p>Per conversation: ~1-5MB</p></li>
+<li><p>Chatbot display: ~100KB per message</p></li>
+<li><p>Total: ~2-10MB per active session</p></li>
+</ul>
+<p><strong>Scalability:</strong></p>
+<ul class="simple">
+<li><p>Single instance: 10-50 concurrent users</p></li>
+<li><p>Multiple instances: 100+ concurrent users</p></li>
+<li><p>Load balancing: Horizontal scaling</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use streaming for long responses</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent_streaming</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stream response for better UX.&quot;&quot;&quot;</span>
+    <span class="c1"># Implement streaming response</span>
+    <span class="k">pass</span>
+
+<span class="c1"># Cache common queries</span>
+<span class="n">query_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chat_with_agent_cached</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cache responses for common queries.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">query_cache</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">query_cache</span><span class="p">[</span><span class="n">message</span><span class="p">]</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">chat_with_agent</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">)</span>
+    <span class="n">query_cache</span><span class="p">[</span><span class="n">message</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span>
+    <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+</section>
+<section id="deployment-options">
+<h2>Deployment Options<a class="headerlink" href="#deployment-options" title="Link to this heading">¶</a></h2>
+<p><strong>Local Development:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">demo</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="n">share</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># Local only</span>
+</pre></div>
+</div>
+<p><strong>Public Sharing:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">demo</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="n">share</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Public link</span>
+</pre></div>
+</div>
+<p><strong>Docker Deployment:</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.10</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;app.py&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Cloud Deployment:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hugging Face Spaces</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="n">server_name</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="n">server_port</span><span class="o">=</span><span class="mi">7860</span><span class="p">)</span>
+
+<span class="c1"># AWS, GCP, Azure</span>
+<span class="c1"># Use containerization and orchestration</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>State Not Persisting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Conversation history lost</span>
+<span class="c1"># Solution: Verify checkpointer is working</span>
+
+<span class="n">current_state</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current state: </span><span class="si">{</span><span class="n">current_state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Thread ID: </span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;configurable&#39;</span><span class="p">][</span><span class="s1">&#39;thread_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Clarification Not Working</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Interrupt not triggering</span>
+<span class="c1"># Solution: Verify interrupt_before configuration</span>
+
+<span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">checkpointer</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">,</span>
+    <span class="n">interrupt_before</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Slow Responses</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Chat interface slow</span>
+<span class="c1"># Solution: Check agent execution time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">input_state</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+<span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Execution time: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Memory Leaks</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Memory usage increasing</span>
+<span class="c1"># Solution: Clear old sessions</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cleanup_old_sessions</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove old conversation threads.&quot;&quot;&quot;</span>
+    <span class="c1"># Implement cleanup logic</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-end-to-end-system">
+<h2>Complete End-to-End System<a class="headerlink" href="#complete-end-to-end-system" title="Link to this heading">¶</a></h2>
+<p>You now have a fully functional Agentic RAG system with:</p>
+<p><strong>Core Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Document Processing</strong>: PDF to Markdown conversion</p></li>
+<li><p><strong>Vector Database</strong>: Qdrant with hybrid search</p></li>
+<li><p><strong>Hierarchical Indexing</strong>: Parent/child chunk strategy</p></li>
+<li><p><strong>Agent System</strong>: LangGraph with multi-agent architecture</p></li>
+<li><p><strong>Chat Interface</strong>: Gradio web UI</p></li>
+</ol>
+<p><strong>Advanced Features:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Conversation Memory</strong>: Multi-turn context preservation</p></li>
+<li><p><strong>Query Rewriting</strong>: Intelligent query reformulation</p></li>
+<li><p><strong>Human-in-the-Loop</strong>: Clarification requests</p></li>
+<li><p><strong>Context Compression</strong>: Token-aware memory management</p></li>
+<li><p><strong>Parallel Execution</strong>: Multi-question research</p></li>
+<li><p><strong>Graceful Degradation</strong>: Fallback responses</p></li>
+</ol>
+<p><strong>Capabilities:</strong></p>
+<ul class="simple">
+<li><p>Search and retrieve relevant documents</p></li>
+<li><p>Synthesize answers from multiple sources</p></li>
+<li><p>Handle multi-part questions</p></li>
+<li><p>Request clarification for unclear queries</p></li>
+<li><p>Maintain conversation context</p></li>
+<li><p>Compress context to manage tokens</p></li>
+<li><p>Execute within resource limits</p></li>
+</ul>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With the chat interface complete, you can:</p>
+<ul class="simple">
+<li><p>Deploy to production (Hugging Face Spaces, AWS, GCP, Azure)</p></li>
+<li><p>Add authentication and user management</p></li>
+<li><p>Implement analytics and monitoring</p></li>
+<li><p>Optimize performance and scalability</p></li>
+<li><p>Add additional features (file upload, export, etc.)</p></li>
+<li><p>Integrate with other systems</p></li>
+<li><p>Build mobile applications</p></li>
+</ul>
+<p>Congratulations! You have successfully built a complete Agentic RAG system with conversation memory, hierarchical indexing, and human-in-the-loop query clarification.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch10_build_langgraph_graphs.html" class="btn btn-neutral float-left" title="Topic 10: Build the LangGraph Graphs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

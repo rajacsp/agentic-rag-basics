@@ -1,0 +1,1551 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 9: Build Graph Node and Edge Functions &mdash; Agentic RAG Basics 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Topic 10: Build the LangGraph Graphs" href="ch10_build_langgraph_graphs.html" />
+    <link rel="prev" title="Topic 8: Agent Configuration" href="ch08_agent_configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Agentic RAG Basics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">Topic 7: Define State and Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">Topic 8: Agent Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 9: Build Graph Node and Edge Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-summarize-history-node">Step 2: Summarize History Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-rewrite-query-node">Step 3: Rewrite Query Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-request-clarification-node">Step 4: Request Clarification Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-route-after-rewrite-edge">Step 5: Route After Rewrite Edge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-aggregate-answers-node">Step 6: Aggregate Answers Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-graph-nodes-and-edges-module">Complete Graph Nodes and Edges Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-structure">Graph Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-7-agent-subgraph-nodes-and-edges">Step 7: Agent Subgraph Nodes and Edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">Topic 10: Build the LangGraph Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">Topic 11: Create Chat Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Agentic RAG Basics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 9: Build Graph Node and Edge Functions</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch09_build_graph_nodes_and_edges.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-9-build-graph-node-and-edge-functions">
+<h1>Topic 9: Build Graph Node and Edge Functions<a class="headerlink" href="#topic-9-build-graph-node-and-edge-functions" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the creation of processing nodes and routing edges that form the LangGraph workflow. Nodes represent discrete processing steps (summarization, query rewriting, agent execution, answer aggregation), while edges define the flow between them. Together, they create a stateful, directed graph that orchestrates the entire RAG pipeline.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>Graph nodes and edges serve as the “execution engine” of the RAG system, managing:</p>
+<ul class="simple">
+<li><p><strong>Processing Nodes</strong>: Discrete steps that transform state</p></li>
+<li><p><strong>Routing Edges</strong>: Conditional logic that determines flow</p></li>
+<li><p><strong>State Transitions</strong>: Updates to conversation and agent state</p></li>
+<li><p><strong>Message Management</strong>: Adding, removing, and transforming messages</p></li>
+<li><p><strong>Workflow Orchestration</strong>: Coordinating multi-step processes</p></li>
+</ul>
+<p>The graph architecture includes:</p>
+<ol class="arabic simple">
+<li><p><strong>Summarize History Node</strong>: Compresses conversation history</p></li>
+<li><p><strong>Rewrite Query Node</strong>: Analyzes and reformulates queries</p></li>
+<li><p><strong>Request Clarification Node</strong>: Handles unclear queries</p></li>
+<li><p><strong>Route After Rewrite Edge</strong>: Conditional routing logic</p></li>
+<li><p><strong>Aggregate Answers Node</strong>: Synthesizes multiple answers</p></li>
+</ol>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Send</span><span class="p">,</span> <span class="n">Command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">,</span> <span class="n">SystemMessage</span><span class="p">,</span>
+    <span class="n">RemoveMessage</span><span class="p">,</span> <span class="n">ToolMessage</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">langgraph.types.Send</span></code>: Sends state to another node</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">langgraph.types.Command</span></code>: Controls graph execution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">langchain_core.messages</span></code>: Message types for conversation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typing.Literal</span></code>: Type hints for routing decisions</p></li>
+</ul>
+<p><strong>Why These Imports:</strong></p>
+<ul class="simple">
+<li><p><strong>Send</strong>: Enables dynamic node routing</p></li>
+<li><p><strong>Message types</strong>: Represent different message roles</p></li>
+<li><p><strong>RemoveMessage</strong>: Cleans up message history</p></li>
+<li><p><strong>Literal</strong>: Type-safe routing decisions</p></li>
+</ul>
+</section>
+<section id="step-2-summarize-history-node">
+<h2>Step 2: Summarize History Node<a class="headerlink" href="#step-2-summarize-history-node" title="Link to this heading">¶</a></h2>
+<p>Define the node that compresses conversation history:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">summarize_history</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Summarize conversation history for context preservation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Current conversation state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated state with conversation summary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+
+    <span class="n">relevant_msgs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">msg</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="p">(</span><span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">))</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">relevant_msgs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+
+    <span class="n">conversation</span> <span class="o">=</span> <span class="s2">&quot;Conversation history:</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">relevant_msgs</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]:</span>
+        <span class="n">role</span> <span class="o">=</span> <span class="s2">&quot;User&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">HumanMessage</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;Assistant&quot;</span>
+        <span class="n">conversation</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="n">summary_response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span>
+        <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_conversation_summary_prompt</span><span class="p">()),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">conversation</span><span class="p">)</span>
+    <span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="n">summary_response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+        <span class="s2">&quot;agent_answers&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;__reset__&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}]</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Step 2a: Minimum Message Check</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Skips summarization for short conversations</p></li>
+<li><p>Avoids unnecessary processing</p></li>
+<li><p>Preserves all context for short histories</p></li>
+</ul>
+<p><strong>Why 4 Messages:</strong></p>
+<ul class="simple">
+<li><p>Minimum for meaningful summary</p></li>
+<li><p>Typically 2 exchanges (user + assistant × 2)</p></li>
+<li><p>Below this, full history is already concise</p></li>
+</ul>
+<p><strong>Step 2b: Filter Relevant Messages</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">relevant_msgs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">msg</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="p">(</span><span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">))</span>
+    <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Excludes tool messages and system messages</p></li>
+<li><p>Removes last message (current query)</p></li>
+<li><p>Focuses on conversation history only</p></li>
+</ul>
+<p><strong>Why This Filtering:</strong></p>
+<ul class="simple">
+<li><p>Tool messages are implementation details</p></li>
+<li><p>System messages are instructions, not conversation</p></li>
+<li><p>Last message is current query, not history</p></li>
+<li><p>Keeps summary focused on prior context</p></li>
+</ul>
+<p><strong>Step 2c: Build Conversation String</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conversation</span> <span class="o">=</span> <span class="s2">&quot;Conversation history:</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">relevant_msgs</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]:</span>
+    <span class="n">role</span> <span class="o">=</span> <span class="s2">&quot;User&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">HumanMessage</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;Assistant&quot;</span>
+    <span class="n">conversation</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Formats messages for LLM consumption</p></li>
+<li><p>Limits to last 6 messages (3 exchanges)</p></li>
+<li><p>Creates readable conversation format</p></li>
+</ul>
+<p><strong>Why Last 6 Messages:</strong></p>
+<ul class="simple">
+<li><p>Provides sufficient context</p></li>
+<li><p>Prevents excessive token usage</p></li>
+<li><p>Balances completeness and efficiency</p></li>
+<li><p>Typical conversation window</p></li>
+</ul>
+<p><strong>Step 2d: Generate Summary</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary_response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span>
+    <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_conversation_summary_prompt</span><span class="p">()),</span>
+    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">conversation</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Uses LLM to create concise summary</p></li>
+<li><p>Low temperature (0.2) for consistency</p></li>
+<li><p>Applies conversation summary prompt</p></li>
+</ul>
+<p><strong>Why Low Temperature:</strong></p>
+<ul class="simple">
+<li><p>Ensures consistent, deterministic summaries</p></li>
+<li><p>Reduces variability</p></li>
+<li><p>Focuses on factual content</p></li>
+</ul>
+<p><strong>Step 2e: Reset Agent Answers</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="p">{</span>
+    <span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="n">summary_response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+    <span class="s2">&quot;agent_answers&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;__reset__&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Resets accumulated answers for new query</p></li>
+<li><p>Clears prior research results</p></li>
+<li><p>Prepares for new agent execution</p></li>
+</ul>
+<p><strong>Summarize History Usage Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Conversation with 8 messages</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;What is backpropagation?&quot;</span><span class="p">),</span>
+        <span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;Backpropagation is...&quot;</span><span class="p">),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;How does it work?&quot;</span><span class="p">),</span>
+        <span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;It works by...&quot;</span><span class="p">),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;What are applications?&quot;</span><span class="p">),</span>
+        <span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;Applications include...&quot;</span><span class="p">),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;Tell me more&quot;</span><span class="p">),</span>
+        <span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;More details...&quot;</span><span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">conversation_summary</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">agent_answers</span><span class="o">=</span><span class="p">[]</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">summarize_history</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="c1"># Output:</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;conversation_summary&quot;: &quot;Discussed backpropagation, how it works, and applications&quot;,</span>
+<span class="c1">#     &quot;agent_answers&quot;: [{&quot;__reset__&quot;: True}]</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-rewrite-query-node">
+<h2>Step 3: Rewrite Query Node<a class="headerlink" href="#step-3-rewrite-query-node" title="Link to this heading">¶</a></h2>
+<p>Define the node that analyzes and reformulates queries:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rewrite_query</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze query clarity and rewrite for optimal retrieval.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Current conversation state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated state with query analysis results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">last_message</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">conversation_summary</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">context_section</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Conversation Context:</span><span class="se">\n</span><span class="si">{</span><span class="n">conversation_summary</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">conversation_summary</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;User Query:</span><span class="se">\n</span><span class="si">{</span><span class="n">last_message</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="n">llm_with_structure</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">with_structured_output</span><span class="p">(</span><span class="n">QueryAnalysis</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm_with_structure</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span>
+        <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_rewrite_query_prompt</span><span class="p">()),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">context_section</span><span class="p">)</span>
+    <span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">questions</span> <span class="ow">and</span> <span class="n">response</span><span class="o">.</span><span class="n">is_clear</span><span class="p">:</span>
+        <span class="n">delete_all</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">RemoveMessage</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">SystemMessage</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">delete_all</span><span class="p">,</span>
+            <span class="s2">&quot;originalQuery&quot;</span><span class="p">:</span> <span class="n">last_message</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+            <span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">questions</span>
+        <span class="p">}</span>
+
+    <span class="n">clarification</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">10</span>
+        <span class="k">else</span> <span class="s2">&quot;I need more information to understand your question.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">clarification</span><span class="p">)]</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Step 3a: Extract Query and Context</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">last_message</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">conversation_summary</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Gets current user query</p></li>
+<li><p>Retrieves prior conversation context</p></li>
+<li><p>Prepares input for analysis</p></li>
+</ul>
+<p><strong>Step 3b: Build Context Section</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">context_section</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;Conversation Context:</span><span class="se">\n</span><span class="si">{</span><span class="n">conversation_summary</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="n">conversation_summary</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+<span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;User Query:</span><span class="se">\n</span><span class="si">{</span><span class="n">last_message</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Combines context and query</p></li>
+<li><p>Includes context only if available</p></li>
+<li><p>Formats for LLM consumption</p></li>
+</ul>
+<p><strong>Step 3c: Structured Output</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">llm_with_structure</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">with_structured_output</span><span class="p">(</span><span class="n">QueryAnalysis</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">llm_with_structure</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span>
+    <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_rewrite_query_prompt</span><span class="p">()),</span>
+    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">context_section</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Uses structured output for QueryAnalysis</p></li>
+<li><p>Low temperature (0.1) for consistency</p></li>
+<li><p>Ensures valid response format</p></li>
+</ul>
+<p><strong>Why Structured Output:</strong></p>
+<ul class="simple">
+<li><p>Guarantees response format</p></li>
+<li><p>Enables type checking</p></li>
+<li><p>Prevents parsing errors</p></li>
+<li><p>Ensures is_clear and questions fields</p></li>
+</ul>
+<p><strong>Step 3d: Handle Clear Questions</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">questions</span> <span class="ow">and</span> <span class="n">response</span><span class="o">.</span><span class="n">is_clear</span><span class="p">:</span>
+    <span class="n">delete_all</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">RemoveMessage</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">SystemMessage</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">delete_all</span><span class="p">,</span>
+        <span class="s2">&quot;originalQuery&quot;</span><span class="p">:</span> <span class="n">last_message</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+        <span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">questions</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Clears message history for clean agent start</p></li>
+<li><p>Stores original and rewritten queries</p></li>
+<li><p>Sets clear flag for routing</p></li>
+</ul>
+<p><strong>Why Clear Messages:</strong></p>
+<ul class="simple">
+<li><p>Prevents tool messages from prior attempts</p></li>
+<li><p>Starts agent with clean slate</p></li>
+<li><p>Reduces context noise</p></li>
+<li><p>Improves agent focus</p></li>
+</ul>
+<p><strong>Step 3e: Handle Unclear Questions</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clarification</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">10</span>
+    <span class="k">else</span> <span class="s2">&quot;I need more information to understand your question.&quot;</span>
+<span class="p">)</span>
+<span class="k">return</span> <span class="p">{</span>
+    <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">clarification</span><span class="p">)]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Returns clarification request to user</p></li>
+<li><p>Uses LLM-generated clarification if available</p></li>
+<li><p>Falls back to default message</p></li>
+</ul>
+<p><strong>Why Length Check:</strong></p>
+<ul class="simple">
+<li><p>Ensures meaningful clarification</p></li>
+<li><p>Prevents empty or too-short messages</p></li>
+<li><p>Validates LLM output</p></li>
+</ul>
+<p><strong>Rewrite Query Usage Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clear query</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">)],</span>
+    <span class="n">conversation_summary</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">rewrite_query</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="c1"># Output:</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;questionIsClear&quot;: True,</span>
+<span class="c1">#     &quot;messages&quot;: [],  # Cleared</span>
+<span class="c1">#     &quot;originalQuery&quot;: &quot;How do neural networks work?&quot;,</span>
+<span class="c1">#     &quot;rewrittenQuestions&quot;: [&quot;How do neural networks work?&quot;]</span>
+<span class="c1"># }</span>
+
+<span class="c1"># Unclear query</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;xyzabc qwerty&quot;</span><span class="p">)],</span>
+    <span class="n">conversation_summary</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">rewrite_query</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="c1"># Output:</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;questionIsClear&quot;: False,</span>
+<span class="c1">#     &quot;messages&quot;: [AIMessage(content=&quot;I need more information...&quot;)]</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-request-clarification-node">
+<h2>Step 4: Request Clarification Node<a class="headerlink" href="#step-4-request-clarification-node" title="Link to this heading">¶</a></h2>
+<p>Define the node that handles unclear queries:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">request_clarification</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle unclear query by requesting clarification.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Current conversation state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Empty dict (state already updated with clarification message)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Placeholder node for clarification workflow</p></li>
+<li><p>Allows user to provide clearer query</p></li>
+<li><p>Enables loop back to rewrite_query</p></li>
+</ul>
+<p><strong>Why Separate Node:</strong></p>
+<ul class="simple">
+<li><p>Enables graph routing</p></li>
+<li><p>Allows user interaction</p></li>
+<li><p>Supports multi-turn clarification</p></li>
+<li><p>Maintains clean graph structure</p></li>
+</ul>
+</section>
+<section id="step-5-route-after-rewrite-edge">
+<h2>Step 5: Route After Rewrite Edge<a class="headerlink" href="#step-5-route-after-rewrite-edge" title="Link to this heading">¶</a></h2>
+<p>Define the routing logic after query rewriting:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">route_after_rewrite</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="s2">&quot;agent&quot;</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Route to clarification or agent based on query clarity.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Current conversation state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Routing decision or list of Send commands</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;questionIsClear&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;request_clarification&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">Send</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+                <span class="s2">&quot;question_index&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">,</span>
+                <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">})</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">])</span>
+        <span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Step 5a: Clarity Check</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;questionIsClear&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;request_clarification&quot;</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Routes to clarification if query unclear</p></li>
+<li><p>Prevents agent execution on bad queries</p></li>
+<li><p>Enables user feedback loop</p></li>
+</ul>
+<p><strong>Step 5b: Dynamic Agent Routing</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">Send</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+            <span class="s2">&quot;question_index&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">,</span>
+            <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">})</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">])</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Creates Send command for each rewritten question</p></li>
+<li><p>Enables parallel agent execution</p></li>
+<li><p>Passes question index for tracking</p></li>
+</ul>
+<p><strong>Why Send Commands:</strong></p>
+<ul class="simple">
+<li><p>Enables dynamic routing</p></li>
+<li><p>Supports parallel execution</p></li>
+<li><p>Passes state to agent nodes</p></li>
+<li><p>Maintains question ordering</p></li>
+</ul>
+<p><strong>Route After Rewrite Usage Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clear query with 2 questions</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span>
+    <span class="n">questionIsClear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">rewrittenQuestions</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;What are their applications?&quot;</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">route_after_rewrite</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="c1"># Output: [</span>
+<span class="c1">#     Send(&quot;agent&quot;, {&quot;question&quot;: &quot;How do neural networks work?&quot;, &quot;question_index&quot;: 0, &quot;messages&quot;: []}),</span>
+<span class="c1">#     Send(&quot;agent&quot;, {&quot;question&quot;: &quot;What are their applications?&quot;, &quot;question_index&quot;: 1, &quot;messages&quot;: []})</span>
+<span class="c1"># ]</span>
+
+<span class="c1"># Unclear query</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span>
+    <span class="n">questionIsClear</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">route_after_rewrite</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="c1"># Output: &quot;request_clarification&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-6-aggregate-answers-node">
+<h2>Step 6: Aggregate Answers Node<a class="headerlink" href="#step-6-aggregate-answers-node" title="Link to this heading">¶</a></h2>
+<p>Define the node that synthesizes multiple answers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">aggregate_answers</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregate multiple agent answers into single response.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Current conversation state with agent answers</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated state with aggregated answer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agent_answers&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;No answers were generated.&quot;</span><span class="p">)]}</span>
+
+    <span class="n">sorted_answers</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">&quot;agent_answers&quot;</span><span class="p">],</span>
+        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">formatted_answers</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ans</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_answers</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">formatted_answers</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Answer </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ans</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">user_message</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Original user question: </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;originalQuery&quot;</span><span class="p">]</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>Retrieved answers:{formatted_answers}”””)</p>
+<blockquote>
+<div><dl class="simple">
+<dt>synthesis_response = llm.invoke([</dt><dd><p>SystemMessage(content=get_aggregation_prompt()),
+user_message</p>
+</dd>
+</dl>
+<p>])</p>
+<p>return {“messages”: [AIMessage(content=synthesis_response.content)]}</p>
+</div></blockquote>
+<p><strong>Step 6a: Check for Answers</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agent_answers&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;No answers were generated.&quot;</span><span class="p">)]}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Handles case where no answers produced</p></li>
+<li><p>Returns graceful error message</p></li>
+<li><p>Prevents crashes on empty results</p></li>
+</ul>
+<p><strong>Step 6b: Sort Answers</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sorted_answers</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">[</span><span class="s2">&quot;agent_answers&quot;</span><span class="p">],</span>
+    <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Orders answers by question index</p></li>
+<li><p>Maintains question sequence</p></li>
+<li><p>Ensures consistent output order</p></li>
+</ul>
+<p><strong>Step 6c: Format Answers</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">formatted_answers</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ans</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_answers</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">formatted_answers</span> <span class="o">+=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Answer </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ans</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Creates readable answer format</p></li>
+<li><p>Numbers answers sequentially</p></li>
+<li><p>Prepares for LLM aggregation</p></li>
+</ul>
+<p><strong>Step 6d: Synthesize Answers</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">user_message</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Original user question: </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;originalQuery&quot;</span><span class="p">]</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>Retrieved answers:{formatted_answers}”””)</p>
+<blockquote>
+<div><dl class="simple">
+<dt>synthesis_response = llm.invoke([</dt><dd><p>SystemMessage(content=get_aggregation_prompt()),
+user_message</p>
+</dd>
+</dl>
+<p>])</p>
+</div></blockquote>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Uses LLM to synthesize answers</p></li>
+<li><p>Applies aggregation prompt</p></li>
+<li><p>Creates coherent final response</p></li>
+</ul>
+<p><strong>Aggregate Answers Usage Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multiple answers</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span>
+    <span class="n">originalQuery</span><span class="o">=</span><span class="s2">&quot;What is backpropagation and its applications?&quot;</span><span class="p">,</span>
+    <span class="n">agent_answers</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="s2">&quot;Backpropagation is a training algorithm...&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="s2">&quot;Applications include computer vision...&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">aggregate_answers</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="c1"># Output:</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;messages&quot;: [AIMessage(content=&quot;Synthesized answer combining both...&quot;)]</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-graph-nodes-and-edges-module">
+<h2>Complete Graph Nodes and Edges Module<a class="headerlink" href="#complete-graph-nodes-and-edges-module" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete nodes and edges code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Send</span><span class="p">,</span> <span class="n">Command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">,</span> <span class="n">SystemMessage</span><span class="p">,</span>
+    <span class="n">RemoveMessage</span><span class="p">,</span> <span class="n">ToolMessage</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">summarize_history</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Summarize conversation history.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+
+    <span class="n">relevant_msgs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">msg</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="p">(</span><span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">))</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">relevant_msgs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+
+    <span class="n">conversation</span> <span class="o">=</span> <span class="s2">&quot;Conversation history:</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">relevant_msgs</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]:</span>
+        <span class="n">role</span> <span class="o">=</span> <span class="s2">&quot;User&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">HumanMessage</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;Assistant&quot;</span>
+        <span class="n">conversation</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="n">summary_response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span>
+        <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_conversation_summary_prompt</span><span class="p">()),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">conversation</span><span class="p">)</span>
+    <span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="n">summary_response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+        <span class="s2">&quot;agent_answers&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;__reset__&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}]</span>
+    <span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rewrite_query</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze and rewrite query.&quot;&quot;&quot;</span>
+    <span class="n">last_message</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">conversation_summary</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">context_section</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Conversation Context:</span><span class="se">\n</span><span class="si">{</span><span class="n">conversation_summary</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">conversation_summary</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;User Query:</span><span class="se">\n</span><span class="si">{</span><span class="n">last_message</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="n">llm_with_structure</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">with_structured_output</span><span class="p">(</span><span class="n">QueryAnalysis</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm_with_structure</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span>
+        <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_rewrite_query_prompt</span><span class="p">()),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">context_section</span><span class="p">)</span>
+    <span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">questions</span> <span class="ow">and</span> <span class="n">response</span><span class="o">.</span><span class="n">is_clear</span><span class="p">:</span>
+        <span class="n">delete_all</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">RemoveMessage</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">SystemMessage</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">delete_all</span><span class="p">,</span>
+            <span class="s2">&quot;originalQuery&quot;</span><span class="p">:</span> <span class="n">last_message</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+            <span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">questions</span>
+        <span class="p">}</span>
+
+    <span class="n">clarification</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">clarification_needed</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">10</span>
+        <span class="k">else</span> <span class="s2">&quot;I need more information to understand your question.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">clarification</span><span class="p">)]</span>
+    <span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">request_clarification</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Request clarification for unclear query.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">route_after_rewrite</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="s2">&quot;agent&quot;</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Route based on query clarity.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;questionIsClear&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;request_clarification&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">Send</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+                <span class="s2">&quot;question_index&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">,</span>
+                <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">})</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">])</span>
+        <span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">aggregate_answers</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregate multiple answers.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agent_answers&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;No answers were generated.&quot;</span><span class="p">)]}</span>
+
+    <span class="n">sorted_answers</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">&quot;agent_answers&quot;</span><span class="p">],</span>
+        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">formatted_answers</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ans</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_answers</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">formatted_answers</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Answer </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ans</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">user_message</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Original user question: </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;originalQuery&quot;</span><span class="p">]</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>Retrieved answers:{formatted_answers}”””)</p>
+<blockquote>
+<div><dl class="simple">
+<dt>synthesis_response = llm.invoke([</dt><dd><p>SystemMessage(content=get_aggregation_prompt()),
+user_message</p>
+</dd>
+</dl>
+<p>])</p>
+<p>return {“messages”: [AIMessage(content=synthesis_response.content)]}</p>
+</div></blockquote>
+</section>
+<section id="graph-structure">
+<h2>Graph Structure<a class="headerlink" href="#graph-structure" title="Link to this heading">¶</a></h2>
+<p><strong>Typical Graph Flow:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User Input
+    ↓
+summarize_history
+    ↓
+rewrite_query
+    ↓
+route_after_rewrite
+    ↙           ↘
+request_clarification    agent (parallel for each question)
+    ↓                           ↓
+(loop back)              aggregate_answers
+                                ↓
+                        Final Response
+</pre></div>
+</div>
+<p><strong>Graph Construction Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">END</span>
+
+<span class="c1"># Create graph</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+
+<span class="c1"># Add nodes</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;summarize_history&quot;</span><span class="p">,</span> <span class="n">summarize_history</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span> <span class="n">rewrite_query</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="n">request_clarification</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="n">agent_node</span><span class="p">)</span>  <span class="c1"># Defined separately</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;aggregate_answers&quot;</span><span class="p">,</span> <span class="n">aggregate_answers</span><span class="p">)</span>
+
+<span class="c1"># Add edges</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;summarize_history&quot;</span><span class="p">,</span> <span class="s2">&quot;rewrite_query&quot;</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span>
+    <span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span>
+    <span class="n">route_after_rewrite</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;request_clarification&quot;</span><span class="p">:</span> <span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;agent&quot;</span><span class="p">:</span> <span class="s2">&quot;agent&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="s2">&quot;rewrite_query&quot;</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="s2">&quot;aggregate_answers&quot;</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;aggregate_answers&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+
+<span class="c1"># Compile graph</span>
+<span class="n">compiled_graph</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Message Type Checking</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Check message type</span>
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">HumanMessage</span><span class="p">):</span>
+    <span class="c1"># Handle user message</span>
+    <span class="k">pass</span>
+
+<span class="c1"># Avoid: String comparison</span>
+<span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+    <span class="c1"># Fragile and error-prone</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p><strong>2. Safe Dictionary Access</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Use get with default</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Avoid: Direct access</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;conversation_summary&quot;</span><span class="p">]</span>  <span class="c1"># May raise KeyError</span>
+</pre></div>
+</div>
+<p><strong>3. Structured Output</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Use structured output</span>
+<span class="n">llm_with_structure</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_structured_output</span><span class="p">(</span><span class="n">QueryAnalysis</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">llm_with_structure</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># Avoid: Parse string output</span>
+<span class="n">response_str</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="c1"># Manual parsing is error-prone</span>
+</pre></div>
+</div>
+<p><strong>4. Temperature Configuration</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Low temperature for consistency</span>
+<span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># Avoid: Default temperature</span>
+<span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># May be too high for deterministic tasks</span>
+</pre></div>
+</div>
+<p><strong>5. Error Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Handle empty results</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agent_answers&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;No answers...&quot;</span><span class="p">)]}</span>
+
+<span class="c1"># Avoid: Assume data exists</span>
+<span class="n">answers</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;agent_answers&quot;</span><span class="p">]</span>  <span class="c1"># May crash if empty</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Node Execution Time:</strong></p>
+<ul class="simple">
+<li><p>summarize_history: 500-1000ms (LLM call)</p></li>
+<li><p>rewrite_query: 300-600ms (LLM call + structured output)</p></li>
+<li><p>request_clarification: 1-10ms (no LLM)</p></li>
+<li><p>aggregate_answers: 500-1000ms (LLM call)</p></li>
+</ul>
+<p><strong>Message Management:</strong></p>
+<ul class="simple">
+<li><p>RemoveMessage: 1-5ms per message</p></li>
+<li><p>Message filtering: 1-2ms per message</p></li>
+<li><p>Total for 10 messages: 10-50ms</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cache LLM configurations</span>
+<span class="n">summarizer_llm</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">rewriter_llm</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Batch message operations</span>
+<span class="n">delete_all</span> <span class="o">=</span> <span class="p">[</span><span class="n">RemoveMessage</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">]</span>
+
+<span class="c1"># Limit message history</span>
+<span class="n">relevant_msgs</span> <span class="o">=</span> <span class="n">relevant_msgs</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span>  <span class="c1"># Keep last 6</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>Messages Not Clearing</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Messages not removed</span>
+<span class="c1"># Solution: Ensure RemoveMessage is returned</span>
+
+<span class="n">delete_all</span> <span class="o">=</span> <span class="p">[</span><span class="n">RemoveMessage</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">]]</span>
+<span class="k">return</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">delete_all</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Routing Not Working</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Route not following conditional</span>
+<span class="c1"># Solution: Verify return type matches routing keys</span>
+
+<span class="c1"># Routing definition</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span>
+    <span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span>
+    <span class="n">route_after_rewrite</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;request_clarification&quot;</span><span class="p">:</span> <span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;agent&quot;</span><span class="p">:</span> <span class="s2">&quot;agent&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Function must return one of these keys</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">route_after_rewrite</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">condition</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;request_clarification&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;agent&quot;</span>
+</pre></div>
+</div>
+<p><strong>Structured Output Errors</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Structured output validation fails</span>
+<span class="c1"># Solution: Ensure response matches QueryAnalysis schema</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">QueryAnalysis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">is_clear</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">questions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">clarification_needed</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="c1"># LLM must return valid JSON matching schema</span>
+</pre></div>
+</div>
+<p><strong>Send Commands Not Working</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Send commands not routing</span>
+<span class="c1"># Solution: Ensure agent node exists and accepts state</span>
+
+<span class="c1"># Define agent node</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="n">agent_node</span><span class="p">)</span>
+
+<span class="c1"># Send command must match node name</span>
+<span class="n">Send</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span> <span class="o">...</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+<section id="step-7-agent-subgraph-nodes-and-edges">
+<h2>Step 7: Agent Subgraph Nodes and Edges<a class="headerlink" href="#step-7-agent-subgraph-nodes-and-edges" title="Link to this heading">¶</a></h2>
+<p>Define the nodes and edges for the agent subgraph that handles individual question research:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">RemoveMessage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Set</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">orchestrator</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Orchestrate agent research with tool invocation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Agent execution state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated state with LLM response and tool calls</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context_summary</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;context_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">sys_msg</span> <span class="o">=</span> <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_orchestrator_prompt</span><span class="p">())</span>
+
+    <span class="n">summary_injection</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[COMPRESSED CONTEXT FROM PRIOR RESEARCH]</span><span class="se">\n\n</span><span class="si">{</span><span class="n">context_summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">context_summary</span> <span class="k">else</span> <span class="p">[]</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;messages&quot;</span><span class="p">):</span>
+        <span class="n">human_msg</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;question&quot;</span><span class="p">])</span>
+        <span class="n">force_search</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">&quot;YOU MUST CALL &#39;search_child_chunks&#39; AS THE FIRST STEP TO ANSWER THIS QUESTION.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">llm_with_tools</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span><span class="n">sys_msg</span><span class="p">]</span> <span class="o">+</span> <span class="n">summary_injection</span> <span class="o">+</span> <span class="p">[</span><span class="n">human_msg</span><span class="p">,</span> <span class="n">force_search</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">human_msg</span><span class="p">,</span> <span class="n">response</span><span class="p">],</span>
+            <span class="s2">&quot;tool_call_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">tool_calls</span> <span class="ow">or</span> <span class="p">[]),</span>
+            <span class="s2">&quot;iteration_count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">}</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm_with_tools</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span><span class="n">sys_msg</span><span class="p">]</span> <span class="o">+</span> <span class="n">summary_injection</span> <span class="o">+</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">])</span>
+    <span class="n">tool_calls</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">tool_calls</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">response</span><span class="p">],</span>
+        <span class="s2">&quot;tool_call_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">tool_calls</span><span class="p">)</span> <span class="k">if</span> <span class="n">tool_calls</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;iteration_count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Step 7a: Orchestrator Purpose</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose:
+- Invokes LLM with tools for research
+- Injects compressed context from prior iterations
+- Forces initial search for new questions
+- Tracks tool calls and iterations
+</pre></div>
+</div>
+<p><strong>Step 7b: Context Injection</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">context_summary</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;context_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">summary_injection</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[COMPRESSED CONTEXT FROM PRIOR RESEARCH]</span><span class="se">\n\n</span><span class="si">{</span><span class="n">context_summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">context_summary</span> <span class="k">else</span> <span class="p">[]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Provides prior research context to LLM</p></li>
+<li><p>Enables iterative refinement</p></li>
+<li><p>Prevents redundant searches</p></li>
+<li><p>Maintains research continuity</p></li>
+</ul>
+<p><strong>Step 7c: Force Initial Search</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;messages&quot;</span><span class="p">):</span>
+    <span class="n">human_msg</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;question&quot;</span><span class="p">])</span>
+    <span class="n">force_search</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span>
+        <span class="n">content</span><span class="o">=</span><span class="s2">&quot;YOU MUST CALL &#39;search_child_chunks&#39; AS THE FIRST STEP...&quot;</span>
+    <span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm_with_tools</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span><span class="n">sys_msg</span><span class="p">]</span> <span class="o">+</span> <span class="n">summary_injection</span> <span class="o">+</span> <span class="p">[</span><span class="n">human_msg</span><span class="p">,</span> <span class="n">force_search</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Ensures first step is always search</p></li>
+<li><p>Prevents LLM from skipping retrieval</p></li>
+<li><p>Guarantees document access</p></li>
+<li><p>Enforces research discipline</p></li>
+</ul>
+<p><strong>Step 7d: Routing Decision Node</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">route_after_orchestrator_call</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="s2">&quot;collect_answer&quot;</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Route based on tool calls and limits.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Agent execution state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Routing decision: &quot;tool&quot;, &quot;fallback_response&quot;, or &quot;collect_answer&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">iteration</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;iteration_count&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">tool_count</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tool_call_count&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;=</span> <span class="n">MAX_ITERATIONS</span> <span class="ow">or</span> <span class="n">tool_count</span> <span class="o">&gt;</span> <span class="n">MAX_TOOL_CALLS</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;fallback_response&quot;</span>
+
+    <span class="n">last_message</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">tool_calls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">last_message</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tool_calls</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;collect_answer&quot;</span>
+
+    <span class="k">return</span> <span class="s2">&quot;tool&quot;</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Checks execution limits</p></li>
+<li><p>Determines next step</p></li>
+<li><p>Routes to tool execution or answer collection</p></li>
+<li><p>Handles limit breaches</p></li>
+</ul>
+<p><strong>Routing Logic:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. Check if limits exceeded
+   → Yes: Route to fallback_response
+   → No: Continue
+
+2. Check if LLM called tools
+   → Yes: Route to tool execution
+   → No: Route to collect_answer
+</pre></div>
+</div>
+<p><strong>Step 7e: Fallback Response Node</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fallback_response</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate response when research limit reached.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Agent execution state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated state with fallback response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">unique_contents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">ToolMessage</span><span class="p">)</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">content</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="n">unique_contents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="n">context_summary</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;context_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="n">context_parts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">context_summary</span><span class="p">:</span>
+        <span class="n">context_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;## Compressed Research Context (from prior iterations)</span><span class="se">\n\n</span><span class="si">{</span><span class="n">context_summary</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">unique_contents</span><span class="p">:</span>
+        <span class="n">context_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="s2">&quot;## Retrieved Data (current iteration)</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+            <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;--- DATA SOURCE </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> ---</span><span class="se">\n</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_contents</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">context_text</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context_parts</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">context_parts</span>
+        <span class="k">else</span> <span class="s2">&quot;No data was retrieved from the documents.&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">prompt_content</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;USER QUERY: </span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;question&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">context_text</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;INSTRUCTION:</span><span class="se">\n</span><span class="s2">Provide the best possible answer using only the data above.&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span>
+        <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_fallback_response_prompt</span><span class="p">()),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">prompt_content</span><span class="p">)</span>
+    <span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">response</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Generates answer when limits reached</p></li>
+<li><p>Uses all available context</p></li>
+<li><p>Deduplicates tool results</p></li>
+<li><p>Ensures graceful degradation</p></li>
+</ul>
+<p><strong>Step 7f: Context Compression Decision</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">should_compress_context</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decide if context should be compressed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Agent execution state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Command to compress or continue</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">]</span>
+
+    <span class="n">new_ids</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">messages</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">tc</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;retrieve_parent_chunks&quot;</span><span class="p">:</span>
+                    <span class="n">raw</span> <span class="o">=</span> <span class="n">tc</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">tc</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">tc</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ids&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="n">new_ids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;parent::</span><span class="si">{</span><span class="n">raw</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">new_ids</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;parent::</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">tc</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;search_child_chunks&quot;</span><span class="p">:</span>
+                    <span class="n">query</span> <span class="o">=</span> <span class="n">tc</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+                        <span class="n">new_ids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;search::</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+
+    <span class="n">updated_ids</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;retrieval_keys&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span> <span class="o">|</span> <span class="n">new_ids</span>
+
+    <span class="n">current_token_messages</span> <span class="o">=</span> <span class="n">estimate_context_tokens</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+    <span class="n">current_token_summary</span> <span class="o">=</span> <span class="n">estimate_context_tokens</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;context_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))]</span>
+    <span class="p">)</span>
+    <span class="n">current_tokens</span> <span class="o">=</span> <span class="n">current_token_messages</span> <span class="o">+</span> <span class="n">current_token_summary</span>
+
+    <span class="n">max_allowed</span> <span class="o">=</span> <span class="n">BASE_TOKEN_THRESHOLD</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_token_summary</span> <span class="o">*</span> <span class="n">TOKEN_GROWTH_FACTOR</span><span class="p">)</span>
+
+    <span class="n">goto</span> <span class="o">=</span> <span class="s2">&quot;compress_context&quot;</span> <span class="k">if</span> <span class="n">current_tokens</span> <span class="o">&gt;</span> <span class="n">max_allowed</span> <span class="k">else</span> <span class="s2">&quot;orchestrator&quot;</span>
+    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;retrieval_keys&quot;</span><span class="p">:</span> <span class="n">updated_ids</span><span class="p">},</span> <span class="n">goto</span><span class="o">=</span><span class="n">goto</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Tracks retrieved documents</p></li>
+<li><p>Estimates token usage</p></li>
+<li><p>Decides if compression needed</p></li>
+<li><p>Routes to compression or next iteration</p></li>
+</ul>
+<p><strong>Token Calculation:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>current_tokens = messages_tokens + summary_tokens
+max_allowed = BASE_TOKEN_THRESHOLD + (summary_tokens × TOKEN_GROWTH_FACTOR)
+
+if current_tokens &gt; max_allowed:
+    compress_context()
+else:
+    continue_orchestrator()
+</pre></div>
+</div>
+<p><strong>Step 7g: Compress Context Node</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compress_context</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compress research context to reduce token usage.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Agent execution state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated state with compressed context</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">]</span>
+    <span class="n">existing_summary</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;context_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">messages</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="n">conversation_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;USER QUESTION:</span><span class="se">\n</span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;question&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Conversation to compress:</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="n">existing_summary</span><span class="p">:</span>
+        <span class="n">conversation_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;[PRIOR COMPRESSED CONTEXT]</span><span class="se">\n</span><span class="si">{</span><span class="n">existing_summary</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+
+    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">):</span>
+            <span class="n">tool_calls_info</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">calls</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tc</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">tc</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">)</span>
+                <span class="n">tool_calls_info</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; | Tool calls: </span><span class="si">{</span><span class="n">calls</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">conversation_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;[ASSISTANT</span><span class="si">{</span><span class="n">tool_calls_info</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;(tool call only)&#39;</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">ToolMessage</span><span class="p">):</span>
+            <span class="n">tool_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;tool&quot;</span><span class="p">)</span>
+            <span class="n">conversation_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;[TOOL RESULT — </span><span class="si">{</span><span class="n">tool_name</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+
+    <span class="n">summary_response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span>
+        <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">get_context_compression_prompt</span><span class="p">()),</span>
+        <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">conversation_text</span><span class="p">)</span>
+    <span class="p">])</span>
+    <span class="n">new_summary</span> <span class="o">=</span> <span class="n">summary_response</span><span class="o">.</span><span class="n">content</span>
+
+    <span class="n">retrieved_ids</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;retrieval_keys&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">retrieved_ids</span><span class="p">:</span>
+        <span class="n">parent_ids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">retrieved_ids</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;parent::&quot;</span><span class="p">))</span>
+        <span class="n">search_queries</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;search::&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">retrieved_ids</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;search::&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">block</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">---</span><span class="se">\n</span><span class="s2">**Already executed (do NOT repeat):**</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">parent_ids</span><span class="p">:</span>
+            <span class="n">block</span> <span class="o">+=</span> <span class="s2">&quot;Parent chunks retrieved:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;parent::&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parent_ids</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">search_queries</span><span class="p">:</span>
+            <span class="n">block</span> <span class="o">+=</span> <span class="s2">&quot;Search queries already run:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">search_queries</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">new_summary</span> <span class="o">+=</span> <span class="n">block</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;context_summary&quot;</span><span class="p">:</span> <span class="n">new_summary</span><span class="p">,</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">RemoveMessage</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Compresses research context</p></li>
+<li><p>Tracks executed searches and retrievals</p></li>
+<li><p>Prevents redundant operations</p></li>
+<li><p>Reduces token usage</p></li>
+</ul>
+<p><strong>Compression Strategy:</strong></p>
+<ol class="arabic simple">
+<li><p>Build conversation text from messages</p></li>
+<li><p>Include prior compressed context</p></li>
+<li><p>Compress with LLM</p></li>
+<li><p>Add “already executed” section</p></li>
+<li><p>Clear message history</p></li>
+</ol>
+<p><strong>Step 7h: Collect Answer Node</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">collect_answer</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collect final answer from agent research.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state: Agent execution state</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated state with final answer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">last_message</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">is_valid</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">last_message</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">)</span> <span class="ow">and</span>
+        <span class="n">last_message</span><span class="o">.</span><span class="n">content</span> <span class="ow">and</span>
+        <span class="ow">not</span> <span class="n">last_message</span><span class="o">.</span><span class="n">tool_calls</span>
+    <span class="p">)</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">last_message</span><span class="o">.</span><span class="n">content</span> <span class="k">if</span> <span class="n">is_valid</span> <span class="k">else</span> <span class="s2">&quot;Unable to generate an answer.&quot;</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;final_answer&quot;</span><span class="p">:</span> <span class="n">answer</span><span class="p">,</span>
+        <span class="s2">&quot;agent_answers&quot;</span><span class="p">:</span> <span class="p">[{</span>
+            <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;question_index&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;question&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="n">answer</span>
+        <span class="p">}]</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Extracts final answer from LLM</p></li>
+<li><p>Validates answer quality</p></li>
+<li><p>Formats for aggregation</p></li>
+<li><p>Tracks question index</p></li>
+</ul>
+<p><strong>Agent Subgraph Flow</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>orchestrator
+    ↓
+route_after_orchestrator_call
+    ↙        ↓         ↘
+tool    collect_answer  fallback_response
+    ↓         ↓              ↓
+execute   (end)           (end)
+    ↓
+should_compress_context
+    ↙              ↘
+compress_context  orchestrator
+    ↓
+orchestrator (loop)
+</pre></div>
+</div>
+<p><strong>Why This Architecture</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. Summarization
+   - Maintains conversational context without overwhelming LLM
+   - Enables multi-turn research
+   - Preserves prior findings
+
+2. Query Rewriting
+   - Ensures search queries are precise and unambiguous
+   - Uses context intelligently
+   - Improves retrieval quality
+
+3. Human-in-the-Loop
+   - Catches unclear queries before wasting retrieval resources
+   - Enables user clarification
+   - Prevents failed research
+
+4. Parallel Execution
+   - Send API spawns independent agent subgraphs for each sub-question
+   - Enables simultaneous research
+   - Improves throughput
+
+5. Context Compression
+   - Keeps agent&#39;s working memory lean across long retrieval loops
+   - Prevents redundant fetches
+   - Manages token usage
+   - Tracks executed operations
+
+6. Fallback Response
+   - Ensures graceful degradation
+   - Agent always returns something useful
+   - Respects execution limits
+   - Synthesizes available data
+
+7. Answer Collection &amp; Aggregation
+   - Extracts clean final answers from agents
+   - Aggregates into single coherent response
+   - Maintains question ordering
+   - Enables multi-question synthesis
+</pre></div>
+</div>
+<p><strong>Agent Subgraph Construction Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">END</span>
+
+<span class="c1"># Create agent subgraph</span>
+<span class="n">agent_graph</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">AgentState</span><span class="p">)</span>
+
+<span class="c1"># Add nodes</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span> <span class="n">orchestrator</span><span class="p">)</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="n">tool_executor</span><span class="p">)</span>  <span class="c1"># Defined separately</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="n">compress_context</span><span class="p">)</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span> <span class="n">collect_answer</span><span class="p">)</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="n">fallback_response</span><span class="p">)</span>
+
+<span class="c1"># Add edges</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span>
+    <span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span>
+    <span class="n">route_after_orchestrator_call</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="s2">&quot;tool&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;collect_answer&quot;</span><span class="p">:</span> <span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fallback_response&quot;</span><span class="p">:</span> <span class="s2">&quot;fallback_response&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="s2">&quot;should_compress_context&quot;</span><span class="p">)</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span>
+    <span class="s2">&quot;should_compress_context&quot;</span><span class="p">,</span>
+    <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="s2">&quot;compress_context&quot;</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;should_compress&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;compress_context&quot;</span><span class="p">:</span> <span class="s2">&quot;compress_context&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;orchestrator&quot;</span><span class="p">:</span> <span class="s2">&quot;orchestrator&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">)</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+<span class="n">agent_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+
+<span class="c1"># Compile agent subgraph</span>
+<span class="n">agent_subgraph</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Integration with Main Graph</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In main graph</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="n">agent_subgraph</span><span class="o">.</span><span class="n">invoke</span><span class="p">)</span>
+
+<span class="c1"># Route to agent with Send</span>
+<span class="k">return</span> <span class="p">[</span>
+    <span class="n">Send</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+        <span class="s2">&quot;question_index&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">,</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">})</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">])</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With graph nodes and edges defined, you can proceed to:</p>
+<ul class="simple">
+<li><p>Building the agent node for tool execution</p></li>
+<li><p>Implementing the complete graph compilation</p></li>
+<li><p>Creating the graph execution loop</p></li>
+<li><p>Adding monitoring and logging</p></li>
+<li><p>Building the complete RAG application</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch08_agent_configuration.html" class="btn btn-neutral float-left" title="Topic 8: Agent Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch10_build_langgraph_graphs.html" class="btn btn-neutral float-right" title="Topic 10: Build the LangGraph Graphs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

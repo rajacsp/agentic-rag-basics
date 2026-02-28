@@ -80,7 +80,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General substitutions.
-project = 'GitHub Book Template'
+project = 'Agentic RAG Basics'
 copyright = '2026, Raja CSP Raman'
 
 # The default replacements for |version| and |release|, also used in various

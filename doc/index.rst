@@ -1,7 +1,7 @@
-RAG System Documentation
-========================
+Agentic RAG Basics
+==================
 
-Welcome to the Retrieval-Augmented Generation (RAG) System Documentation. This guide covers the setup, configuration, and implementation of a hybrid search system using LangChain, Qdrant, and local language models.
+Welcome to the Agentic RAG Basics documentation. This comprehensive guide covers the setup, configuration, and implementation of a complete Retrieval-Augmented Generation (RAG) system with agentic capabilities, conversation memory, and human-in-the-loop support using LangChain, Qdrant, LangGraph, and local language models.
 
 Contents
 --------
@@ -16,24 +16,33 @@ Contents
    ch04_hierarchical_document_indexing
    ch05_define_agent_tools
    ch06_define_system_prompts
+   ch07_define_state_and_data_models
+   ch08_agent_configuration
+   ch09_build_graph_nodes_and_edges
+   ch10_build_langgraph_graphs
+   ch11_create_chat_interface
 
-Quick Facts
------------
+Key Features
+------------
 
-- **Total Area**: 9.98 million km²
-- **Population**: Approximately 39 million
-- **Capital**: Ottawa, Ontario
-- **Official Languages**: English and French
-- **Provinces**: 10
-- **Territories**: 3
+- **Hybrid Search**: Combines dense and sparse embeddings for optimal retrieval
+- **Hierarchical Indexing**: Parent/child chunk strategy for context preservation
+- **Multi-Agent Architecture**: Parallel processing of multiple questions
+- **Conversation Memory**: Multi-turn context preservation with compression
+- **Human-in-the-Loop**: Intelligent clarification requests for unclear queries
+- **Graceful Degradation**: Fallback responses when research limits are reached
+- **Token Management**: Dynamic context compression based on token usage
+- **State Persistence**: Checkpointing for conversation recovery
 
-Major Regions
--------------
+System Architecture
+-------------------
 
-**Eastern Canada**: Home to the Maritime provinces and Quebec, known for historic cities and coastal beauty.
+**Document Processing**: Convert PDFs to Markdown and create hierarchical chunks
 
-**Central Canada**: Includes Ontario and Quebec, the most populous regions with major urban centers.
+**Vector Storage**: Store embeddings in Qdrant with hybrid search capabilities
 
-**Western Canada**: Features the Prairie provinces and British Columbia, known for natural resources and mountain landscapes.
+**Agent System**: LangGraph-based multi-agent architecture with tool execution
 
-**Northern Canada**: Includes the three territories, known for vast wilderness and unique ecosystems.
+**Chat Interface**: Gradio web UI with conversation persistence and human-in-the-loop support
+
+**Complete Pipeline**: End-to-end document research and question answering

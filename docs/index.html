@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAG System Documentation &mdash; GitHub Book Template 1.00 documentation</title>
+  <title>Agentic RAG Basics &mdash; Agentic RAG Basics 1.00 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
@@ -31,7 +31,7 @@
           
           
           <a href="#" class="icon icon-home">
-            GitHub Book Template
+            Agentic RAG Basics
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -49,6 +49,11 @@
 <li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">Topic 7: Define State and Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">Topic 8: Agent Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">Topic 9: Build Graph Node and Edge Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">Topic 10: Build the LangGraph Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">Topic 11: Create Chat Interface</a></li>
 </ul>
 
         </div>
@@ -57,7 +62,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">GitHub Book Template</a>
+          <a href="#">Agentic RAG Basics</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -65,7 +70,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">RAG System Documentation</li>
+      <li class="breadcrumb-item active">Agentic RAG Basics</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/index.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -75,9 +80,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="rag-system-documentation">
-<h1>RAG System Documentation<a class="headerlink" href="#rag-system-documentation" title="Link to this heading">¶</a></h1>
-<p>Welcome to the Retrieval-Augmented Generation (RAG) System Documentation. This guide covers the setup, configuration, and implementation of a hybrid search system using LangChain, Qdrant, and local language models.</p>
+  <section id="agentic-rag-basics">
+<h1>Agentic RAG Basics<a class="headerlink" href="#agentic-rag-basics" title="Link to this heading">¶</a></h1>
+<p>Welcome to the Agentic RAG Basics documentation. This comprehensive guide covers the setup, configuration, and implementation of a complete Retrieval-Augmented Generation (RAG) system with agentic capabilities, conversation memory, and human-in-the-loop support using LangChain, Qdrant, LangGraph, and local language models.</p>
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -197,26 +202,116 @@
 <li class="toctree-l2"><a class="reference internal" href="ch06_define_system_prompts.html#id9">Next Steps</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">Topic 7: Define State and Data Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#step-2-define-state-reducer-functions">Step 2: Define State Reducer Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#step-3-define-main-state-class">Step 3: Define Main State Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#step-4-define-agent-state-class">Step 4: Define Agent State Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#step-5-define-query-analysis-model">Step 5: Define Query Analysis Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#complete-state-and-data-models-module">Complete State and Data Models Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#state-management-patterns">State Management Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#state-transitions">State Transitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch07_define_state_and_data_models.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">Topic 8: Agent Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#step-2-define-hard-limits">Step 2: Define Hard Limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#step-3-define-token-thresholds">Step 3: Define Token Thresholds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#step-4-token-counting-function">Step 4: Token Counting Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#complete-agent-configuration-module">Complete Agent Configuration Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#configuration-usage-patterns">Configuration Usage Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#configuration-monitoring">Configuration Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08_agent_configuration.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">Topic 9: Build Graph Node and Edge Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#step-2-summarize-history-node">Step 2: Summarize History Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#step-3-rewrite-query-node">Step 3: Rewrite Query Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#step-4-request-clarification-node">Step 4: Request Clarification Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#step-5-route-after-rewrite-edge">Step 5: Route After Rewrite Edge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#step-6-aggregate-answers-node">Step 6: Aggregate Answers Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#complete-graph-nodes-and-edges-module">Complete Graph Nodes and Edges Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#graph-structure">Graph Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#step-7-agent-subgraph-nodes-and-edges">Step 7: Agent Subgraph Nodes and Edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">Topic 10: Build the LangGraph Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#step-2-create-checkpointer">Step 2: Create Checkpointer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#step-3-build-agent-subgraph">Step 3: Build Agent Subgraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#step-4-build-main-graph">Step 4: Build Main Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#complete-graph-assembly-code">Complete Graph Assembly Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#graph-execution">Graph Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#graph-architecture-explained">Graph Architecture Explained</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10_build_langgraph_graphs.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">Topic 11: Create Chat Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#step-2-create-thread-id-function">Step 2: Create Thread ID Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#step-3-clear-session-function">Step 3: Clear Session Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#step-4-chat-function">Step 4: Chat Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#step-5-initialize-configuration">Step 5: Initialize Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#step-6-build-gradio-interface">Step 6: Build Gradio Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#complete-chat-interface-code">Complete Chat Interface Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#interface-features">Interface Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#advanced-interface-customization">Advanced Interface Customization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#deployment-options">Deployment Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#complete-end-to-end-system">Complete End-to-End System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11_create_chat_interface.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
-<section id="quick-facts">
-<h2>Quick Facts<a class="headerlink" href="#quick-facts" title="Link to this heading">¶</a></h2>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><strong>Total Area</strong>: 9.98 million km²</p></li>
-<li><p><strong>Population</strong>: Approximately 39 million</p></li>
-<li><p><strong>Capital</strong>: Ottawa, Ontario</p></li>
-<li><p><strong>Official Languages</strong>: English and French</p></li>
-<li><p><strong>Provinces</strong>: 10</p></li>
-<li><p><strong>Territories</strong>: 3</p></li>
+<li><p><strong>Hybrid Search</strong>: Combines dense and sparse embeddings for optimal retrieval</p></li>
+<li><p><strong>Hierarchical Indexing</strong>: Parent/child chunk strategy for context preservation</p></li>
+<li><p><strong>Multi-Agent Architecture</strong>: Parallel processing of multiple questions</p></li>
+<li><p><strong>Conversation Memory</strong>: Multi-turn context preservation with compression</p></li>
+<li><p><strong>Human-in-the-Loop</strong>: Intelligent clarification requests for unclear queries</p></li>
+<li><p><strong>Graceful Degradation</strong>: Fallback responses when research limits are reached</p></li>
+<li><p><strong>Token Management</strong>: Dynamic context compression based on token usage</p></li>
+<li><p><strong>State Persistence</strong>: Checkpointing for conversation recovery</p></li>
 </ul>
 </section>
-<section id="major-regions">
-<h2>Major Regions<a class="headerlink" href="#major-regions" title="Link to this heading">¶</a></h2>
-<p><strong>Eastern Canada</strong>: Home to the Maritime provinces and Quebec, known for historic cities and coastal beauty.</p>
-<p><strong>Central Canada</strong>: Includes Ontario and Quebec, the most populous regions with major urban centers.</p>
-<p><strong>Western Canada</strong>: Features the Prairie provinces and British Columbia, known for natural resources and mountain landscapes.</p>
-<p><strong>Northern Canada</strong>: Includes the three territories, known for vast wilderness and unique ecosystems.</p>
+<section id="system-architecture">
+<h2>System Architecture<a class="headerlink" href="#system-architecture" title="Link to this heading">¶</a></h2>
+<p><strong>Document Processing</strong>: Convert PDFs to Markdown and create hierarchical chunks</p>
+<p><strong>Vector Storage</strong>: Store embeddings in Qdrant with hybrid search capabilities</p>
+<p><strong>Agent System</strong>: LangGraph-based multi-agent architecture with tool execution</p>
+<p><strong>Chat Interface</strong>: Gradio web UI with conversation persistence and human-in-the-loop support</p>
+<p><strong>Complete Pipeline</strong>: End-to-end document research and question answering</p>
 </section>
 </section>
 

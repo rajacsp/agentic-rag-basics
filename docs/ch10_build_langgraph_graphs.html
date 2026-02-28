@@ -1,0 +1,800 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 10: Build the LangGraph Graphs &mdash; Agentic RAG Basics 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Topic 11: Create Chat Interface" href="ch11_create_chat_interface.html" />
+    <link rel="prev" title="Topic 9: Build Graph Node and Edge Functions" href="ch09_build_graph_nodes_and_edges.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Agentic RAG Basics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_define_state_and_data_models.html">Topic 7: Define State and Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">Topic 8: Agent Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">Topic 9: Build Graph Node and Edge Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 10: Build the LangGraph Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-create-checkpointer">Step 2: Create Checkpointer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-build-agent-subgraph">Step 3: Build Agent Subgraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-build-main-graph">Step 4: Build Main Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-graph-assembly-code">Complete Graph Assembly Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-execution">Graph Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-architecture-explained">Graph Architecture Explained</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">Topic 11: Create Chat Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Agentic RAG Basics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 10: Build the LangGraph Graphs</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch10_build_langgraph_graphs.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-10-build-the-langgraph-graphs">
+<h1>Topic 10: Build the LangGraph Graphs<a class="headerlink" href="#topic-10-build-the-langgraph-graphs" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the assembly of the complete LangGraph workflow, combining the agent subgraph for individual question research with the main graph for conversation orchestration. The result is a sophisticated multi-agent architecture that handles conversation memory, query analysis, parallel research, and answer synthesis.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>The complete LangGraph system serves as the “execution engine” for the entire RAG pipeline, managing:</p>
+<ul class="simple">
+<li><p><strong>Agent Subgraph</strong>: Processes individual questions with tool execution and context compression</p></li>
+<li><p><strong>Main Graph</strong>: Orchestrates conversation flow, query rewriting, and answer aggregation</p></li>
+<li><p><strong>Checkpointing</strong>: Maintains conversation state across interactions</p></li>
+<li><p><strong>Interrupts</strong>: Enables human-in-the-loop clarification</p></li>
+<li><p><strong>Parallel Execution</strong>: Spawns independent agents for multiple questions</p></li>
+</ul>
+<p>The graph architecture includes:</p>
+<ol class="arabic simple">
+<li><p><strong>Agent Subgraph</strong>: Question-level research and tool execution</p></li>
+<li><p><strong>Main Graph</strong>: Conversation-level orchestration</p></li>
+<li><p><strong>Checkpointer</strong>: State persistence and recovery</p></li>
+<li><p><strong>Interrupt Points</strong>: User interaction opportunities</p></li>
+</ol>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">START</span><span class="p">,</span> <span class="n">END</span><span class="p">,</span> <span class="n">StateGraph</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.prebuilt</span><span class="w"> </span><span class="kn">import</span> <span class="n">ToolNode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemorySaver</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">langgraph.graph.START,</span> <span class="pre">END</span></code>: Special nodes marking graph entry and exit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">langgraph.graph.StateGraph</span></code>: Graph builder for state-based workflows</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">langgraph.prebuilt.ToolNode</span></code>: Pre-built node for tool execution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">langgraph.checkpoint.memory.InMemorySaver</span></code>: In-memory state checkpointing</p></li>
+</ul>
+<p><strong>Why These Imports:</strong></p>
+<ul class="simple">
+<li><p><strong>StateGraph</strong>: Enables state-based graph construction</p></li>
+<li><p><strong>ToolNode</strong>: Simplifies tool execution without custom code</p></li>
+<li><p><strong>InMemorySaver</strong>: Enables conversation persistence</p></li>
+<li><p><strong>START/END</strong>: Marks graph boundaries</p></li>
+</ul>
+</section>
+<section id="step-2-create-checkpointer">
+<h2>Step 2: Create Checkpointer<a class="headerlink" href="#step-2-create-checkpointer" title="Link to this heading">¶</a></h2>
+<p>Define the state persistence mechanism:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">checkpointer</span> <span class="o">=</span> <span class="n">InMemorySaver</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Saves conversation state between interactions</p></li>
+<li><p>Enables recovery from interrupts</p></li>
+<li><p>Maintains conversation history</p></li>
+<li><p>Supports multi-turn conversations</p></li>
+</ul>
+<p><strong>Why In-Memory:</strong></p>
+<ul class="simple">
+<li><p>Fast access</p></li>
+<li><p>Suitable for single-session applications</p></li>
+<li><p>No external dependencies</p></li>
+<li><p>Sufficient for most use cases</p></li>
+</ul>
+<p><strong>Alternative Checkpointers:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># PostgreSQL checkpointer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.postgres</span><span class="w"> </span><span class="kn">import</span> <span class="n">PostgresSaver</span>
+<span class="n">checkpointer</span> <span class="o">=</span> <span class="n">PostgresSaver</span><span class="p">(</span><span class="n">connection_string</span><span class="o">=</span><span class="s2">&quot;postgresql://...&quot;</span><span class="p">)</span>
+
+<span class="c1"># SQLite checkpointer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.sqlite</span><span class="w"> </span><span class="kn">import</span> <span class="n">SqliteSaver</span>
+<span class="n">checkpointer</span> <span class="o">=</span> <span class="n">SqliteSaver</span><span class="p">(</span><span class="n">db_path</span><span class="o">=</span><span class="s2">&quot;./checkpoints.db&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-build-agent-subgraph">
+<h2>Step 3: Build Agent Subgraph<a class="headerlink" href="#step-3-build-agent-subgraph" title="Link to this heading">¶</a></h2>
+<p>Assemble the agent subgraph for individual question research:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">AgentState</span><span class="p">)</span>
+
+<span class="c1"># Add nodes</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span> <span class="n">orchestrator</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="n">ToolNode</span><span class="p">([</span><span class="n">search_child_chunks</span><span class="p">,</span> <span class="n">retrieve_parent_chunks</span><span class="p">]))</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="n">compress_context</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="n">fallback_response</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;should_compress_context&quot;</span><span class="p">,</span> <span class="n">should_compress_context</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span> <span class="n">collect_answer</span><span class="p">)</span>
+
+<span class="c1"># Add edges</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span>
+    <span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span>
+    <span class="n">route_after_orchestrator_call</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;tools&quot;</span><span class="p">:</span> <span class="s2">&quot;tools&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fallback_response&quot;</span><span class="p">:</span> <span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;collect_answer&quot;</span><span class="p">:</span> <span class="s2">&quot;collect_answer&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="s2">&quot;should_compress_context&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="s2">&quot;collect_answer&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+
+<span class="c1"># Compile agent subgraph</span>
+<span class="n">agent_subgraph</span> <span class="o">=</span> <span class="n">agent_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Step 3a: Create StateGraph</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">AgentState</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Creates graph builder for AgentState</p></li>
+<li><p>Defines state schema for agent execution</p></li>
+<li><p>Enables node and edge addition</p></li>
+</ul>
+<p><strong>Step 3b: Add Nodes</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span> <span class="n">orchestrator</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="n">ToolNode</span><span class="p">([</span><span class="n">search_child_chunks</span><span class="p">,</span> <span class="n">retrieve_parent_chunks</span><span class="p">]))</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="n">compress_context</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="n">fallback_response</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;should_compress_context&quot;</span><span class="p">,</span> <span class="n">should_compress_context</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span> <span class="n">collect_answer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Registers all processing nodes</p></li>
+<li><p>ToolNode automatically executes tools</p></li>
+<li><p>Each node transforms state</p></li>
+</ul>
+<p><strong>Why ToolNode:</strong></p>
+<ul class="simple">
+<li><p>Simplifies tool execution</p></li>
+<li><p>Handles tool result formatting</p></li>
+<li><p>Manages error handling</p></li>
+<li><p>Reduces boilerplate code</p></li>
+</ul>
+<p><strong>Step 3c: Add Edges</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span>
+    <span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span>
+    <span class="n">route_after_orchestrator_call</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;tools&quot;</span><span class="p">:</span> <span class="s2">&quot;tools&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fallback_response&quot;</span><span class="p">:</span> <span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;collect_answer&quot;</span><span class="p">:</span> <span class="s2">&quot;collect_answer&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="s2">&quot;should_compress_context&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="s2">&quot;collect_answer&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Defines graph flow</p></li>
+<li><p>START edge: Entry point</p></li>
+<li><p>Conditional edges: Routing logic</p></li>
+<li><p>Regular edges: Deterministic flow</p></li>
+<li><p>END edge: Exit point</p></li>
+</ul>
+<p><strong>Step 3d: Compile Agent Subgraph</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_subgraph</span> <span class="o">=</span> <span class="n">agent_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Finalizes graph structure</p></li>
+<li><p>Enables execution</p></li>
+<li><p>Validates graph connectivity</p></li>
+<li><p>Returns executable graph</p></li>
+</ul>
+<p><strong>Agent Subgraph Structure</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>START
+  ↓
+orchestrator
+  ↙    ↓    ↘
+tools  fallback  collect_answer
+  ↓      ↓         ↓
+compress  collect_answer
+  ↓         ↓
+orchestrator  END
+  ↓
+(loop)
+</pre></div>
+</div>
+</section>
+<section id="step-4-build-main-graph">
+<h2>Step 4: Build Main Graph<a class="headerlink" href="#step-4-build-main-graph" title="Link to this heading">¶</a></h2>
+<p>Assemble the main graph for conversation orchestration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">graph_builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+
+<span class="c1"># Add nodes</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;summarize_history&quot;</span><span class="p">,</span> <span class="n">summarize_history</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span> <span class="n">rewrite_query</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="n">request_clarification</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="n">agent_subgraph</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;aggregate_answers&quot;</span><span class="p">,</span> <span class="n">aggregate_answers</span><span class="p">)</span>
+
+<span class="c1"># Add edges</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;summarize_history&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;summarize_history&quot;</span><span class="p">,</span> <span class="s2">&quot;rewrite_query&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span><span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span> <span class="n">route_after_rewrite</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="s2">&quot;rewrite_query&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">([</span><span class="s2">&quot;agent&quot;</span><span class="p">],</span> <span class="s2">&quot;aggregate_answers&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;aggregate_answers&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+
+<span class="c1"># Compile main graph with checkpointer and interrupt</span>
+<span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">checkpointer</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">,</span>
+    <span class="n">interrupt_before</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Step 4a: Create StateGraph</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">graph_builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Creates graph builder for main State</p></li>
+<li><p>Defines state schema for conversation</p></li>
+<li><p>Enables node and edge addition</p></li>
+</ul>
+<p><strong>Step 4b: Add Nodes</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;summarize_history&quot;</span><span class="p">,</span> <span class="n">summarize_history</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span> <span class="n">rewrite_query</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="n">request_clarification</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="n">agent_subgraph</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;aggregate_answers&quot;</span><span class="p">,</span> <span class="n">aggregate_answers</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Registers conversation-level nodes</p></li>
+<li><p>“agent” node is the compiled subgraph</p></li>
+<li><p>Each node processes conversation state</p></li>
+</ul>
+<p><strong>Why Subgraph as Node:</strong></p>
+<ul class="simple">
+<li><p>Encapsulates agent logic</p></li>
+<li><p>Enables parallel execution</p></li>
+<li><p>Maintains separation of concerns</p></li>
+<li><p>Simplifies main graph</p></li>
+</ul>
+<p><strong>Step 4c: Add Edges</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;summarize_history&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;summarize_history&quot;</span><span class="p">,</span> <span class="s2">&quot;rewrite_query&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span><span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span> <span class="n">route_after_rewrite</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="s2">&quot;rewrite_query&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">([</span><span class="s2">&quot;agent&quot;</span><span class="p">],</span> <span class="s2">&quot;aggregate_answers&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;aggregate_answers&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Defines conversation flow</p></li>
+<li><p>START edge: Entry point</p></li>
+<li><p>Conditional edges: Routing based on query clarity</p></li>
+<li><p>Multi-source edge: Aggregates from all agents</p></li>
+<li><p>END edge: Exit point</p></li>
+</ul>
+<p><strong>Multi-Source Edge:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">([</span><span class="s2">&quot;agent&quot;</span><span class="p">],</span> <span class="s2">&quot;aggregate_answers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This edge handles multiple agent instances (from Send commands) converging to aggregation.</p>
+<p><strong>Step 4d: Compile Main Graph</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">checkpointer</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">,</span>
+    <span class="n">interrupt_before</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Finalizes graph structure</p></li>
+<li><p>Enables execution</p></li>
+<li><p>Adds checkpointing for state persistence</p></li>
+<li><p>Adds interrupt point for user interaction</p></li>
+</ul>
+<p><strong>Checkpointer Parameter:</strong></p>
+<ul class="simple">
+<li><p>Saves state before each node</p></li>
+<li><p>Enables recovery from interrupts</p></li>
+<li><p>Supports multi-turn conversations</p></li>
+</ul>
+<p><strong>Interrupt Before Parameter:</strong></p>
+<ul class="simple">
+<li><p>Pauses execution before specified node</p></li>
+<li><p>Allows user input</p></li>
+<li><p>Enables human-in-the-loop</p></li>
+</ul>
+<p><strong>Main Graph Structure</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>START
+  ↓
+summarize_history
+  ↓
+rewrite_query
+  ↙        ↘
+request_clarification  [agent] (parallel for each question)
+  ↓              ↓
+rewrite_query  aggregate_answers
+  ↓              ↓
+(loop)          END
+</pre></div>
+</div>
+</section>
+<section id="complete-graph-assembly-code">
+<h2>Complete Graph Assembly Code<a class="headerlink" href="#complete-graph-assembly-code" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete graph assembly code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">START</span><span class="p">,</span> <span class="n">END</span><span class="p">,</span> <span class="n">StateGraph</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.prebuilt</span><span class="w"> </span><span class="kn">import</span> <span class="n">ToolNode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemorySaver</span>
+
+<span class="c1"># Create checkpointer</span>
+<span class="n">checkpointer</span> <span class="o">=</span> <span class="n">InMemorySaver</span><span class="p">()</span>
+
+<span class="c1"># Build agent subgraph</span>
+<span class="n">agent_builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">AgentState</span><span class="p">)</span>
+
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span> <span class="n">orchestrator</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="n">ToolNode</span><span class="p">([</span><span class="n">search_child_chunks</span><span class="p">,</span> <span class="n">retrieve_parent_chunks</span><span class="p">]))</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="n">compress_context</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="n">fallback_response</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;should_compress_context&quot;</span><span class="p">,</span> <span class="n">should_compress_context</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span> <span class="n">collect_answer</span><span class="p">)</span>
+
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span>
+    <span class="s2">&quot;orchestrator&quot;</span><span class="p">,</span>
+    <span class="n">route_after_orchestrator_call</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;tools&quot;</span><span class="p">:</span> <span class="s2">&quot;tools&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fallback_response&quot;</span><span class="p">:</span> <span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;collect_answer&quot;</span><span class="p">:</span> <span class="s2">&quot;collect_answer&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="s2">&quot;should_compress_context&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;compress_context&quot;</span><span class="p">,</span> <span class="s2">&quot;orchestrator&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;fallback_response&quot;</span><span class="p">,</span> <span class="s2">&quot;collect_answer&quot;</span><span class="p">)</span>
+<span class="n">agent_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;collect_answer&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+
+<span class="n">agent_subgraph</span> <span class="o">=</span> <span class="n">agent_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+
+<span class="c1"># Build main graph</span>
+<span class="n">graph_builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;summarize_history&quot;</span><span class="p">,</span> <span class="n">summarize_history</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span> <span class="n">rewrite_query</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="n">request_clarification</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="n">agent_subgraph</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;aggregate_answers&quot;</span><span class="p">,</span> <span class="n">aggregate_answers</span><span class="p">)</span>
+
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;summarize_history&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;summarize_history&quot;</span><span class="p">,</span> <span class="s2">&quot;rewrite_query&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span><span class="s2">&quot;rewrite_query&quot;</span><span class="p">,</span> <span class="n">route_after_rewrite</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">,</span> <span class="s2">&quot;rewrite_query&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">([</span><span class="s2">&quot;agent&quot;</span><span class="p">],</span> <span class="s2">&quot;aggregate_answers&quot;</span><span class="p">)</span>
+<span class="n">graph_builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;aggregate_answers&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+
+<span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">checkpointer</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">,</span>
+    <span class="n">interrupt_before</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="graph-execution">
+<h2>Graph Execution<a class="headerlink" href="#graph-execution" title="Link to this heading">¶</a></h2>
+<p><strong>Basic Execution:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single query</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span>
+    <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;What is backpropagation?&quot;</span><span class="p">)],</span>
+    <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;originalQuery&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;agent_answers&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Multi-Turn Conversation:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First query</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="s2">&quot;user_123&quot;</span><span class="p">}}</span>
+
+<span class="n">result1</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span>
+    <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;What is backpropagation?&quot;</span><span class="p">)],</span>
+    <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;originalQuery&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;agent_answers&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">},</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Second query (uses conversation history)</span>
+<span class="n">result2</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span>
+    <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;How is it used?&quot;</span><span class="p">)],</span>
+    <span class="s2">&quot;questionIsClear&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;conversation_summary&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;originalQuery&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;agent_answers&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">},</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>With Interrupts:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="s2">&quot;user_123&quot;</span><span class="p">}}</span>
+
+<span class="c1"># First execution (may interrupt)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span>
+    <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;unclear query&quot;</span><span class="p">)],</span>
+    <span class="o">...</span>
+<span class="p">},</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Check if interrupted</span>
+<span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interrupted&quot;</span><span class="p">):</span>
+    <span class="c1"># Get clarification from user</span>
+    <span class="n">clarification</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Please clarify: &quot;</span><span class="p">)</span>
+
+    <span class="c1"># Resume execution</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">clarification</span><span class="p">)],</span>
+        <span class="o">...</span>
+    <span class="p">},</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="graph-architecture-explained">
+<h2>Graph Architecture Explained<a class="headerlink" href="#graph-architecture-explained" title="Link to this heading">¶</a></h2>
+<p><strong>Agent Subgraph Flow:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Process individual questions with tool execution and context compression
+
+START
+  ↓
+orchestrator (invoke LLM with tools)
+  ↓
+route_after_orchestrator_call
+  ↙        ↓         ↘
+tools  fallback  collect_answer
+  ↓      ↓         ↓
+should_compress  collect_answer
+  ↙        ↘
+compress  orchestrator
+  ↓         ↓
+orchestrator (loop)
+  ↓
+collect_answer
+  ↓
+END
+</pre></div>
+</div>
+<p><strong>Main Graph Flow:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purpose: Orchestrate complete conversation workflow
+
+START
+  ↓
+summarize_history (extract conversation context)
+  ↓
+rewrite_query (analyze clarity, reformulate)
+  ↙        ↘
+request_clarification  [agent] (parallel for each question)
+  ↓              ↓
+rewrite_query  aggregate_answers (synthesize results)
+  ↓              ↓
+(loop)          END
+</pre></div>
+</div>
+<p><strong>Why This Architecture:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. Separation of Concerns
+   - Agent subgraph: Question-level research
+   - Main graph: Conversation-level orchestration
+   - Clear boundaries and responsibilities
+
+2. Parallel Execution
+   - Multiple agents run simultaneously
+   - Each processes one question independently
+   - Results converge at aggregation
+
+3. State Management
+   - Checkpointing preserves conversation state
+   - Enables multi-turn interactions
+   - Supports recovery from interrupts
+
+4. Human-in-the-Loop
+   - Interrupt before clarification request
+   - User provides input
+   - Execution resumes with clarification
+
+5. Context Compression
+   - Agent subgraph compresses context
+   - Prevents token bloat
+   - Tracks executed operations
+
+6. Graceful Degradation
+   - Fallback response on limit breach
+   - Always returns useful answer
+   - Respects resource constraints
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Graph Validation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Validate graph structure</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Graph compiled successfully&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Graph compilation error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Avoid: No validation</span>
+<span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>2. Checkpointer Configuration</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Use appropriate checkpointer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemorySaver</span>
+<span class="n">checkpointer</span> <span class="o">=</span> <span class="n">InMemorySaver</span><span class="p">()</span>
+
+<span class="c1"># For production</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.postgres</span><span class="w"> </span><span class="kn">import</span> <span class="n">PostgresSaver</span>
+<span class="n">checkpointer</span> <span class="o">=</span> <span class="n">PostgresSaver</span><span class="p">(</span><span class="n">connection_string</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>3. Interrupt Points</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Strategic interrupt points</span>
+<span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">checkpointer</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">,</span>
+    <span class="n">interrupt_before</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Avoid: Too many interrupts</span>
+<span class="n">interrupt_before</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;node1&quot;</span><span class="p">,</span> <span class="s2">&quot;node2&quot;</span><span class="p">,</span> <span class="s2">&quot;node3&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>4. Thread IDs</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Use thread IDs for multi-user</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="s2">&quot;user_123&quot;</span><span class="p">}}</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">input_state</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Avoid: No thread ID (shared state)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">input_state</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>5. Error Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Handle execution errors</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">input_state</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Execution error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Handle error gracefully</span>
+
+<span class="c1"># Avoid: No error handling</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">input_state</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Graph Compilation Time:</strong></p>
+<ul class="simple">
+<li><p>Agent subgraph: 10-50ms</p></li>
+<li><p>Main graph: 10-50ms</p></li>
+<li><p>Total: 20-100ms</p></li>
+</ul>
+<p><strong>Execution Time:</strong></p>
+<ul class="simple">
+<li><p>Simple query: 2-5 seconds</p></li>
+<li><p>Complex query: 5-15 seconds</p></li>
+<li><p>Multi-question: 10-30 seconds</p></li>
+</ul>
+<p><strong>Memory Usage:</strong></p>
+<ul class="simple">
+<li><p>Graph structure: ~1-5MB</p></li>
+<li><p>Checkpointer: ~100KB per conversation</p></li>
+<li><p>Total: ~2-10MB per active conversation</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cache compiled graphs</span>
+<span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">checkpointer</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">)</span>
+
+<span class="c1"># Reuse for multiple queries</span>
+<span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">input_state</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Use thread IDs for multi-user</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">}}</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>Graph Compilation Errors</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: &quot;Node not found&quot; error</span>
+<span class="c1"># Solution: Ensure all referenced nodes are added</span>
+
+<span class="c1"># Check all nodes are added</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">graph_builder</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+
+<span class="c1"># Check all edges reference existing nodes</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">graph_builder</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Routing Errors</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Conditional edge routing fails</span>
+<span class="c1"># Solution: Verify routing function returns valid keys</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">route_function</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="c1"># Must return one of the routing keys</span>
+    <span class="k">if</span> <span class="n">condition</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;node1&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;node2&quot;</span>
+</pre></div>
+</div>
+<p><strong>Interrupt Not Working</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Execution doesn&#39;t interrupt</span>
+<span class="c1"># Solution: Ensure interrupt_before specifies correct node</span>
+
+<span class="n">agent_graph</span> <span class="o">=</span> <span class="n">graph_builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">checkpointer</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">,</span>
+    <span class="n">interrupt_before</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;request_clarification&quot;</span><span class="p">]</span>  <span class="c1"># Must exist</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>State Not Persisting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: State lost between invocations</span>
+<span class="c1"># Solution: Use checkpointer and thread ID</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="s2">&quot;user_123&quot;</span><span class="p">}}</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">agent_graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">input_state</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Parallel Execution Not Working</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Agents not running in parallel</span>
+<span class="c1"># Solution: Use Send commands in routing</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">route_after_rewrite</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">Send</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">,</span> <span class="s2">&quot;question_index&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;rewrittenQuestions&quot;</span><span class="p">])</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With the complete LangGraph graphs built, you can proceed to:</p>
+<ul class="simple">
+<li><p>Creating the application interface (CLI, API, web UI)</p></li>
+<li><p>Implementing monitoring and logging</p></li>
+<li><p>Adding performance optimization</p></li>
+<li><p>Deploying to production</p></li>
+<li><p>Building the complete RAG application</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch09_build_graph_nodes_and_edges.html" class="btn btn-neutral float-left" title="Topic 9: Build Graph Node and Edge Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch11_create_chat_interface.html" class="btn btn-neutral float-right" title="Topic 11: Create Chat Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

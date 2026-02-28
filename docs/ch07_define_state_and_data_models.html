@@ -1,0 +1,999 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 7: Define State and Data Models &mdash; Agentic RAG Basics 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Topic 8: Agent Configuration" href="ch08_agent_configuration.html" />
+    <link rel="prev" title="Topic 6: Define System Prompts" href="ch06_define_system_prompts.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Agentic RAG Basics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_configure_vector_database.html">Topic 2: Configure Vector Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_pdfs_to_markdown.html">Topic 3: PDFs to Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_hierarchical_document_indexing.html">Topic 4: Hierarchical Document Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_define_agent_tools.html">Topic 5: Define Agent Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_define_system_prompts.html">Topic 6: Define System Prompts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 7: Define State and Data Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-define-state-reducer-functions">Step 2: Define State Reducer Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-define-main-state-class">Step 3: Define Main State Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-define-agent-state-class">Step 4: Define Agent State Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-define-query-analysis-model">Step 5: Define Query Analysis Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-state-and-data-models-module">Complete State and Data Models Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state-management-patterns">State Management Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state-transitions">State Transitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_agent_configuration.html">Topic 8: Agent Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_build_graph_nodes_and_edges.html">Topic 9: Build Graph Node and Edge Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_build_langgraph_graphs.html">Topic 10: Build the LangGraph Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_create_chat_interface.html">Topic 11: Create Chat Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Agentic RAG Basics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 7: Define State and Data Models</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch07_define_state_and_data_models.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-7-define-state-and-data-models">
+<h1>Topic 7: Define State and Data Models<a class="headerlink" href="#topic-7-define-state-and-data-models" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the creation of state structures and data models that track conversation context, agent execution, and query analysis throughout the RAG pipeline. Well-designed state models enable efficient information flow, support multi-turn conversations, and facilitate debugging and monitoring of agent behavior.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>State and data models serve as the “memory” of the RAG system, tracking:</p>
+<ul class="simple">
+<li><p><strong>Conversation State</strong>: Messages, summaries, and context</p></li>
+<li><p><strong>Agent Execution State</strong>: Tool calls, iterations, and progress</p></li>
+<li><p><strong>Query Analysis</strong>: Question clarity and reformulation</p></li>
+<li><p><strong>Retrieval State</strong>: Tracking retrieved documents and keys</p></li>
+<li><p><strong>Answer Aggregation</strong>: Collecting and managing answers</p></li>
+</ul>
+<p>The state architecture includes:</p>
+<ol class="arabic simple">
+<li><p><strong>State</strong>: Main conversation and agent state</p></li>
+<li><p><strong>AgentState</strong>: Detailed agent execution tracking</p></li>
+<li><p><strong>QueryAnalysis</strong>: Query clarity and reformulation results</p></li>
+</ol>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>Begin by importing the necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessagesState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">operator</span>
+</pre></div>
+</div>
+<p><strong>Import Explanations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">langgraph.graph.MessagesState</span></code>: Base state class for message-based workflows</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code>: Data validation and serialization</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pydantic.Field</span></code>: Field metadata and descriptions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typing.List,</span> <span class="pre">Annotated,</span> <span class="pre">Set</span></code>: Type hints for complex types</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">operator</span></code>: Operators for state reduction (add, union)</p></li>
+</ul>
+<p><strong>Why These Imports:</strong></p>
+<ul class="simple">
+<li><p><strong>LangGraph</strong>: Enables stateful graph-based agent workflows</p></li>
+<li><p><strong>Pydantic</strong>: Provides data validation and schema generation</p></li>
+<li><p><strong>Type hints</strong>: Enable IDE support and runtime validation</p></li>
+<li><p><strong>Operators</strong>: Support state accumulation and merging</p></li>
+</ul>
+</section>
+<section id="step-2-define-state-reducer-functions">
+<h2>Step 2: Define State Reducer Functions<a class="headerlink" href="#step-2-define-state-reducer-functions" title="Link to this heading">¶</a></h2>
+<p>Define functions for managing state updates:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">accumulate_or_reset</span><span class="p">(</span><span class="n">existing</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">new</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accumulate new items or reset if reset flag present.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        existing: Current list of items</span>
+<span class="sd">        new: New items to add</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated list (reset if __reset__ flag present, else accumulated)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">new</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__reset__&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="n">existing</span> <span class="o">+</span> <span class="n">new</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">set_union</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">b</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Union two sets.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: First set</span>
+<span class="sd">        b: Second set</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Union of both sets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">|</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p><strong>Step 2a: Accumulate or Reset Function</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">accumulate_or_reset</span><span class="p">(</span><span class="n">existing</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">new</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Manages agent answer accumulation</p></li>
+<li><p>Supports resetting answers when needed</p></li>
+<li><p>Enables multi-turn answer collection</p></li>
+</ul>
+<p><strong>How It Works:</strong></p>
+<ol class="arabic simple">
+<li><p>Check if new items contain <code class="docutils literal notranslate"><span class="pre">__reset__</span></code> flag</p></li>
+<li><p>If reset flag present: return empty list (discard existing)</p></li>
+<li><p>Otherwise: append new items to existing list</p></li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Normal Accumulation
+===============================
+existing = [{&quot;answer&quot;: &quot;First answer&quot;}]
+new = [{&quot;answer&quot;: &quot;Second answer&quot;}]
+
+Result: [{&quot;answer&quot;: &quot;First answer&quot;}, {&quot;answer&quot;: &quot;Second answer&quot;}]
+
+Scenario 2: Reset
+=================
+existing = [{&quot;answer&quot;: &quot;First answer&quot;}]
+new = [{&quot;__reset__&quot;: True}, {&quot;answer&quot;: &quot;New answer&quot;}]
+
+Result: [] (reset triggered, existing discarded)
+</pre></div>
+</div>
+<p><strong>Why Accumulate or Reset:</strong></p>
+<ul class="simple">
+<li><p>Supports multi-turn conversations</p></li>
+<li><p>Enables answer collection across iterations</p></li>
+<li><p>Allows resetting when starting new research</p></li>
+<li><p>Prevents answer duplication</p></li>
+</ul>
+<p><strong>Step 2b: Set Union Function</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_union</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">b</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Merges retrieval keys from multiple iterations</p></li>
+<li><p>Tracks unique documents accessed</p></li>
+<li><p>Prevents duplicate tracking</p></li>
+</ul>
+<p><strong>How It Works:</strong></p>
+<ol class="arabic simple">
+<li><p>Takes two sets as input</p></li>
+<li><p>Returns union (all unique elements)</p></li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario 1: Merging Keys
+========================
+a = {&quot;doc1.pdf&quot;, &quot;doc2.pdf&quot;}
+b = {&quot;doc2.pdf&quot;, &quot;doc3.pdf&quot;}
+
+Result: {&quot;doc1.pdf&quot;, &quot;doc2.pdf&quot;, &quot;doc3.pdf&quot;}
+
+Scenario 2: Empty Set
+=====================
+a = {&quot;doc1.pdf&quot;}
+b = set()
+
+Result: {&quot;doc1.pdf&quot;}
+</pre></div>
+</div>
+<p><strong>Why Set Union:</strong></p>
+<ul class="simple">
+<li><p>Tracks all accessed documents</p></li>
+<li><p>Prevents duplicate entries</p></li>
+<li><p>Enables retrieval deduplication</p></li>
+<li><p>Supports multi-iteration research</p></li>
+</ul>
+</section>
+<section id="step-3-define-main-state-class">
+<h2>Step 3: Define Main State Class<a class="headerlink" href="#step-3-define-main-state-class" title="Link to this heading">¶</a></h2>
+<p>Define the main conversation and agent state:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main state for conversation and agent execution.</span>
+
+<span class="sd">    Extends MessagesState with additional fields for RAG pipeline.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">questionIsClear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">conversation_summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">originalQuery</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">rewrittenQuestions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">agent_answers</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">accumulate_or_reset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p><strong>State Purpose:</strong></p>
+<p>Tracks:</p>
+<ul class="simple">
+<li><p>Conversation messages (from MessagesState)</p></li>
+<li><p>Question clarity</p></li>
+<li><p>Conversation summaries</p></li>
+<li><p>Original and rewritten queries</p></li>
+<li><p>Accumulated agent answers</p></li>
+</ul>
+<p><strong>Step 3a: MessagesState Base</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+</pre></div>
+</div>
+<p><strong>What MessagesState Provides:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">messages</span></code>: List of conversation messages</p></li>
+<li><p>Message history management</p></li>
+<li><p>Built-in message handling</p></li>
+</ul>
+<p><strong>Why Extend MessagesState:</strong></p>
+<ul class="simple">
+<li><p>Provides message management out-of-the-box</p></li>
+<li><p>Integrates with LangGraph workflows</p></li>
+<li><p>Enables message-based state transitions</p></li>
+</ul>
+<p><strong>Step 3b: Question Clarity Field</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">questionIsClear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Tracks if user’s question is clear</p></li>
+<li><p>Determines if clarification needed</p></li>
+<li><p>Guides query rewriting</p></li>
+</ul>
+<p><strong>Example Values:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>True: &quot;What is backpropagation?&quot; (clear)
+False: &quot;xyzabc qwerty&quot; (unclear)
+False: &quot;what about it?&quot; (ambiguous follow-up)
+</pre></div>
+</div>
+<p><strong>Step 3c: Conversation Summary Field</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conversation_summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Stores compressed conversation history</p></li>
+<li><p>Enables context preservation</p></li>
+<li><p>Supports multi-turn conversations</p></li>
+</ul>
+<p><strong>Example Value:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;Discussed neural networks and their training process using backpropagation.
+ User asked about optimization techniques.&quot;
+</pre></div>
+</div>
+<p><strong>Step 3d: Query Fields</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">originalQuery</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">rewrittenQuestions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">originalQuery</span></code>: User’s original input</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rewrittenQuestions</span></code>: Reformulated queries for retrieval</p></li>
+</ul>
+<p><strong>Example Values:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>originalQuery: &quot;How do RNNs work?&quot;
+rewrittenQuestions: [
+    &quot;How do Recurrent Neural Networks work?&quot;,
+    &quot;What is the architecture of RNNs?&quot;
+]
+</pre></div>
+</div>
+<p><strong>Step 3e: Agent Answers Field</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_answers</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">accumulate_or_reset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Accumulates answers from agent iterations</p></li>
+<li><p>Supports multi-turn answer collection</p></li>
+<li><p>Can be reset when needed</p></li>
+</ul>
+<p><strong>Example Value:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;How do RNNs work?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="s2">&quot;RNNs process sequences...&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paper.pdf&quot;</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;What are applications?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="s2">&quot;RNNs are used in...&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;guide.pdf&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>State Usage Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">questionIsClear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">conversation_summary</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">originalQuery</span><span class="o">=</span><span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+    <span class="n">rewrittenQuestions</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">agent_answers</span><span class="o">=</span><span class="p">[]</span>
+<span class="p">)</span>
+
+<span class="c1"># Update state</span>
+<span class="n">state</span><span class="o">.</span><span class="n">questionIsClear</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">state</span><span class="o">.</span><span class="n">rewrittenQuestions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;What is the architecture of neural networks?&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># Accumulate answers</span>
+<span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+    <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="s2">&quot;Neural networks consist of interconnected nodes...&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;research_paper.pdf&quot;</span><span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-define-agent-state-class">
+<h2>Step 4: Define Agent State Class<a class="headerlink" href="#step-4-define-agent-state-class" title="Link to this heading">¶</a></h2>
+<p>Define detailed agent execution state:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AgentState</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;State for detailed agent execution tracking.</span>
+
+<span class="sd">    Tracks tool calls, iterations, and retrieval progress.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tool_call_count</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">iteration_count</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">question_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">context_summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">retrieval_keys</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">set_union</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">final_answer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">agent_answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p><strong>AgentState Purpose:</strong></p>
+<p>Tracks:</p>
+<ul class="simple">
+<li><p>Tool invocation count</p></li>
+<li><p>Iteration progress</p></li>
+<li><p>Current question being processed</p></li>
+<li><p>Retrieved document keys</p></li>
+<li><p>Final answer generation</p></li>
+<li><p>Detailed answer collection</p></li>
+</ul>
+<p><strong>Step 4a: Tool Call Tracking</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tool_call_count</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Counts tool invocations</p></li>
+<li><p>Monitors agent activity</p></li>
+<li><p>Detects excessive tool usage</p></li>
+</ul>
+<p><strong>How It Works:</strong></p>
+<ul class="simple">
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">operator.add</span></code> to accumulate counts</p></li>
+<li><p>Increments on each tool call</p></li>
+<li><p>Enables monitoring and limits</p></li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Initial: tool_call_count = 0
+After search: tool_call_count = 1
+After retrieve: tool_call_count = 2
+After another search: tool_call_count = 3
+</pre></div>
+</div>
+<p><strong>Step 4b: Iteration Tracking</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">iteration_count</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Counts agent iterations</p></li>
+<li><p>Monitors research progress</p></li>
+<li><p>Enforces iteration limits</p></li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Initial: iteration_count = 0
+After iteration 1: iteration_count = 1
+After iteration 2: iteration_count = 2
+After iteration 3: iteration_count = 3
+</pre></div>
+</div>
+<p><strong>Step 4c: Question Processing</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">question</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">question_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">question</span></code>: Current question being processed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">question_index</span></code>: Index in multi-question list</p></li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scenario: Processing 3 questions
+
+Iteration 1:
+- question = &quot;How do neural networks work?&quot;
+- question_index = 0
+
+Iteration 2:
+- question = &quot;What are their applications?&quot;
+- question_index = 1
+
+Iteration 3:
+- question = &quot;How are they trained?&quot;
+- question_index = 2
+</pre></div>
+</div>
+<p><strong>Step 4d: Context and Retrieval Tracking</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">context_summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">retrieval_keys</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">set_union</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">context_summary</span></code>: Compressed research context</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">retrieval_keys</span></code>: Set of unique retrieved documents</p></li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>context_summary: &quot;Found information about neural networks,
+                  backpropagation, and training methods.&quot;
+
+retrieval_keys: {&quot;research_paper.pdf&quot;, &quot;technical_guide.pdf&quot;, &quot;manual.pdf&quot;}
+</pre></div>
+</div>
+<p><strong>Step 4e: Answer Fields</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">final_answer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">agent_answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">final_answer</span></code>: Final synthesized answer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">agent_answers</span></code>: Detailed answers for each question</p></li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">final_answer</span><span class="p">:</span> <span class="s2">&quot;Neural networks are computational models that learn</span>
+               <span class="n">through</span> <span class="n">backpropagation</span><span class="o">.</span> <span class="n">They</span> <span class="n">have</span> <span class="n">applications</span> <span class="ow">in</span>
+               <span class="n">computer</span> <span class="n">vision</span><span class="p">,</span> <span class="n">NLP</span><span class="p">,</span> <span class="ow">and</span> <span class="n">robotics</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="n">agent_answers</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="s2">&quot;Neural networks consist of...&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paper.pdf&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>AgentState Usage Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize agent state</span>
+<span class="n">agent_state</span> <span class="o">=</span> <span class="n">AgentState</span><span class="p">(</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">tool_call_count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">iteration_count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">question</span><span class="o">=</span><span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+    <span class="n">question_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">context_summary</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">retrieval_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span>
+    <span class="n">final_answer</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">agent_answers</span><span class="o">=</span><span class="p">[]</span>
+<span class="p">)</span>
+
+<span class="c1"># Update during execution</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">tool_call_count</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># After search</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">iteration_count</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># After iteration</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">retrieval_keys</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;research_paper.pdf&quot;</span><span class="p">)</span>  <span class="c1"># After retrieval</span>
+
+<span class="c1"># Set final answer</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">final_answer</span> <span class="o">=</span> <span class="s2">&quot;Neural networks work by...&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-5-define-query-analysis-model">
+<h2>Step 5: Define Query Analysis Model<a class="headerlink" href="#step-5-define-query-analysis-model" title="Link to this heading">¶</a></h2>
+<p>Define the data model for query analysis results:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">QueryAnalysis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of query clarity and reformulation analysis.</span>
+
+<span class="sd">    Determines if question is clear and provides reformulated questions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">is_clear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Indicates if the user&#39;s question is clear and answerable.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">questions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of rewritten, self-contained questions.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">clarification_needed</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Explanation if the question is unclear.&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>QueryAnalysis Purpose:</strong></p>
+<p>Captures:</p>
+<ul class="simple">
+<li><p>Question clarity assessment</p></li>
+<li><p>Reformulated questions</p></li>
+<li><p>Clarification requirements</p></li>
+</ul>
+<p><strong>Step 5a: Clarity Assessment</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">is_clear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Indicates if the user&#39;s question is clear and answerable.&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Determines if question is understandable</p></li>
+<li><p>Guides downstream processing</p></li>
+<li><p>Triggers clarification if needed</p></li>
+</ul>
+<p><strong>Example Values:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>True: &quot;What is backpropagation?&quot; (clear)
+False: &quot;xyzabc qwerty&quot; (unclear)
+False: &quot;what about it?&quot; (ambiguous)
+</pre></div>
+</div>
+<p><strong>Step 5b: Reformulated Questions</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">questions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of rewritten, self-contained questions.&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Provides optimized questions for retrieval</p></li>
+<li><p>Handles multi-part queries</p></li>
+<li><p>Improves search effectiveness</p></li>
+</ul>
+<p><strong>Example Values:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single question</span>
+<span class="p">[</span><span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">]</span>
+
+<span class="c1"># Multi-part question split</span>
+<span class="p">[</span>
+    <span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;What are the applications of neural networks?&quot;</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Step 5c: Clarification Needed</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clarification_needed</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Explanation if the question is unclear.&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Purpose:</strong></p>
+<ul class="simple">
+<li><p>Explains why question is unclear</p></li>
+<li><p>Guides user clarification</p></li>
+<li><p>Enables helpful error messages</p></li>
+</ul>
+<p><strong>Example Values:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;&quot;: (if is_clear is True)
+
+&quot;The question contains unclear abbreviations and lacks context.
+ Could you rephrase using full terms?&quot;
+
+&quot;The question is ambiguous. Are you asking about the architecture,
+ training process, or applications?&quot;
+</pre></div>
+</div>
+<p><strong>QueryAnalysis Usage Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clear question</span>
+<span class="n">analysis</span> <span class="o">=</span> <span class="n">QueryAnalysis</span><span class="p">(</span>
+    <span class="n">is_clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">questions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">],</span>
+    <span class="n">clarification_needed</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Unclear question</span>
+<span class="n">analysis</span> <span class="o">=</span> <span class="n">QueryAnalysis</span><span class="p">(</span>
+    <span class="n">is_clear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">questions</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">clarification_needed</span><span class="o">=</span><span class="s2">&quot;The question is unclear. Could you provide more context?&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Multi-part question</span>
+<span class="n">analysis</span> <span class="o">=</span> <span class="n">QueryAnalysis</span><span class="p">(</span>
+    <span class="n">is_clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">questions</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;What are their applications?&quot;</span>
+    <span class="p">],</span>
+    <span class="n">clarification_needed</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-state-and-data-models-module">
+<h2>Complete State and Data Models Module<a class="headerlink" href="#complete-state-and-data-models-module" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete state and data models code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessagesState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">operator</span>
+
+<span class="c1"># State reducer functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">accumulate_or_reset</span><span class="p">(</span><span class="n">existing</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">new</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accumulate new items or reset if reset flag present.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">new</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__reset__&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="n">existing</span> <span class="o">+</span> <span class="n">new</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">set_union</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">b</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Union two sets.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">|</span> <span class="n">b</span>
+
+<span class="c1"># Main state class</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main state for conversation and agent execution.&quot;&quot;&quot;</span>
+    <span class="n">questionIsClear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">conversation_summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">originalQuery</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">rewrittenQuestions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">agent_answers</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">accumulate_or_reset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Agent execution state class</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentState</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;State for detailed agent execution tracking.&quot;&quot;&quot;</span>
+    <span class="n">tool_call_count</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">iteration_count</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">question_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">context_summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">retrieval_keys</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">set_union</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">final_answer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">agent_answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Query analysis model</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QueryAnalysis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of query clarity and reformulation analysis.&quot;&quot;&quot;</span>
+    <span class="n">is_clear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Indicates if the user&#39;s question is clear and answerable.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">questions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of rewritten, self-contained questions.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">clarification_needed</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Explanation if the question is unclear.&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="state-management-patterns">
+<h2>State Management Patterns<a class="headerlink" href="#state-management-patterns" title="Link to this heading">¶</a></h2>
+<p><strong>Pattern 1: State Initialization</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialize_state</span><span class="p">(</span><span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize state for new conversation.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">State</span><span class="p">(</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">questionIsClear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">conversation_summary</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">originalQuery</span><span class="o">=</span><span class="n">user_query</span><span class="p">,</span>
+        <span class="n">rewrittenQuestions</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">agent_answers</span><span class="o">=</span><span class="p">[]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Pattern 2: State Updates</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">updates</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update state with new values.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">updates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+<p><strong>Pattern 3: Answer Accumulation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">add_answer</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">answer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add answer to state.&quot;&quot;&quot;</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+<p><strong>Pattern 4: State Reset</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reset_answers</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset accumulated answers.&quot;&quot;&quot;</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;__reset__&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}]</span>
+    <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+</section>
+<section id="state-transitions">
+<h2>State Transitions<a class="headerlink" href="#state-transitions" title="Link to this heading">¶</a></h2>
+<p><strong>Typical State Flow:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. Initialize State
+   ↓
+2. Analyze Query
+   - Set questionIsClear
+   - Set rewrittenQuestions
+   ↓
+3. Agent Execution
+   - Increment iteration_count
+   - Increment tool_call_count
+   - Update retrieval_keys
+   - Update context_summary
+   ↓
+4. Answer Generation
+   - Set final_answer
+   - Accumulate agent_answers
+   ↓
+5. Conversation Summary
+   - Update conversation_summary
+   ↓
+6. Return Final State
+</pre></div>
+</div>
+<p><strong>Example State Transition:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 1: Initialize</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">questionIsClear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">originalQuery</span><span class="o">=</span><span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+    <span class="n">rewrittenQuestions</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">agent_answers</span><span class="o">=</span><span class="p">[]</span>
+<span class="p">)</span>
+
+<span class="c1"># Step 2: Query Analysis</span>
+<span class="n">state</span><span class="o">.</span><span class="n">questionIsClear</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">state</span><span class="o">.</span><span class="n">rewrittenQuestions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">]</span>
+
+<span class="c1"># Step 3: Agent Execution</span>
+<span class="n">agent_state</span> <span class="o">=</span> <span class="n">AgentState</span><span class="p">(</span>
+    <span class="n">messages</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">messages</span><span class="p">,</span>
+    <span class="n">tool_call_count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">iteration_count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">question</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">rewrittenQuestions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">question_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">context_summary</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">retrieval_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span>
+    <span class="n">final_answer</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">agent_answers</span><span class="o">=</span><span class="p">[]</span>
+<span class="p">)</span>
+
+<span class="c1"># During execution</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">tool_call_count</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># search</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">tool_call_count</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># retrieve</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">iteration_count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">retrieval_keys</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;paper.pdf&quot;</span><span class="p">)</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">context_summary</span> <span class="o">=</span> <span class="s2">&quot;Found information about neural networks&quot;</span>
+
+<span class="c1"># Step 4: Answer Generation</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">final_answer</span> <span class="o">=</span> <span class="s2">&quot;Neural networks are computational models...&quot;</span>
+<span class="n">agent_state</span><span class="o">.</span><span class="n">agent_answers</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+    <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;How do neural networks work?&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="n">agent_state</span><span class="o">.</span><span class="n">final_answer</span><span class="p">,</span>
+    <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">agent_state</span><span class="o">.</span><span class="n">retrieval_keys</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="c1"># Step 5: Update main state</span>
+<span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span> <span class="o">=</span> <span class="n">agent_state</span><span class="o">.</span><span class="n">agent_answers</span>
+<span class="n">state</span><span class="o">.</span><span class="n">conversation_summary</span> <span class="o">=</span> <span class="s2">&quot;Discussed neural networks and their architecture&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<p><strong>1. Type Hints</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Clear type hints</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Avoid: Missing type hints</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+    <span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">answers</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p><strong>2. Field Descriptions</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Descriptive fields</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QueryAnalysis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">is_clear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Indicates if the user&#39;s question is clear and answerable.&quot;</span>
+    <span class="p">)</span>
+
+<span class="c1"># Avoid: No descriptions</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QueryAnalysis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">is_clear</span><span class="p">:</span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p><strong>3. Default Values</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Sensible defaults</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+    <span class="n">questionIsClear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">agent_answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Avoid: No defaults</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">MessagesState</span><span class="p">):</span>
+    <span class="n">questionIsClear</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">agent_answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>4. State Reducers</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Custom reducers for complex logic</span>
+<span class="n">agent_answers</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">accumulate_or_reset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Avoid: No reducer logic</span>
+<span class="n">agent_answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p><strong>5. Immutability</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: Create new state</span>
+<span class="n">new_state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="o">**</span><span class="n">state</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span> <span class="n">question_is_clear</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Avoid: Mutate existing state</span>
+<span class="n">state</span><span class="o">.</span><span class="n">question_is_clear</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Memory Usage:</strong></p>
+<ul class="simple">
+<li><p>State object: ~1-5KB</p></li>
+<li><p>Messages list: ~100 bytes per message</p></li>
+<li><p>Agent answers: ~500 bytes per answer</p></li>
+<li><p>Total: Scales with conversation length</p></li>
+</ul>
+<p><strong>State Serialization:</strong></p>
+<ul class="simple">
+<li><p>JSON serialization: 1-5ms</p></li>
+<li><p>Pydantic validation: 1-2ms</p></li>
+<li><p>Total: Minimal overhead</p></li>
+</ul>
+<p><strong>Optimization Tips:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Limit message history</span>
+<span class="n">state</span><span class="o">.</span><span class="n">messages</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span>  <span class="c1"># Keep last 10 messages</span>
+
+<span class="c1"># Compress old answers</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span> <span class="o">=</span> <span class="n">compress_answers</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span><span class="p">)</span>
+
+<span class="c1"># Clear retrieval keys periodically</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">retrieval_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">retrieval_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>State Not Updating</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: State changes not reflected</span>
+<span class="c1"># Solution: Ensure returning updated state</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">update_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">question_is_clear</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">state</span>  <span class="c1"># Must return state</span>
+</pre></div>
+</div>
+<p><strong>Accumulation Not Working</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Answers not accumulating</span>
+<span class="c1"># Solution: Verify reducer function</span>
+
+<span class="c1"># Check that accumulate_or_reset is used</span>
+<span class="n">agent_answers</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">accumulate_or_reset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p><strong>Type Validation Errors</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Pydantic validation errors</span>
+<span class="c1"># Solution: Ensure correct types</span>
+
+<span class="c1"># Good</span>
+<span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">}]</span>
+
+<span class="c1"># Bad</span>
+<span class="n">state</span><span class="o">.</span><span class="n">agent_answers</span> <span class="o">=</span> <span class="s2">&quot;answer text&quot;</span>  <span class="c1"># Wrong type</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With state and data models defined, you can proceed to:</p>
+<ul class="simple">
+<li><p>Building the agent graph with state transitions</p></li>
+<li><p>Implementing node functions for each stage</p></li>
+<li><p>Creating the complete agent workflow</p></li>
+<li><p>Integrating with LangGraph for execution</p></li>
+<li><p>Building the complete RAG application</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch06_define_system_prompts.html" class="btn btn-neutral float-left" title="Topic 6: Define System Prompts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch08_agent_configuration.html" class="btn btn-neutral float-right" title="Topic 8: Agent Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
