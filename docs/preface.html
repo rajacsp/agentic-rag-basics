@@ -19,7 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Canadian Information Documentation" href="index.html" /> 
+    <link rel="next" title="Topic 1: Initial Setup and Configuration" href="ch01_initial_setup_configuration.html" />
+    <link rel="prev" title="RAG System Documentation" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,11 +46,13 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Preface</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#about-this-guide">About This Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-you-ll-learn">What You’ll Learn</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#canada-overview">Canada Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rag-system-overview">RAG System Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-use-this-documentation">How to Use This Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#key-highlights">Key Highlights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-technologies">Key Technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-architecture">System Architecture</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
 </ul>
 
         </div>
@@ -80,35 +83,54 @@
 <h1>Preface<a class="headerlink" href="#preface" title="Link to this heading">¶</a></h1>
 <section id="about-this-guide">
 <h2>About This Guide<a class="headerlink" href="#about-this-guide" title="Link to this heading">¶</a></h2>
-<p>This guide provides an introduction to Canadian geography, provinces, cities, and landmarks. Whether you’re planning a visit, conducting research, or simply learning about Canada, this resource offers valuable information.</p>
+<p>This guide provides a comprehensive introduction to building and deploying a Retrieval-Augmented Generation (RAG) system. Whether you’re new to RAG systems, LangChain, or vector databases, this documentation will guide you through each step of the implementation process.</p>
 </section>
 <section id="what-you-ll-learn">
 <h2>What You’ll Learn<a class="headerlink" href="#what-you-ll-learn" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>Overview of Canada’s 10 provinces and 3 territories</p></li>
-<li><p>Information about major Canadian cities</p></li>
-<li><p>Notable landmarks and attractions</p></li>
-<li><p>Geographic and demographic data</p></li>
-<li><p>Cultural and historical highlights</p></li>
+<li><p>Initial setup and configuration of RAG system components</p></li>
+<li><p>Integration of dense and sparse embeddings for hybrid search</p></li>
+<li><p>Vector database management with Qdrant</p></li>
+<li><p>Local language model deployment using Ollama</p></li>
+<li><p>Document processing and ingestion pipelines</p></li>
+<li><p>Query processing and retrieval strategies</p></li>
 </ul>
 </section>
-<section id="canada-overview">
-<h2>Canada Overview<a class="headerlink" href="#canada-overview" title="Link to this heading">¶</a></h2>
-<p>Canada is the second-largest country in the world by total area, spanning six time zones from the Atlantic to the Pacific Ocean. With a population of approximately 39 million people, Canada is known for its natural beauty, multicultural society, and high standard of living.</p>
+<section id="rag-system-overview">
+<h2>RAG System Overview<a class="headerlink" href="#rag-system-overview" title="Link to this heading">¶</a></h2>
+<p>A Retrieval-Augmented Generation (RAG) system combines the power of large language models with external knowledge retrieval. Instead of relying solely on a model’s training data, RAG systems retrieve relevant documents or passages from a knowledge base and use them to augment the model’s responses. This approach provides:</p>
+<ul class="simple">
+<li><p><strong>Accuracy</strong>: Responses grounded in actual documents</p></li>
+<li><p><strong>Freshness</strong>: Access to up-to-date information</p></li>
+<li><p><strong>Transparency</strong>: Traceable sources for generated content</p></li>
+<li><p><strong>Efficiency</strong>: Reduced hallucinations through factual grounding</p></li>
+</ul>
 </section>
 <section id="how-to-use-this-documentation">
 <h2>How to Use This Documentation<a class="headerlink" href="#how-to-use-this-documentation" title="Link to this heading">¶</a></h2>
-<p>Each section provides detailed information about different aspects of Canadian geography. You can navigate through the chapters using the table of contents or search for specific information using the search function.</p>
+<p>Each chapter builds upon the previous one, starting with foundational setup and progressing to advanced implementation details. You can follow the chapters sequentially or jump to specific topics using the table of contents.</p>
 </section>
-<section id="key-highlights">
-<h2>Key Highlights<a class="headerlink" href="#key-highlights" title="Link to this heading">¶</a></h2>
+<section id="key-technologies">
+<h2>Key Technologies<a class="headerlink" href="#key-technologies" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><strong>Niagara Falls</strong>: One of the world’s most famous waterfalls</p></li>
-<li><p><strong>Rocky Mountains</strong>: Stunning mountain range in Western Canada</p></li>
-<li><p><strong>Parliament Hill</strong>: Historic center of Canadian government</p></li>
-<li><p><strong>CN Tower</strong>: Iconic landmark in Toronto</p></li>
-<li><p><strong>Banff National Park</strong>: UNESCO World Heritage Site</p></li>
+<li><p><strong>LangChain</strong>: Framework for building applications with language models</p></li>
+<li><p><strong>Qdrant</strong>: Vector database for efficient similarity search</p></li>
+<li><p><strong>Ollama</strong>: Local language model inference engine</p></li>
+<li><p><strong>HuggingFace</strong>: Pre-trained embedding models</p></li>
+<li><p><strong>BM25</strong>: Sparse embedding algorithm for keyword matching</p></li>
 </ul>
+</section>
+<section id="system-architecture">
+<h2>System Architecture<a class="headerlink" href="#system-architecture" title="Link to this heading">¶</a></h2>
+<p>The RAG system architecture consists of:</p>
+<ol class="arabic simple">
+<li><p><strong>Document Ingestion</strong>: Loading and preprocessing documents</p></li>
+<li><p><strong>Embedding Generation</strong>: Creating dense and sparse embeddings</p></li>
+<li><p><strong>Vector Storage</strong>: Storing embeddings in Qdrant</p></li>
+<li><p><strong>Query Processing</strong>: Converting user queries to embeddings</p></li>
+<li><p><strong>Retrieval</strong>: Finding relevant documents using hybrid search</p></li>
+<li><p><strong>Generation</strong>: Using LLM to generate responses based on retrieved context</p></li>
+</ol>
 </section>
 </section>
 
@@ -116,7 +138,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Canadian Information Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="RAG System Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch01_initial_setup_configuration.html" class="btn btn-neutral float-right" title="Topic 1: Initial Setup and Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

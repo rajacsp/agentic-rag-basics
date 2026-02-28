@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic 1: Initial Setup and Configuration &mdash; GitHub Book Template 1.00 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
+
+  
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/documentation_options.js?v=da1d7f10"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Preface" href="preface.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GitHub Book Template
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topic 1: Initial Setup and Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-define-directory-paths">Step 2: Define Directory Paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-create-required-directories">Step 3: Create Required Directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-initialize-language-model">Step 4: Initialize Language Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-initialize-dense-embeddings">Step 5: Initialize Dense Embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-initialize-sparse-embeddings">Step 6: Initialize Sparse Embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-7-initialize-qdrant-vector-database">Step 7: Initialize Qdrant Vector Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-initialization-code">Complete Initialization Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-concepts">Key Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites-and-dependencies">Prerequisites and Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GitHub Book Template</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Topic 1: Initial Setup and Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/ch01_initial_setup_configuration.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="topic-1-initial-setup-and-configuration">
+<h1>Topic 1: Initial Setup and Configuration<a class="headerlink" href="#topic-1-initial-setup-and-configuration" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This chapter covers the foundational setup required to initialize a Retrieval-Augmented Generation (RAG) system using LangChain, Qdrant vector database, and various embedding models. The configuration establishes the core components needed for document processing, embedding generation, and semantic search capabilities.</p>
+</section>
+<section id="purpose-and-architecture">
+<h2>Purpose and Architecture<a class="headerlink" href="#purpose-and-architecture" title="Link to this heading">¶</a></h2>
+<p>The initialization process sets up a hybrid search system that combines:</p>
+<ul class="simple">
+<li><p><strong>Dense Embeddings</strong>: Using sentence transformers for semantic understanding</p></li>
+<li><p><strong>Sparse Embeddings</strong>: Using BM25-based sparse embeddings for keyword matching</p></li>
+<li><p><strong>Vector Database</strong>: Qdrant for efficient similarity search and retrieval</p></li>
+<li><p><strong>Language Model</strong>: Ollama-based LLM for inference and generation tasks</p></li>
+</ul>
+<p>This architecture enables powerful document retrieval and question-answering capabilities.</p>
+</section>
+<section id="step-1-import-required-libraries">
+<h2>Step 1: Import Required Libraries<a class="headerlink" href="#step-1-import-required-libraries" title="Link to this heading">¶</a></h2>
+<p>The first step involves importing all necessary dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_huggingface</span><span class="w"> </span><span class="kn">import</span> <span class="n">HuggingFaceEmbeddings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_qdrant.fastembed_sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastEmbedSparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qdrant_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">QdrantClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOllama</span>
+</pre></div>
+</div>
+<p><strong>Key Imports Explained:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code> and <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code>: For file system operations and path management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HuggingFaceEmbeddings</span></code>: Provides dense embeddings using pre-trained transformer models</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FastEmbedSparse</span></code>: Implements sparse embeddings using BM25 algorithm</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QdrantClient</span></code>: Client for interacting with Qdrant vector database</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChatOllama</span></code>: Interface for local LLM inference via Ollama</p></li>
+</ul>
+</section>
+<section id="step-2-define-directory-paths">
+<h2>Step 2: Define Directory Paths<a class="headerlink" href="#step-2-define-directory-paths" title="Link to this heading">¶</a></h2>
+<p>Configure the directory structure for organizing documents and data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DOCS_DIR</span> <span class="o">=</span> <span class="s2">&quot;docs&quot;</span>                    <span class="c1"># Directory containing PDF files</span>
+<span class="n">MARKDOWN_DIR</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span>            <span class="c1"># Directory for PDF-to-Markdown conversions</span>
+<span class="n">PARENT_STORE_PATH</span> <span class="o">=</span> <span class="s2">&quot;parent_store&quot;</span>   <span class="c1"># Directory for parent chunk JSON files</span>
+<span class="n">CHILD_COLLECTION</span> <span class="o">=</span> <span class="s2">&quot;document_child_chunks&quot;</span>
+</pre></div>
+</div>
+<p><strong>Directory Purposes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DOCS_DIR</span></code>: Source location for original PDF documents</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MARKDOWN_DIR</span></code>: Stores converted markdown versions of PDFs for easier processing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PARENT_STORE_PATH</span></code>: Stores JSON files containing parent chunks for hierarchical retrieval</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CHILD_COLLECTION</span></code>: Qdrant collection name for storing child document chunks</p></li>
+</ul>
+</section>
+<section id="step-3-create-required-directories">
+<h2>Step 3: Create Required Directories<a class="headerlink" href="#step-3-create-required-directories" title="Link to this heading">¶</a></h2>
+<p>Ensure all necessary directories exist before processing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">DOCS_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">exist_ok=True</span></code> parameter prevents errors if directories already exist, making the code idempotent and safe for repeated execution.</p>
+</section>
+<section id="step-4-initialize-language-model">
+<h2>Step 4: Initialize Language Model<a class="headerlink" href="#step-4-initialize-language-model" title="Link to this heading">¶</a></h2>
+<p>Set up the local language model using Ollama:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOllama</span>
+
+<span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOllama</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;qwen3:4b-instruct-2507-q4_K_M&quot;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Model</strong>: <code class="docutils literal notranslate"><span class="pre">qwen3:4b-instruct-2507-q4_K_M</span></code> - A 4-billion parameter quantized model optimized for instruction following</p></li>
+<li><p><strong>Temperature</strong>: Set to 0 for deterministic outputs, ensuring consistent and reproducible responses</p></li>
+</ul>
+<p>This configuration prioritizes consistency and reliability for production use cases.</p>
+</section>
+<section id="step-5-initialize-dense-embeddings">
+<h2>Step 5: Initialize Dense Embeddings<a class="headerlink" href="#step-5-initialize-dense-embeddings" title="Link to this heading">¶</a></h2>
+<p>Configure dense embeddings for semantic similarity:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dense_embeddings</span> <span class="o">=</span> <span class="n">HuggingFaceEmbeddings</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Model Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Model</strong>: <code class="docutils literal notranslate"><span class="pre">sentence-transformers/all-mpnet-base-v2</span></code> - A state-of-the-art sentence embedding model</p></li>
+<li><p><strong>Dimensions</strong>: 768-dimensional embeddings</p></li>
+<li><p><strong>Use Case</strong>: Captures semantic meaning and context of text passages</p></li>
+<li><p><strong>Performance</strong>: Excellent balance between speed and accuracy</p></li>
+</ul>
+<p>Dense embeddings are used for semantic search and understanding document meaning.</p>
+</section>
+<section id="step-6-initialize-sparse-embeddings">
+<h2>Step 6: Initialize Sparse Embeddings<a class="headerlink" href="#step-6-initialize-sparse-embeddings" title="Link to this heading">¶</a></h2>
+<p>Set up sparse embeddings for keyword-based retrieval:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sparse_embeddings</span> <span class="o">=</span> <span class="n">FastEmbedSparse</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;Qdrant/bm25&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Algorithm</strong>: BM25 (Best Matching 25) - a probabilistic ranking function</p></li>
+<li><p><strong>Use Case</strong>: Keyword matching and traditional information retrieval</p></li>
+<li><p><strong>Advantage</strong>: Complements dense embeddings for hybrid search</p></li>
+</ul>
+<p>Sparse embeddings excel at finding exact keyword matches and are particularly useful for technical documents.</p>
+</section>
+<section id="step-7-initialize-qdrant-vector-database">
+<h2>Step 7: Initialize Qdrant Vector Database<a class="headerlink" href="#step-7-initialize-qdrant-vector-database" title="Link to this heading">¶</a></h2>
+<p>Connect to or create a local Qdrant instance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">QdrantClient</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;qdrant_db&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Configuration Details:</strong></p>
+<ul class="simple">
+<li><p><strong>Storage</strong>: Local file-based storage at <code class="docutils literal notranslate"><span class="pre">qdrant_db</span></code> directory</p></li>
+<li><p><strong>Type</strong>: In-memory with persistent storage</p></li>
+<li><p><strong>Scalability</strong>: Suitable for development and small-to-medium deployments</p></li>
+</ul>
+<p>The Qdrant client provides the interface for storing and retrieving vector embeddings.</p>
+</section>
+<section id="complete-initialization-code">
+<h2>Complete Initialization Code<a class="headerlink" href="#complete-initialization-code" title="Link to this heading">¶</a></h2>
+<p>Here’s the complete initialization sequence:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_huggingface</span><span class="w"> </span><span class="kn">import</span> <span class="n">HuggingFaceEmbeddings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_qdrant.fastembed_sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastEmbedSparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qdrant_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">QdrantClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOllama</span>
+
+<span class="c1"># Define paths</span>
+<span class="n">DOCS_DIR</span> <span class="o">=</span> <span class="s2">&quot;docs&quot;</span>
+<span class="n">MARKDOWN_DIR</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span>
+<span class="n">PARENT_STORE_PATH</span> <span class="o">=</span> <span class="s2">&quot;parent_store&quot;</span>
+<span class="n">CHILD_COLLECTION</span> <span class="o">=</span> <span class="s2">&quot;document_child_chunks&quot;</span>
+
+<span class="c1"># Create directories</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">DOCS_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">MARKDOWN_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">PARENT_STORE_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Initialize LLM</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOllama</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;qwen3:4b-instruct-2507-q4_K_M&quot;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+
+<span class="c1"># Initialize embeddings</span>
+<span class="n">dense_embeddings</span> <span class="o">=</span> <span class="n">HuggingFaceEmbeddings</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span>
+<span class="p">)</span>
+<span class="n">sparse_embeddings</span> <span class="o">=</span> <span class="n">FastEmbedSparse</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;Qdrant/bm25&quot;</span><span class="p">)</span>
+
+<span class="c1"># Initialize vector database</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">QdrantClient</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;qdrant_db&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="key-concepts">
+<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt><strong>Hybrid Search</strong></dt><dd><p>Combines dense and sparse embeddings to leverage both semantic understanding and keyword matching, resulting in more accurate and relevant retrieval.</p>
+</dd>
+<dt><strong>Vector Database</strong></dt><dd><p>Qdrant efficiently stores and searches high-dimensional vectors, enabling fast similarity-based document retrieval at scale.</p>
+</dd>
+<dt><strong>Embeddings</strong></dt><dd><p>Numerical representations of text that capture semantic meaning, enabling computers to understand and compare text similarity.</p>
+</dd>
+<dt><strong>Local LLM</strong></dt><dd><p>Running models locally via Ollama provides privacy, cost efficiency, and control over inference without relying on external APIs.</p>
+</dd>
+</dl>
+</section>
+<section id="prerequisites-and-dependencies">
+<h2>Prerequisites and Dependencies<a class="headerlink" href="#prerequisites-and-dependencies" title="Link to this heading">¶</a></h2>
+<p>Before running this initialization code, ensure you have:</p>
+<ol class="arabic">
+<li><p><strong>Python 3.8+</strong> installed</p></li>
+<li><p><strong>Ollama</strong> installed and running locally</p></li>
+<li><p><strong>Required Python packages</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>langchain<span class="w"> </span>langchain-huggingface<span class="w"> </span>langchain-qdrant<span class="w"> </span>qdrant-client<span class="w"> </span>sentence-transformers
+</pre></div>
+</div>
+</li>
+<li><p><strong>Ollama Model</strong>: Download the required model:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ollama<span class="w"> </span>pull<span class="w"> </span>qwen3:4b-instruct-2507-q4_K_M
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt><strong>Ollama Connection Error</strong></dt><dd><p>Ensure Ollama is running: <code class="docutils literal notranslate"><span class="pre">ollama</span> <span class="pre">serve</span></code></p>
+</dd>
+<dt><strong>Model Not Found</strong></dt><dd><p>Download the model using: <code class="docutils literal notranslate"><span class="pre">ollama</span> <span class="pre">pull</span> <span class="pre">qwen3:4b-instruct-2507-q4_K_M</span></code></p>
+</dd>
+<dt><strong>Memory Issues</strong></dt><dd><p>The 4B model requires approximately 2-3GB RAM. For systems with less memory, consider using a smaller model.</p>
+</dd>
+<dt><strong>Embedding Model Download</strong></dt><dd><p>HuggingFace embeddings are downloaded automatically on first use. Ensure internet connectivity.</p>
+</dd>
+</dl>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>With the initial setup complete, you can proceed to:</p>
+<ul class="simple">
+<li><p>Document ingestion and preprocessing</p></li>
+<li><p>Chunk creation and embedding generation</p></li>
+<li><p>Vector database population</p></li>
+<li><p>Query processing and retrieval</p></li>
+<li><p>Response generation using the LLM</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="preface.html" class="btn btn-neutral float-left" title="Preface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Raja CSP Raman.
+      <span class="lastupdated">Last updated on Feb 28, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

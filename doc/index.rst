@@ -1,7 +1,7 @@
-Canadian Information Documentation
-==================================
+RAG System Documentation
+========================
 
-Welcome to the Canadian Information Guide. This documentation provides comprehensive information about Canada's provinces, cities, and landmarks.
+Welcome to the Retrieval-Augmented Generation (RAG) System Documentation. This guide covers the setup, configuration, and implementation of a hybrid search system using LangChain, Qdrant, and local language models.
 
 Contents
 --------
@@ -10,8 +10,7 @@ Contents
    :maxdepth: 2
 
    preface
-   ch02_canadian_provinces
-   ch03_canadian_cities
+   ch01_initial_setup_configuration
 
 Quick Facts
 -----------

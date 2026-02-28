@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Canadian Information Documentation &mdash; GitHub Book Template 1.00 documentation</title>
+  <title>RAG System Documentation &mdash; GitHub Book Template 1.00 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/fix_rtd.css" />
@@ -43,6 +43,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a></li>
 </ul>
 
         </div>
@@ -59,7 +60,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Canadian Information Documentation</li>
+      <li class="breadcrumb-item active">RAG System Documentation</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/index.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -69,9 +70,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="canadian-information-documentation">
-<h1>Canadian Information Documentation<a class="headerlink" href="#canadian-information-documentation" title="Link to this heading">¶</a></h1>
-<p>Welcome to the Canadian Information Guide. This documentation provides comprehensive information about Canada’s provinces, cities, and landmarks.</p>
+  <section id="rag-system-documentation">
+<h1>RAG System Documentation<a class="headerlink" href="#rag-system-documentation" title="Link to this heading">¶</a></h1>
+<p>Welcome to the Retrieval-Augmented Generation (RAG) System Documentation. This guide covers the setup, configuration, and implementation of a hybrid search system using LangChain, Qdrant, and local language models.</p>
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -79,9 +80,27 @@
 <li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="preface.html#about-this-guide">About This Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="preface.html#what-you-ll-learn">What You’ll Learn</a></li>
-<li class="toctree-l2"><a class="reference internal" href="preface.html#canada-overview">Canada Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preface.html#rag-system-overview">RAG System Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="preface.html#how-to-use-this-documentation">How to Use This Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="preface.html#key-highlights">Key Highlights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preface.html#key-technologies">Key Technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preface.html#system-architecture">System Architecture</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch01_initial_setup_configuration.html">Topic 1: Initial Setup and Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#purpose-and-architecture">Purpose and Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#step-1-import-required-libraries">Step 1: Import Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#step-2-define-directory-paths">Step 2: Define Directory Paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#step-3-create-required-directories">Step 3: Create Required Directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#step-4-initialize-language-model">Step 4: Initialize Language Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#step-5-initialize-dense-embeddings">Step 5: Initialize Dense Embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#step-6-initialize-sparse-embeddings">Step 6: Initialize Sparse Embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#step-7-initialize-qdrant-vector-database">Step 7: Initialize Qdrant Vector Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#complete-initialization-code">Complete Initialization Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#key-concepts">Key Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#prerequisites-and-dependencies">Prerequisites and Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch01_initial_setup_configuration.html#next-steps">Next Steps</a></li>
 </ul>
 </li>
 </ul>
